@@ -1,0 +1,10 @@
+{
+  "schema": "ournotes-boxlens.scan-request/1",
+  "player": "example",
+  "images": [
+    {
+      "name": "blank.png",
+      "data": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAIAAAAlC+aJAAAApElEQVRoBdXBAQEAAAABIJ433Q5V5FmRZ0WeFXlW5FmRZ0WeFXlW5FmRZ0WeFXlW5FmRZ0WeFXlW5FmRZ0WeFXlW5FmRZ0WeFXlW5FmRZ0WeFXlW5FmRZ0WeFXlW5FmRZ0WeFXlW5FmRZ0WeFXlW5FmRZ0WeFXlW5FmRZ0WeFXlW5FmRZ0WeFXlW5FmRZ0WeFXlW5FmRZ0WeFXlW5FmRZ0WeFXk2SopgQURw5TgAAAAASUVORK5CYII="
+    }
+  ]
+}

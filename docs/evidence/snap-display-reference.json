@@ -1,0 +1,7 @@
+{
+  "metadata_name": "App.UI.UISupportCard$$ChangeParamDisplayed",
+  "file_va_hex": "0x64ffb8c",
+  "c_sha256": "e1e7a9da5f64b3a3797c5a2862a5837b0b3aa3a737b3024c63858825f4d4a174",
+  "type_index": 3985,
+  "finding": "Support-card Pfm/Tec/Vis views display percentages; these are not level labels."
+}

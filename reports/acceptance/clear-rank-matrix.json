@@ -1,0 +1,421 @@
+{
+  "schema": "ournotes-boxlens.clear-rank-matrix/1",
+  "composition": "native-padding-preserved-v2",
+  "screenshots": 220,
+  "groups": {
+    "overall": {
+      "expected": 2440,
+      "identified": 2440,
+      "correct": 2440,
+      "wrong": 0,
+      "unknown": 0,
+      "missed": 0
+    },
+    "rank/1": {
+      "expected": 488,
+      "identified": 488,
+      "correct": 488,
+      "wrong": 0,
+      "unknown": 0,
+      "missed": 0
+    },
+    "member/rarity2/rank1": {
+      "expected": 100,
+      "identified": 100,
+      "correct": 100,
+      "wrong": 0,
+      "unknown": 0,
+      "missed": 0
+    },
+    "[1280, 720]": {
+      "expected": 610,
+      "identified": 610,
+      "correct": 610,
+      "wrong": 0,
+      "unknown": 0,
+      "missed": 0
+    },
+    "ja": {
+      "expected": 488,
+      "identified": 488,
+      "correct": 488,
+      "wrong": 0,
+      "unknown": 0,
+      "missed": 0
+    },
+    "en": {
+      "expected": 488,
+      "identified": 488,
+      "correct": 488,
+      "wrong": 0,
+      "unknown": 0,
+      "missed": 0
+    },
+    "zh-Hant": {
+      "expected": 488,
+      "identified": 488,
+      "correct": 488,
+      "wrong": 0,
+      "unknown": 0,
+      "missed": 0
+    },
+    "member/rarity3/rank1": {
+      "expected": 100,
+      "identified": 100,
+      "correct": 100,
+      "wrong": 0,
+      "unknown": 0,
+      "missed": 0
+    },
+    "zh-Hans": {
+      "expected": 488,
+      "identified": 488,
+      "correct": 488,
+      "wrong": 0,
+      "unknown": 0,
+      "missed": 0
+    },
+    "ko": {
+      "expected": 488,
+      "identified": 488,
+      "correct": 488,
+      "wrong": 0,
+      "unknown": 0,
+      "missed": 0
+    },
+    "member/rarity4/rank1": {
+      "expected": 40,
+      "identified": 40,
+      "correct": 40,
+      "wrong": 0,
+      "unknown": 0,
+      "missed": 0
+    },
+    "snap/rarity2/rank1": {
+      "expected": 100,
+      "identified": 100,
+      "correct": 100,
+      "wrong": 0,
+      "unknown": 0,
+      "missed": 0
+    },
+    "snap/rarity3/rank1": {
+      "expected": 100,
+      "identified": 100,
+      "correct": 100,
+      "wrong": 0,
+      "unknown": 0,
+      "missed": 0
+    },
+    "snap/rarity4/rank1": {
+      "expected": 40,
+      "identified": 40,
+      "correct": 40,
+      "wrong": 0,
+      "unknown": 0,
+      "missed": 0
+    },
+    "snap/rarity10/rank1": {
+      "expected": 8,
+      "identified": 8,
+      "correct": 8,
+      "wrong": 0,
+      "unknown": 0,
+      "missed": 0
+    },
+    "rank/2": {
+      "expected": 488,
+      "identified": 488,
+      "correct": 488,
+      "wrong": 0,
+      "unknown": 0,
+      "missed": 0
+    },
+    "member/rarity2/rank2": {
+      "expected": 100,
+      "identified": 100,
+      "correct": 100,
+      "wrong": 0,
+      "unknown": 0,
+      "missed": 0
+    },
+    "member/rarity3/rank2": {
+      "expected": 100,
+      "identified": 100,
+      "correct": 100,
+      "wrong": 0,
+      "unknown": 0,
+      "missed": 0
+    },
+    "member/rarity4/rank2": {
+      "expected": 40,
+      "identified": 40,
+      "correct": 40,
+      "wrong": 0,
+      "unknown": 0,
+      "missed": 0
+    },
+    "snap/rarity2/rank2": {
+      "expected": 100,
+      "identified": 100,
+      "correct": 100,
+      "wrong": 0,
+      "unknown": 0,
+      "missed": 0
+    },
+    "snap/rarity3/rank2": {
+      "expected": 100,
+      "identified": 100,
+      "correct": 100,
+      "wrong": 0,
+      "unknown": 0,
+      "missed": 0
+    },
+    "snap/rarity4/rank2": {
+      "expected": 40,
+      "identified": 40,
+      "correct": 40,
+      "wrong": 0,
+      "unknown": 0,
+      "missed": 0
+    },
+    "snap/rarity10/rank2": {
+      "expected": 8,
+      "identified": 8,
+      "correct": 8,
+      "wrong": 0,
+      "unknown": 0,
+      "missed": 0
+    },
+    "rank/3": {
+      "expected": 488,
+      "identified": 488,
+      "correct": 488,
+      "wrong": 0,
+      "unknown": 0,
+      "missed": 0
+    },
+    "member/rarity2/rank3": {
+      "expected": 100,
+      "identified": 100,
+      "correct": 100,
+      "wrong": 0,
+      "unknown": 0,
+      "missed": 0
+    },
+    "member/rarity3/rank3": {
+      "expected": 100,
+      "identified": 100,
+      "correct": 100,
+      "wrong": 0,
+      "unknown": 0,
+      "missed": 0
+    },
+    "member/rarity4/rank3": {
+      "expected": 40,
+      "identified": 40,
+      "correct": 40,
+      "wrong": 0,
+      "unknown": 0,
+      "missed": 0
+    },
+    "snap/rarity2/rank3": {
+      "expected": 100,
+      "identified": 100,
+      "correct": 100,
+      "wrong": 0,
+      "unknown": 0,
+      "missed": 0
+    },
+    "snap/rarity3/rank3": {
+      "expected": 100,
+      "identified": 100,
+      "correct": 100,
+      "wrong": 0,
+      "unknown": 0,
+      "missed": 0
+    },
+    "snap/rarity4/rank3": {
+      "expected": 40,
+      "identified": 40,
+      "correct": 40,
+      "wrong": 0,
+      "unknown": 0,
+      "missed": 0
+    },
+    "snap/rarity10/rank3": {
+      "expected": 8,
+      "identified": 8,
+      "correct": 8,
+      "wrong": 0,
+      "unknown": 0,
+      "missed": 0
+    },
+    "rank/4": {
+      "expected": 488,
+      "identified": 488,
+      "correct": 488,
+      "wrong": 0,
+      "unknown": 0,
+      "missed": 0
+    },
+    "member/rarity2/rank4": {
+      "expected": 100,
+      "identified": 100,
+      "correct": 100,
+      "wrong": 0,
+      "unknown": 0,
+      "missed": 0
+    },
+    "member/rarity3/rank4": {
+      "expected": 100,
+      "identified": 100,
+      "correct": 100,
+      "wrong": 0,
+      "unknown": 0,
+      "missed": 0
+    },
+    "member/rarity4/rank4": {
+      "expected": 40,
+      "identified": 40,
+      "correct": 40,
+      "wrong": 0,
+      "unknown": 0,
+      "missed": 0
+    },
+    "snap/rarity2/rank4": {
+      "expected": 100,
+      "identified": 100,
+      "correct": 100,
+      "wrong": 0,
+      "unknown": 0,
+      "missed": 0
+    },
+    "snap/rarity3/rank4": {
+      "expected": 100,
+      "identified": 100,
+      "correct": 100,
+      "wrong": 0,
+      "unknown": 0,
+      "missed": 0
+    },
+    "snap/rarity4/rank4": {
+      "expected": 40,
+      "identified": 40,
+      "correct": 40,
+      "wrong": 0,
+      "unknown": 0,
+      "missed": 0
+    },
+    "snap/rarity10/rank4": {
+      "expected": 8,
+      "identified": 8,
+      "correct": 8,
+      "wrong": 0,
+      "unknown": 0,
+      "missed": 0
+    },
+    "rank/5": {
+      "expected": 488,
+      "identified": 488,
+      "correct": 488,
+      "wrong": 0,
+      "unknown": 0,
+      "missed": 0
+    },
+    "member/rarity2/rank5": {
+      "expected": 100,
+      "identified": 100,
+      "correct": 100,
+      "wrong": 0,
+      "unknown": 0,
+      "missed": 0
+    },
+    "member/rarity3/rank5": {
+      "expected": 100,
+      "identified": 100,
+      "correct": 100,
+      "wrong": 0,
+      "unknown": 0,
+      "missed": 0
+    },
+    "member/rarity4/rank5": {
+      "expected": 40,
+      "identified": 40,
+      "correct": 40,
+      "wrong": 0,
+      "unknown": 0,
+      "missed": 0
+    },
+    "snap/rarity2/rank5": {
+      "expected": 100,
+      "identified": 100,
+      "correct": 100,
+      "wrong": 0,
+      "unknown": 0,
+      "missed": 0
+    },
+    "snap/rarity3/rank5": {
+      "expected": 100,
+      "identified": 100,
+      "correct": 100,
+      "wrong": 0,
+      "unknown": 0,
+      "missed": 0
+    },
+    "snap/rarity4/rank5": {
+      "expected": 40,
+      "identified": 40,
+      "correct": 40,
+      "wrong": 0,
+      "unknown": 0,
+      "missed": 0
+    },
+    "snap/rarity10/rank5": {
+      "expected": 8,
+      "identified": 8,
+      "correct": 8,
+      "wrong": 0,
+      "unknown": 0,
+      "missed": 0
+    },
+    "[1440, 1080]": {
+      "expected": 610,
+      "identified": 610,
+      "correct": 610,
+      "wrong": 0,
+      "unknown": 0,
+      "missed": 0
+    },
+    "[1920, 1080]": {
+      "expected": 610,
+      "identified": 610,
+      "correct": 610,
+      "wrong": 0,
+      "unknown": 0,
+      "missed": 0
+    },
+    "[2560, 1440]": {
+      "expected": 610,
+      "identified": 610,
+      "correct": 610,
+      "wrong": 0,
+      "unknown": 0,
+      "missed": 0
+    }
+  },
+  "level_fixed_to": 1,
+  "scope": "Every catalog identity at every master-defined owned rank at four resolutions; complete visible lists, JPEG95, no blur or occlusion. Rank0 is not an owned rank.",
+  "recognition_provenance": {
+    "schema": "ournotes-boxlens.recognition-provenance/1",
+    "files": {
+      "catalog.json": "902b59ed37ea50e601187b4ccf387cacfbae61c714f52f524f42d6d320df7818",
+      "index.npz": "3a8d7e8f1e3d4d9ae14682a10a85476daeb7c912ad5c4763ca35abf9dac6e50f",
+      "models/encoder.onnx": "a0a64115241a0eb22e2aab3b151ee3a3f57dc317d88524c027aaa443d051efa1",
+      "models/fields.onnx": "768889db7b475dce28ed949299d2e7a624faa3ee18f3c28bb22deac2bcdd1a8d"
+    },
+    "inference_core_sha256": "bf95bcd9579ae61c7dceedcf883befaa1cff81dd929d592e069249683c86dbfe",
+    "field_confidence_threshold": 0.995,
+    "onnxruntime_version": "1.20.1"
+  }
+}

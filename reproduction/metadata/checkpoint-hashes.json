@@ -1,0 +1,8 @@
+{
+  "models/v4/encoder.pt": "faf48c22a38d08902b14d83bd0948256c5590bb0c52318db77e8d27f237b5eeb",
+  "models/v4/level.pt": "6cfcc886ba4ff26d59d06ee1769f1d8b25c941f31a5ece4bcadcbbcdabdd7fdc",
+  "models/v6/level.pt": "e191fb4cbcf9ce9b490a5980d678698957c1b226e7c04630f8bcc67af55029bb",
+  "models/v7-fields/fields.pt": "7abc5231e67a2e8bc000934b4dfcc434fa14bdf4e67526529e5090eed9c013ab",
+  "models/v8-encoder/encoder.pt": "d8c2077842dbced378cbb01277fb341cf2583f64d55ef408d7ff23db7dd4965f",
+  "models/v8-fields/fields.pt": "351db40ac89f611480d05131b7e626e92a928cfdd71278865dd9e87eb2d04b1c"
+}

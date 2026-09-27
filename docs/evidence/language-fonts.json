@@ -1,0 +1,99 @@
+{
+  "languages": {
+    "0": {
+      "fontNames": [
+        "A-OTF-ShinGoPr6N-Regular",
+        "VibeMOPro-Medium"
+      ],
+      "additionalFontNames": [
+        "NotoSansJP-Regular"
+      ]
+    },
+    "1": {
+      "fontNames": [
+        "A-OTF-ShinGoPr6N-Regular",
+        "VibeMOPro-Medium"
+      ],
+      "additionalFontNames": [
+        "A-OTF-ShinGoPr6N-Regular"
+      ]
+    },
+    "2": {
+      "fontNames": [
+        "FZLTH_GB18030L2_R",
+        "VibeMOPro-Medium"
+      ],
+      "additionalFontNames": [
+        "FZLTH_GB18030L2_R"
+      ]
+    },
+    "3": {
+      "fontNames": [
+        "FZLTH_GB18030L2_R",
+        "VibeMOPro-Medium"
+      ],
+      "additionalFontNames": [
+        "FZLTH_GB18030L2_R"
+      ]
+    },
+    "4": {
+      "fontNames": [
+        "Pretendard-SemiBold",
+        "VibeMOPro-Medium"
+      ],
+      "additionalFontNames": [
+        "Pretendard-SemiBold"
+      ]
+    }
+  },
+  "materialTypes": [
+    "Default",
+    "OutlineBlack",
+    "OutlineBlack2",
+    "OutlineWhite",
+    "ShadowBlack",
+    "ShadowWhite",
+    "DropShadowBlack",
+    "OutlineLightGray",
+    "Grow for UICountInfoElement-Positive",
+    "SoftShadowWhite",
+    "GrowPurple",
+    "GrowLiveStart",
+    "OutlineDark",
+    "OutlineDark2",
+    "GlowBlack",
+    "OutlineButtonText",
+    "GlowLightBlue2",
+    "OutlineDarkBlue3",
+    "OutlineSystemMessage",
+    "OutlineBlue",
+    "CardParam",
+    "GlowGreen",
+    "OutlineAdvCommon",
+    "OutlineWhiteAlpha",
+    "OutlineDarkBlueAlpha",
+    "OutlineDarkBlueBlack_30",
+    "OutlineItemAmount",
+    "OutlineDarkBold",
+    "OutlineEventType",
+    "OutlinePurple",
+    "OutlinePink",
+    "GachaAnimationName R",
+    "GachaAnimationName SR",
+    "GachaAnimationName SSR",
+    "GachaAnimationName R Sub",
+    "GachaAnimationName SR Sub",
+    "GachaAnimationName SSR Sub",
+    "MemberNamePanel",
+    "MemberNamePanel Sub",
+    "GachaAppealText",
+    "GachaAnimationGradient",
+    "OutlineAnnouncementCategoryBug",
+    "OutlineAnnouncementCategoryCampaign",
+    "OutlineAnnouncementCategoryEvent",
+    "OutlineAnnouncementCategoryGacha",
+    "OutlineAnnouncementCategoryMaintenance",
+    "OutlineAnnouncementCategoryOther",
+    "OutlineAnnouncementCategoryUpdate"
+  ]
+}

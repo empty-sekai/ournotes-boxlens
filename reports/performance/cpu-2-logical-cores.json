@@ -1,0 +1,603 @@
+{
+  "logical_cpu_affinity": [
+    0,
+    1
+  ],
+  "threads": 2,
+  "platform": "Windows-10-10.0.19044-SP0",
+  "processor": "Intel64 Family 6 Model 151 Stepping 2, GenuineIntel",
+  "host_logical_cpus": 12,
+  "model_sha256": {
+    "encoder.onnx": "a0a64115241a0eb22e2aab3b151ee3a3f57dc317d88524c027aaa443d051efa1",
+    "fields.onnx": "768889db7b475dce28ed949299d2e7a624faa3ee18f3c28bb22deac2bcdd1a8d"
+  },
+  "startup_ms": 962.49,
+  "startup_memory": {
+    "rss_bytes": 162549760,
+    "peak_rss_bytes": 203296768
+  },
+  "final_memory": {
+    "rss_bytes": 266162176,
+    "peak_rss_bytes": 628568064
+  },
+  "input_sha256": {
+    "member.jpg": "94762016747673434bb8c749b067029419c929d6f98961f606db97755ff17e90",
+    "snap.jpg": "b4a62b4dc1fe09fa691e8893d1ae62832c8a26f2a8a26fd58043df23c009b4fc",
+    "member-performance.jpg": "419aa52b9911efc6a8ce0538f43f5dc8ed964d4d5c97d9703fa3851160c244ca",
+    "member-technic.jpg": "0a4cbdbfbb332cb6a6566ac6dcd92f5a0d6c9ac6f4161753e09a2923c23105e8",
+    "member-total.jpg": "07296f65c564e92998d48f57b6580361dc30072239f7b77e63d797757d391f40",
+    "member-training.jpg": "bac4cb7896d318fa9004a628c694d38da5558e4cef1161d2efbf8fe46ec9a1fc",
+    "member-visual.jpg": "3e25579f69e3000e753f4e95d6428d580ae972563194968b47321906ccb8202c",
+    "snap-performance.jpg": "ac472e94e10e92aa21042ee706dd75e1d610c2b5caecce16171945a6569a77e8",
+    "snap-technic.jpg": "4b0d3acabd475328b0cd59338e51280de6f82ae7b59a6d1816114f6f88ac6d9e",
+    "snap-visual.jpg": "9b9c9824cc2dde88a067d3a430c8b6374c00769f80124b3558d65111873a161f"
+  },
+  "warmup": "one pass of all images",
+  "repeats": 5,
+  "median_ms": 1821.565,
+  "p95_ms": 2427.3035,
+  "min_ms": 564.7,
+  "max_ms": 2528.2,
+  "measurements": [
+    {
+      "file": "member.jpg",
+      "repeat": 0,
+      "pixels": [
+        1441,
+        1080
+      ],
+      "cards": 24,
+      "elapsed_ms": 2419.51,
+      "process_cpu_ms": 2671.88
+    },
+    {
+      "file": "snap.jpg",
+      "repeat": 0,
+      "pixels": [
+        1441,
+        1080
+      ],
+      "cards": 3,
+      "elapsed_ms": 688.38,
+      "process_cpu_ms": 968.75
+    },
+    {
+      "file": "member-performance.jpg",
+      "repeat": 0,
+      "pixels": [
+        1441,
+        1080
+      ],
+      "cards": 24,
+      "elapsed_ms": 2241.73,
+      "process_cpu_ms": 2515.62
+    },
+    {
+      "file": "member-technic.jpg",
+      "repeat": 0,
+      "pixels": [
+        1441,
+        1080
+      ],
+      "cards": 24,
+      "elapsed_ms": 2296.64,
+      "process_cpu_ms": 2578.12
+    },
+    {
+      "file": "member-total.jpg",
+      "repeat": 0,
+      "pixels": [
+        1441,
+        1080
+      ],
+      "cards": 24,
+      "elapsed_ms": 2138.92,
+      "process_cpu_ms": 2437.5
+    },
+    {
+      "file": "member-training.jpg",
+      "repeat": 0,
+      "pixels": [
+        1441,
+        1080
+      ],
+      "cards": 24,
+      "elapsed_ms": 1999.03,
+      "process_cpu_ms": 2328.12
+    },
+    {
+      "file": "member-visual.jpg",
+      "repeat": 0,
+      "pixels": [
+        1441,
+        1080
+      ],
+      "cards": 24,
+      "elapsed_ms": 1935.56,
+      "process_cpu_ms": 2281.25
+    },
+    {
+      "file": "snap-performance.jpg",
+      "repeat": 0,
+      "pixels": [
+        1441,
+        1080
+      ],
+      "cards": 3,
+      "elapsed_ms": 924.66,
+      "process_cpu_ms": 1109.38
+    },
+    {
+      "file": "snap-technic.jpg",
+      "repeat": 0,
+      "pixels": [
+        1441,
+        1080
+      ],
+      "cards": 3,
+      "elapsed_ms": 936.73,
+      "process_cpu_ms": 984.38
+    },
+    {
+      "file": "snap-visual.jpg",
+      "repeat": 0,
+      "pixels": [
+        1441,
+        1080
+      ],
+      "cards": 3,
+      "elapsed_ms": 739.13,
+      "process_cpu_ms": 1000.0
+    },
+    {
+      "file": "member.jpg",
+      "repeat": 1,
+      "pixels": [
+        1441,
+        1080
+      ],
+      "cards": 24,
+      "elapsed_ms": 2434.92,
+      "process_cpu_ms": 2500.0
+    },
+    {
+      "file": "snap.jpg",
+      "repeat": 1,
+      "pixels": [
+        1441,
+        1080
+      ],
+      "cards": 3,
+      "elapsed_ms": 982.07,
+      "process_cpu_ms": 1187.5
+    },
+    {
+      "file": "member-performance.jpg",
+      "repeat": 1,
+      "pixels": [
+        1441,
+        1080
+      ],
+      "cards": 24,
+      "elapsed_ms": 2310.4,
+      "process_cpu_ms": 2468.75
+    },
+    {
+      "file": "member-technic.jpg",
+      "repeat": 1,
+      "pixels": [
+        1441,
+        1080
+      ],
+      "cards": 24,
+      "elapsed_ms": 2528.2,
+      "process_cpu_ms": 2593.75
+    },
+    {
+      "file": "member-total.jpg",
+      "repeat": 1,
+      "pixels": [
+        1441,
+        1080
+      ],
+      "cards": 24,
+      "elapsed_ms": 1983.29,
+      "process_cpu_ms": 2421.88
+    },
+    {
+      "file": "member-training.jpg",
+      "repeat": 1,
+      "pixels": [
+        1441,
+        1080
+      ],
+      "cards": 24,
+      "elapsed_ms": 2346.72,
+      "process_cpu_ms": 2515.62
+    },
+    {
+      "file": "member-visual.jpg",
+      "repeat": 1,
+      "pixels": [
+        1441,
+        1080
+      ],
+      "cards": 24,
+      "elapsed_ms": 1883.31,
+      "process_cpu_ms": 2203.12
+    },
+    {
+      "file": "snap-performance.jpg",
+      "repeat": 1,
+      "pixels": [
+        1441,
+        1080
+      ],
+      "cards": 3,
+      "elapsed_ms": 583.65,
+      "process_cpu_ms": 859.38
+    },
+    {
+      "file": "snap-technic.jpg",
+      "repeat": 1,
+      "pixels": [
+        1441,
+        1080
+      ],
+      "cards": 3,
+      "elapsed_ms": 687.98,
+      "process_cpu_ms": 1031.25
+    },
+    {
+      "file": "snap-visual.jpg",
+      "repeat": 1,
+      "pixels": [
+        1441,
+        1080
+      ],
+      "cards": 3,
+      "elapsed_ms": 633.24,
+      "process_cpu_ms": 906.25
+    },
+    {
+      "file": "member.jpg",
+      "repeat": 2,
+      "pixels": [
+        1441,
+        1080
+      ],
+      "cards": 24,
+      "elapsed_ms": 1847.0,
+      "process_cpu_ms": 2187.5
+    },
+    {
+      "file": "snap.jpg",
+      "repeat": 2,
+      "pixels": [
+        1441,
+        1080
+      ],
+      "cards": 3,
+      "elapsed_ms": 621.79,
+      "process_cpu_ms": 843.75
+    },
+    {
+      "file": "member-performance.jpg",
+      "repeat": 2,
+      "pixels": [
+        1441,
+        1080
+      ],
+      "cards": 24,
+      "elapsed_ms": 2066.12,
+      "process_cpu_ms": 2484.38
+    },
+    {
+      "file": "member-technic.jpg",
+      "repeat": 2,
+      "pixels": [
+        1441,
+        1080
+      ],
+      "cards": 24,
+      "elapsed_ms": 2186.2,
+      "process_cpu_ms": 2421.88
+    },
+    {
+      "file": "member-total.jpg",
+      "repeat": 2,
+      "pixels": [
+        1441,
+        1080
+      ],
+      "cards": 24,
+      "elapsed_ms": 1950.88,
+      "process_cpu_ms": 2328.12
+    },
+    {
+      "file": "member-training.jpg",
+      "repeat": 2,
+      "pixels": [
+        1441,
+        1080
+      ],
+      "cards": 24,
+      "elapsed_ms": 2034.19,
+      "process_cpu_ms": 2156.25
+    },
+    {
+      "file": "member-visual.jpg",
+      "repeat": 2,
+      "pixels": [
+        1441,
+        1080
+      ],
+      "cards": 24,
+      "elapsed_ms": 2433.68,
+      "process_cpu_ms": 2531.25
+    },
+    {
+      "file": "snap-performance.jpg",
+      "repeat": 2,
+      "pixels": [
+        1441,
+        1080
+      ],
+      "cards": 3,
+      "elapsed_ms": 697.71,
+      "process_cpu_ms": 968.75
+    },
+    {
+      "file": "snap-technic.jpg",
+      "repeat": 2,
+      "pixels": [
+        1441,
+        1080
+      ],
+      "cards": 3,
+      "elapsed_ms": 593.83,
+      "process_cpu_ms": 921.88
+    },
+    {
+      "file": "snap-visual.jpg",
+      "repeat": 2,
+      "pixels": [
+        1441,
+        1080
+      ],
+      "cards": 3,
+      "elapsed_ms": 699.51,
+      "process_cpu_ms": 953.12
+    },
+    {
+      "file": "member.jpg",
+      "repeat": 3,
+      "pixels": [
+        1441,
+        1080
+      ],
+      "cards": 24,
+      "elapsed_ms": 1959.67,
+      "process_cpu_ms": 2406.25
+    },
+    {
+      "file": "snap.jpg",
+      "repeat": 3,
+      "pixels": [
+        1441,
+        1080
+      ],
+      "cards": 3,
+      "elapsed_ms": 662.18,
+      "process_cpu_ms": 890.62
+    },
+    {
+      "file": "member-performance.jpg",
+      "repeat": 3,
+      "pixels": [
+        1441,
+        1080
+      ],
+      "cards": 24,
+      "elapsed_ms": 1905.66,
+      "process_cpu_ms": 2265.62
+    },
+    {
+      "file": "member-technic.jpg",
+      "repeat": 3,
+      "pixels": [
+        1441,
+        1080
+      ],
+      "cards": 24,
+      "elapsed_ms": 1817.68,
+      "process_cpu_ms": 2250.0
+    },
+    {
+      "file": "member-total.jpg",
+      "repeat": 3,
+      "pixels": [
+        1441,
+        1080
+      ],
+      "cards": 24,
+      "elapsed_ms": 1759.39,
+      "process_cpu_ms": 2046.88
+    },
+    {
+      "file": "member-training.jpg",
+      "repeat": 3,
+      "pixels": [
+        1441,
+        1080
+      ],
+      "cards": 24,
+      "elapsed_ms": 2085.4,
+      "process_cpu_ms": 2453.12
+    },
+    {
+      "file": "member-visual.jpg",
+      "repeat": 3,
+      "pixels": [
+        1441,
+        1080
+      ],
+      "cards": 24,
+      "elapsed_ms": 1959.83,
+      "process_cpu_ms": 2171.88
+    },
+    {
+      "file": "snap-performance.jpg",
+      "repeat": 3,
+      "pixels": [
+        1441,
+        1080
+      ],
+      "cards": 3,
+      "elapsed_ms": 591.24,
+      "process_cpu_ms": 921.88
+    },
+    {
+      "file": "snap-technic.jpg",
+      "repeat": 3,
+      "pixels": [
+        1441,
+        1080
+      ],
+      "cards": 3,
+      "elapsed_ms": 564.7,
+      "process_cpu_ms": 859.38
+    },
+    {
+      "file": "snap-visual.jpg",
+      "repeat": 3,
+      "pixels": [
+        1441,
+        1080
+      ],
+      "cards": 3,
+      "elapsed_ms": 569.43,
+      "process_cpu_ms": 890.62
+    },
+    {
+      "file": "member.jpg",
+      "repeat": 4,
+      "pixels": [
+        1441,
+        1080
+      ],
+      "cards": 24,
+      "elapsed_ms": 1795.17,
+      "process_cpu_ms": 2203.12
+    },
+    {
+      "file": "snap.jpg",
+      "repeat": 4,
+      "pixels": [
+        1441,
+        1080
+      ],
+      "cards": 3,
+      "elapsed_ms": 726.54,
+      "process_cpu_ms": 953.12
+    },
+    {
+      "file": "member-performance.jpg",
+      "repeat": 4,
+      "pixels": [
+        1441,
+        1080
+      ],
+      "cards": 24,
+      "elapsed_ms": 1734.4,
+      "process_cpu_ms": 2171.88
+    },
+    {
+      "file": "member-technic.jpg",
+      "repeat": 4,
+      "pixels": [
+        1441,
+        1080
+      ],
+      "cards": 24,
+      "elapsed_ms": 1825.45,
+      "process_cpu_ms": 2218.75
+    },
+    {
+      "file": "member-total.jpg",
+      "repeat": 4,
+      "pixels": [
+        1441,
+        1080
+      ],
+      "cards": 24,
+      "elapsed_ms": 1720.2,
+      "process_cpu_ms": 2078.12
+    },
+    {
+      "file": "member-training.jpg",
+      "repeat": 4,
+      "pixels": [
+        1441,
+        1080
+      ],
+      "cards": 24,
+      "elapsed_ms": 1832.44,
+      "process_cpu_ms": 2250.0
+    },
+    {
+      "file": "member-visual.jpg",
+      "repeat": 4,
+      "pixels": [
+        1441,
+        1080
+      ],
+      "cards": 24,
+      "elapsed_ms": 1841.85,
+      "process_cpu_ms": 2265.62
+    },
+    {
+      "file": "snap-performance.jpg",
+      "repeat": 4,
+      "pixels": [
+        1441,
+        1080
+      ],
+      "cards": 3,
+      "elapsed_ms": 710.33,
+      "process_cpu_ms": 1000.0
+    },
+    {
+      "file": "snap-technic.jpg",
+      "repeat": 4,
+      "pixels": [
+        1441,
+        1080
+      ],
+      "cards": 3,
+      "elapsed_ms": 630.85,
+      "process_cpu_ms": 906.25
+    },
+    {
+      "file": "snap-visual.jpg",
+      "repeat": 4,
+      "pixels": [
+        1441,
+        1080
+      ],
+      "cards": 3,
+      "elapsed_ms": 624.72,
+      "process_cpu_ms": 890.62
+    }
+  ],
+  "scope": "Same process constrained to listed logical CPUs. Scan includes localization and field reading; excludes file decoding and HTTP. Other host workloads are not controlled.",
+  "inference_core_sha256": "bf95bcd9579ae61c7dceedcf883befaa1cff81dd929d592e069249683c86dbfe",
+  "package_version": "0.1.0",
+  "cpu_model_verified": "12th Gen Intel(R) Core(TM) i5-12400F",
+  "runtime_versions": {
+    "numpy": "2.4.3",
+    "Pillow": "12.1.1",
+    "opencv-python-headless": "5.0.0.93",
+    "onnxruntime": "1.20.1"
+  }
+}

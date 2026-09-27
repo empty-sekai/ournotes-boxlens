@@ -1,0 +1,570 @@
+{
+  "schema": "ournotes-boxlens.coverage/1",
+  "catalog_sha256": "902b59ed37ea50e601187b4ccf387cacfbae61c714f52f524f42d6d320df7818",
+  "catalog": {
+    "count": 122,
+    "by_kind_rarity": {
+      "member/R": 25,
+      "member/SR": 25,
+      "member/SSR": 10,
+      "snap/EX": 2,
+      "snap/R": 25,
+      "snap/SR": 25,
+      "snap/SSR": 10
+    },
+    "by_kind_type": {
+      "member/Blue": 12,
+      "member/Green": 12,
+      "member/Purple": 12,
+      "member/Red": 12,
+      "member/Yellow": 12,
+      "snap/Blue": 12,
+      "snap/Green": 12,
+      "snap/Purple": 13,
+      "snap/Red": 14,
+      "snap/Yellow": 11
+    }
+  },
+  "rarity_enum": {
+    "2": "R",
+    "3": "SR",
+    "4": "SSR",
+    "10": "EX",
+    "20": "BD"
+  },
+  "card_type_enum": {
+    "1": "Red",
+    "2": "Blue",
+    "3": "Green",
+    "4": "Yellow",
+    "5": "Purple"
+  },
+  "enum_evidence": {
+    "rarity_type_index": 34458,
+    "card_type_type_index": 19592,
+    "client": "1.0.1-25",
+    "metadata_hash_verified": true
+  },
+  "absent_enum_rarities": [
+    "BD"
+  ],
+  "datasets": {
+    "work\\box-vision\\remote-audit-v13\\synthetic\\scale-v6\\train\\truth.json": {
+      "truth_sha256": "bbb1b2aea52b1bd04f6bd6b09f6130f82111cd825c7b94493f339716826d353e",
+      "screenshots": 2048,
+      "unique": {
+        "count": 105,
+        "by_kind_rarity": {
+          "member/R": 22,
+          "member/SR": 21,
+          "member/SSR": 9,
+          "snap/EX": 1,
+          "snap/R": 22,
+          "snap/SR": 21,
+          "snap/SSR": 9
+        },
+        "by_kind_type": {
+          "member/Blue": 10,
+          "member/Green": 11,
+          "member/Purple": 9,
+          "member/Red": 10,
+          "member/Yellow": 12,
+          "snap/Blue": 12,
+          "snap/Green": 11,
+          "snap/Purple": 10,
+          "snap/Red": 11,
+          "snap/Yellow": 9
+        }
+      },
+      "observations": {
+        "count": 35483,
+        "by_kind_rarity": {
+          "member/R": 7372,
+          "member/SR": 6930,
+          "member/SSR": 2972,
+          "snap/EX": 344,
+          "snap/R": 7480,
+          "snap/SR": 7291,
+          "snap/SSR": 3094
+        },
+        "by_kind_type": {
+          "member/Blue": 3338,
+          "member/Green": 3657,
+          "member/Purple": 2997,
+          "member/Red": 3321,
+          "member/Yellow": 3961,
+          "snap/Blue": 4086,
+          "snap/Green": 3771,
+          "snap/Purple": 3492,
+          "snap/Red": 3754,
+          "snap/Yellow": 3106
+        }
+      },
+      "missing_catalog_ids": [
+        [
+          "member",
+          7
+        ],
+        [
+          "member",
+          14
+        ],
+        [
+          "member",
+          21
+        ],
+        [
+          "member",
+          28
+        ],
+        [
+          "member",
+          35
+        ],
+        [
+          "member",
+          42
+        ],
+        [
+          "member",
+          49
+        ],
+        [
+          "member",
+          56
+        ],
+        [
+          "snap",
+          7
+        ],
+        [
+          "snap",
+          14
+        ],
+        [
+          "snap",
+          21
+        ],
+        [
+          "snap",
+          28
+        ],
+        [
+          "snap",
+          35
+        ],
+        [
+          "snap",
+          42
+        ],
+        [
+          "snap",
+          49
+        ],
+        [
+          "snap",
+          56
+        ],
+        [
+          "snap",
+          70
+        ]
+      ],
+      "modes": {
+        "unrecorded": 35483
+      },
+      "geometric_visibility": {
+        "whole_card": 31989,
+        "partial_card": 3494
+      }
+    },
+    "work\\box-vision\\remote-audit-v13\\synthetic\\modes-v7\\train\\truth.json": {
+      "truth_sha256": "ceb7bc7c1fe2e634de8633455bc80867fa14007bcb0d3e60201cf8a87004228d",
+      "screenshots": 350,
+      "unique": {
+        "count": 105,
+        "by_kind_rarity": {
+          "member/R": 22,
+          "member/SR": 21,
+          "member/SSR": 9,
+          "snap/EX": 1,
+          "snap/R": 22,
+          "snap/SR": 21,
+          "snap/SSR": 9
+        },
+        "by_kind_type": {
+          "member/Blue": 10,
+          "member/Green": 11,
+          "member/Purple": 9,
+          "member/Red": 10,
+          "member/Yellow": 12,
+          "snap/Blue": 12,
+          "snap/Green": 11,
+          "snap/Purple": 10,
+          "snap/Red": 11,
+          "snap/Yellow": 9
+        }
+      },
+      "observations": {
+        "count": 5935,
+        "by_kind_rarity": {
+          "member/R": 1216,
+          "member/SR": 1173,
+          "member/SSR": 572,
+          "snap/EX": 50,
+          "snap/R": 1264,
+          "snap/SR": 1159,
+          "snap/SSR": 501
+        },
+        "by_kind_type": {
+          "member/Blue": 612,
+          "member/Green": 635,
+          "member/Purple": 491,
+          "member/Red": 561,
+          "member/Yellow": 662,
+          "snap/Blue": 698,
+          "snap/Green": 604,
+          "snap/Purple": 551,
+          "snap/Red": 598,
+          "snap/Yellow": 523
+        }
+      },
+      "missing_catalog_ids": [
+        [
+          "member",
+          7
+        ],
+        [
+          "member",
+          14
+        ],
+        [
+          "member",
+          21
+        ],
+        [
+          "member",
+          28
+        ],
+        [
+          "member",
+          35
+        ],
+        [
+          "member",
+          42
+        ],
+        [
+          "member",
+          49
+        ],
+        [
+          "member",
+          56
+        ],
+        [
+          "snap",
+          7
+        ],
+        [
+          "snap",
+          14
+        ],
+        [
+          "snap",
+          21
+        ],
+        [
+          "snap",
+          28
+        ],
+        [
+          "snap",
+          35
+        ],
+        [
+          "snap",
+          42
+        ],
+        [
+          "snap",
+          49
+        ],
+        [
+          "snap",
+          56
+        ],
+        [
+          "snap",
+          70
+        ]
+      ],
+      "modes": {
+        "level": 1057,
+        "training": 456,
+        "performance": 939,
+        "total": 458,
+        "technic": 984,
+        "visual": 1003,
+        "hide": 1038
+      },
+      "geometric_visibility": {
+        "whole_card": 5321,
+        "partial_card": 614
+      }
+    },
+    "work\\box-vision\\audit-scenes-v8\\scale-v6\\validation\\truth.json": {
+      "truth_sha256": "ec7ca137870ebbd47c4bd4c988ae3a1809712ed9b8f8c08f0b160d158b58d8c4",
+      "screenshots": 512,
+      "unique": {
+        "count": 122,
+        "by_kind_rarity": {
+          "member/R": 25,
+          "member/SR": 25,
+          "member/SSR": 10,
+          "snap/EX": 2,
+          "snap/R": 25,
+          "snap/SR": 25,
+          "snap/SSR": 10
+        },
+        "by_kind_type": {
+          "member/Blue": 12,
+          "member/Green": 12,
+          "member/Purple": 12,
+          "member/Red": 12,
+          "member/Yellow": 12,
+          "snap/Blue": 12,
+          "snap/Green": 12,
+          "snap/Purple": 13,
+          "snap/Red": 14,
+          "snap/Yellow": 11
+        }
+      },
+      "observations": {
+        "count": 8887,
+        "by_kind_rarity": {
+          "member/R": 1777,
+          "member/SR": 1814,
+          "member/SSR": 742,
+          "snap/EX": 145,
+          "snap/R": 1830,
+          "snap/SR": 1846,
+          "snap/SSR": 733
+        },
+        "by_kind_type": {
+          "member/Blue": 864,
+          "member/Green": 847,
+          "member/Purple": 878,
+          "member/Red": 861,
+          "member/Yellow": 883,
+          "snap/Blue": 860,
+          "snap/Green": 863,
+          "snap/Purple": 1003,
+          "snap/Red": 991,
+          "snap/Yellow": 837
+        }
+      },
+      "missing_catalog_ids": [],
+      "modes": {
+        "unrecorded": 8887
+      },
+      "geometric_visibility": {
+        "whole_card": 8119,
+        "partial_card": 768
+      }
+    },
+    "work\\box-vision\\audit-scenes-v8\\scale-v6\\stress\\truth.json": {
+      "truth_sha256": "92349a86c6ad6420249ba9e538c4deae7264801b2f0d77ed5622ba88c6bf54c0",
+      "screenshots": 256,
+      "unique": {
+        "count": 122,
+        "by_kind_rarity": {
+          "member/R": 25,
+          "member/SR": 25,
+          "member/SSR": 10,
+          "snap/EX": 2,
+          "snap/R": 25,
+          "snap/SR": 25,
+          "snap/SSR": 10
+        },
+        "by_kind_type": {
+          "member/Blue": 12,
+          "member/Green": 12,
+          "member/Purple": 12,
+          "member/Red": 12,
+          "member/Yellow": 12,
+          "snap/Blue": 12,
+          "snap/Green": 12,
+          "snap/Purple": 13,
+          "snap/Red": 14,
+          "snap/Yellow": 11
+        }
+      },
+      "observations": {
+        "count": 4273,
+        "by_kind_rarity": {
+          "member/R": 876,
+          "member/SR": 875,
+          "member/SSR": 349,
+          "snap/EX": 73,
+          "snap/R": 888,
+          "snap/SR": 854,
+          "snap/SSR": 358
+        },
+        "by_kind_type": {
+          "member/Blue": 444,
+          "member/Green": 422,
+          "member/Purple": 388,
+          "member/Red": 425,
+          "member/Yellow": 421,
+          "snap/Blue": 448,
+          "snap/Green": 431,
+          "snap/Purple": 463,
+          "snap/Red": 468,
+          "snap/Yellow": 363
+        }
+      },
+      "missing_catalog_ids": [],
+      "modes": {
+        "unrecorded": 4273
+      },
+      "geometric_visibility": {
+        "whole_card": 3776,
+        "partial_card": 497
+      }
+    },
+    "work\\box-vision\\audit-scenes-v8\\modes-v7\\validation\\truth.json": {
+      "truth_sha256": "521b9bd19836ed2333cfc115018a35b3f2642e63ecec39a5e257f64406fe7138",
+      "screenshots": 140,
+      "unique": {
+        "count": 122,
+        "by_kind_rarity": {
+          "member/R": 25,
+          "member/SR": 25,
+          "member/SSR": 10,
+          "snap/EX": 2,
+          "snap/R": 25,
+          "snap/SR": 25,
+          "snap/SSR": 10
+        },
+        "by_kind_type": {
+          "member/Blue": 12,
+          "member/Green": 12,
+          "member/Purple": 12,
+          "member/Red": 12,
+          "member/Yellow": 12,
+          "snap/Blue": 12,
+          "snap/Green": 12,
+          "snap/Purple": 13,
+          "snap/Red": 14,
+          "snap/Yellow": 11
+        }
+      },
+      "observations": {
+        "count": 2344,
+        "by_kind_rarity": {
+          "member/R": 474,
+          "member/SR": 510,
+          "member/SSR": 190,
+          "snap/EX": 42,
+          "snap/R": 461,
+          "snap/SR": 472,
+          "snap/SSR": 195
+        },
+        "by_kind_type": {
+          "member/Blue": 221,
+          "member/Green": 233,
+          "member/Purple": 238,
+          "member/Red": 240,
+          "member/Yellow": 242,
+          "snap/Blue": 220,
+          "snap/Green": 213,
+          "snap/Purple": 246,
+          "snap/Red": 271,
+          "snap/Yellow": 220
+        }
+      },
+      "missing_catalog_ids": [],
+      "modes": {
+        "level": 435,
+        "training": 176,
+        "performance": 370,
+        "total": 173,
+        "technic": 421,
+        "visual": 395,
+        "hide": 374
+      },
+      "geometric_visibility": {
+        "whole_card": 2165,
+        "partial_card": 179
+      }
+    },
+    "work\\box-vision\\audit-scenes-v8\\modes-v7\\stress\\truth.json": {
+      "truth_sha256": "1540ced231e83c2c4b716b52312d9ad2e20367416182473be6c2e0e4fce8553e",
+      "screenshots": 70,
+      "unique": {
+        "count": 122,
+        "by_kind_rarity": {
+          "member/R": 25,
+          "member/SR": 25,
+          "member/SSR": 10,
+          "snap/EX": 2,
+          "snap/R": 25,
+          "snap/SR": 25,
+          "snap/SSR": 10
+        },
+        "by_kind_type": {
+          "member/Blue": 12,
+          "member/Green": 12,
+          "member/Purple": 12,
+          "member/Red": 12,
+          "member/Yellow": 12,
+          "snap/Blue": 12,
+          "snap/Green": 12,
+          "snap/Purple": 13,
+          "snap/Red": 14,
+          "snap/Yellow": 11
+        }
+      },
+      "observations": {
+        "count": 1126,
+        "by_kind_rarity": {
+          "member/R": 229,
+          "member/SR": 249,
+          "member/SSR": 96,
+          "snap/EX": 13,
+          "snap/R": 225,
+          "snap/SR": 242,
+          "snap/SSR": 72
+        },
+        "by_kind_type": {
+          "member/Blue": 115,
+          "member/Green": 116,
+          "member/Purple": 122,
+          "member/Red": 118,
+          "member/Yellow": 103,
+          "snap/Blue": 109,
+          "snap/Green": 115,
+          "snap/Purple": 120,
+          "snap/Red": 112,
+          "snap/Yellow": 96
+        }
+      },
+      "missing_catalog_ids": [],
+      "modes": {
+        "level": 162,
+        "training": 82,
+        "performance": 209,
+        "total": 62,
+        "technic": 203,
+        "visual": 217,
+        "hide": 191
+      },
+      "geometric_visibility": {
+        "whole_card": 990,
+        "partial_card": 136
+      }
+    }
+  },
+  "scope": "Observed identities in saved truth; presence is not accuracy. Catalog snapshot only; no assertion of all current game cards or all UI styles."
+}

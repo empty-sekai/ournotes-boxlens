@@ -1,0 +1,62 @@
+import base64
+import json
+import threading
+from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
+from pathlib import Path
+
+import cv2
+import numpy as np
+
+from .assets import read
+from .engine import Engine,merge
+
+
+def serve(data,port,host='127.0.0.1'):
+    data=Path(data)
+    engine=Engine(data,threads=2)
+    lock=threading.Lock()
+    assets={'/art/'+Path(c['file']).name:data/c['file'] for c in engine.cards}
+    html=(Path(__file__).parent/'web.html').read_bytes()
+
+    class Handler(BaseHTTPRequestHandler):
+        def send(self,body,status=200,content_type='application/json; charset=utf-8'):
+            if not isinstance(body,bytes):body=json.dumps(body,ensure_ascii=False).encode()
+            self.send_response(status)
+            self.send_header('Content-Type',content_type)
+            self.send_header('Content-Length',str(len(body)))
+            self.send_header('Cache-Control','no-store')
+            self.send_header('X-Content-Type-Options','nosniff')
+            self.end_headers();self.wfile.write(body)
+
+        def do_GET(self):
+            if self.path=='/':self.send(html,content_type='text/html; charset=utf-8')
+            elif self.path=='/api/catalog':self.send(engine.cards)
+            elif self.path in assets:self.send(assets[self.path].read_bytes(),content_type='image/webp')
+            elif self.path=='/health':self.send({'status':'ok','cards':len(engine.cards),'threads':2})
+            else:self.send({'error':'Not found'},404)
+
+        def do_POST(self):
+            if self.path!='/api/scan':return self.send({'error':'Not found'},404)
+            try:
+                size=int(self.headers.get('Content-Length','0'))
+                if not 0<size<48*1024*1024:raise ValueError('图片总大小超出限制')
+                request=json.loads(self.rfile.read(size))
+                files=request.get('images',[])
+                if not 1<=len(files)<=30:raise ValueError('每次上传 1–30 张截图')
+                scans=[]
+                with lock:
+                    for i,file in enumerate(files):
+                        raw=base64.b64decode(file['data'].split(',')[-1],validate=True)
+                        image=cv2.imdecode(np.frombuffer(raw,np.uint8),cv2.IMREAD_COLOR)
+                        if image is None or image.shape[0]*image.shape[1]>20_000_000:
+                            raise ValueError('无法读取图片，或分辨率超过 2000 万像素')
+                        source=str(file.get('name',f'image-{i+1}'))[:150]
+                        scans.append(engine.scan(image,source))
+                self.send({'box':merge(scans,player=str(request.get('player','local'))[:100]),'scans':scans})
+            except (ValueError,KeyError,TypeError) as error:
+                self.send({'error':str(error)},400)
+
+        def log_message(self,*args):pass
+
+    print(f'Box vision listening on http://{host}:{port}',flush=True)
+    ThreadingHTTPServer((host,port),Handler).serve_forever()

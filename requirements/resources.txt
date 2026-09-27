@@ -1,0 +1,3 @@
+# Exact public nnnotes source used by the verified extraction; no keys or assets.
+nnnotes[fonts] @ git+https://github.com/MetaSekaiLab/nnnotes.git@bb542af0d7e22a0255a7ee45099a51eb7fbadd12
+UnityPy==1.25.0

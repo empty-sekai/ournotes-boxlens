@@ -1,0 +1,23 @@
+{
+  "schema": "ournotes-boxlens.scan-result/1",
+  "box": {
+    "schema": "bdon-box/1",
+    "player": "example",
+    "coverage": "observed_only",
+    "cards": [],
+    "unique_count": 0,
+    "observations": 0,
+    "duplicate_observations": 0
+  },
+  "scans": [
+    {
+      "source": "blank.png",
+      "width": 64,
+      "height": 64,
+      "source_id": "bd724c65d1ae73db8ab90fce38e0d27028b2ce45cabdcca9e42774871ebce58c",
+      "cards": [],
+      "elapsed_ms": 1.38,
+      "coverage": "observed_only"
+    }
+  ]
+}

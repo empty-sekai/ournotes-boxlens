@@ -1,0 +1,184 @@
+{
+  "schema": "bdon-data-audit/1",
+  "passed": true,
+  "datasets": [
+    {
+      "dataset": "synthetic/scale-v6/train",
+      "profile": "train",
+      "seed": 50021,
+      "manifest_sha256": "bbb1b2aea52b1bd04f6bd6b09f6130f82111cd825c7b94493f339716826d353e",
+      "counts": {
+        "screenshots": 2048,
+        "legacy_hash_computed_from_image": 2048,
+        "cards": 35483,
+        "mode:level": 35483
+      },
+      "locales": {
+        "zh-Hans": 2048
+      },
+      "identities": 105
+    },
+    {
+      "dataset": "synthetic/scale-v6/validation",
+      "profile": "validation",
+      "seed": 60017,
+      "manifest_sha256": "ec7ca137870ebbd47c4bd4c988ae3a1809712ed9b8f8c08f0b160d158b58d8c4",
+      "counts": {
+        "screenshots": 512,
+        "legacy_hash_computed_from_image": 512,
+        "cards": 8887,
+        "mode:level": 8887
+      },
+      "locales": {
+        "zh-Hans": 512
+      },
+      "identities": 122
+    },
+    {
+      "dataset": "synthetic/scale-v6/stress",
+      "profile": "stress",
+      "seed": 70019,
+      "manifest_sha256": "92349a86c6ad6420249ba9e538c4deae7264801b2f0d77ed5622ba88c6bf54c0",
+      "counts": {
+        "screenshots": 256,
+        "legacy_hash_computed_from_image": 256,
+        "cards": 4273,
+        "mode:level": 4273
+      },
+      "locales": {
+        "zh-Hans": 256
+      },
+      "identities": 122
+    },
+    {
+      "dataset": "synthetic/modes-v7/train",
+      "profile": "train",
+      "seed": 91703,
+      "manifest_sha256": "ceb7bc7c1fe2e634de8633455bc80867fa14007bcb0d3e60201cf8a87004228d",
+      "counts": {
+        "screenshots": 350,
+        "legacy_hash_computed_from_image": 350,
+        "cards": 5935,
+        "mode:level": 1057,
+        "mode:training": 456,
+        "mode:performance": 939,
+        "mode:total": 458,
+        "mode:technic": 984,
+        "mode:visual": 1003,
+        "mode:hide": 1038
+      },
+      "locales": {
+        "ja": 70,
+        "en": 70,
+        "zh-Hant": 70,
+        "zh-Hans": 70,
+        "ko": 70
+      },
+      "identities": 105
+    },
+    {
+      "dataset": "synthetic/modes-v7/validation",
+      "profile": "validation",
+      "seed": 92711,
+      "manifest_sha256": "521b9bd19836ed2333cfc115018a35b3f2642e63ecec39a5e257f64406fe7138",
+      "counts": {
+        "screenshots": 140,
+        "legacy_hash_computed_from_image": 140,
+        "cards": 2344,
+        "mode:level": 435,
+        "mode:training": 176,
+        "mode:performance": 370,
+        "mode:total": 173,
+        "mode:technic": 421,
+        "mode:visual": 395,
+        "mode:hide": 374
+      },
+      "locales": {
+        "ja": 28,
+        "en": 28,
+        "zh-Hant": 28,
+        "zh-Hans": 28,
+        "ko": 28
+      },
+      "identities": 122
+    },
+    {
+      "dataset": "synthetic/modes-v7/stress",
+      "profile": "stress",
+      "seed": 93713,
+      "manifest_sha256": "1540ced231e83c2c4b716b52312d9ad2e20367416182473be6c2e0e4fce8553e",
+      "counts": {
+        "screenshots": 70,
+        "legacy_hash_computed_from_image": 70,
+        "cards": 1126,
+        "mode:level": 162,
+        "mode:training": 82,
+        "mode:performance": 209,
+        "mode:total": 62,
+        "mode:technic": 203,
+        "mode:visual": 217,
+        "mode:hide": 191
+      },
+      "locales": {
+        "ja": 14,
+        "en": 14,
+        "zh-Hant": 14,
+        "zh-Hans": 14,
+        "ko": 14
+      },
+      "identities": 122
+    },
+    {
+      "dataset": "synthetic/final-v9/validation",
+      "profile": "validation",
+      "seed": 908271,
+      "manifest_sha256": "7cef333204cac03514a6390ed3aca374995d771d73fe751b69038fc4648712d3",
+      "counts": {
+        "screenshots": 560,
+        "cards": 9723,
+        "mode:level": 1689,
+        "mode:training": 655,
+        "mode:performance": 1642,
+        "mode:total": 694,
+        "mode:technic": 1654,
+        "mode:visual": 1714,
+        "mode:hide": 1675
+      },
+      "locales": {
+        "ja": 112,
+        "en": 112,
+        "zh-Hant": 112,
+        "zh-Hans": 112,
+        "ko": 112
+      },
+      "identities": 122
+    },
+    {
+      "dataset": "synthetic/final-v9/stress",
+      "profile": "stress",
+      "seed": 708289,
+      "manifest_sha256": "ed1e80cbc13ac5bc41de0396deae6270bc3a638dfb8deaee766bcdd953fa0f31",
+      "counts": {
+        "screenshots": 280,
+        "cards": 4673,
+        "mode:level": 812,
+        "mode:training": 283,
+        "mode:performance": 848,
+        "mode:total": 352,
+        "mode:technic": 768,
+        "mode:visual": 817,
+        "mode:hide": 793
+      },
+      "locales": {
+        "ja": 56,
+        "en": 56,
+        "zh-Hant": 56,
+        "zh-Hans": 56,
+        "ko": 56
+      },
+      "identities": 122
+    }
+  ],
+  "errors": [],
+  "scope": "Manifest hashes, exact screenshot duplicates, training ID exclusions, progression and visible labels. Does not certify pixel parity or exact randomized power values."
+}

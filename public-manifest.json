@@ -1,0 +1,735 @@
+{
+  "schema": "ournotes-boxlens.public-source/1",
+  "version": "v0.1.0",
+  "game_assets_included": false,
+  "files": {
+    ".gitattributes": {
+      "bytes": 82,
+      "sha256": "aebc1e10d451ab7acbabbcfad3f2ed01ffc5bf09f4b4b129ad270bd48c8ddfcf"
+    },
+    ".github/workflows/ci.yml": {
+      "bytes": 653,
+      "sha256": "5936cdce7a0d29f92c7b54c901b71770beab2394d7ff39ead2785472c1a8b8b2"
+    },
+    ".gitignore": {
+      "bytes": 251,
+      "sha256": "fc0b56ba097d5a9f0ea1b374ddf561c5c64d3c1acfc143b3c0d037c86963e29c"
+    },
+    "bdon_vision/__init__.py": {
+      "bytes": 56,
+      "sha256": "51810dd8dad6636cef2eda8790ed4c2ee62c4ea75f61abfc31b4f565967e0b91"
+    },
+    "bdon_vision/assets.py": {
+      "bytes": 10606,
+      "sha256": "dc2e63e50134cb5b3f4b0a83d5ceaae0d4ce2f6666329f9d349458afce7d803f"
+    },
+    "bdon_vision/audit_datasets.py": {
+      "bytes": 4620,
+      "sha256": "a7a315ce6ba85e434b1747ee2c2b415e3efcd50307a2185c6dd44be73cf74747"
+    },
+    "bdon_vision/audit_merge.py": {
+      "bytes": 4359,
+      "sha256": "caa94798f3848f74956f6fdb51d39e3dff60e2e76df19818a5436152f85f7096"
+    },
+    "bdon_vision/benchmark.py": {
+      "bytes": 5344,
+      "sha256": "05ee2b8e8cb3597fbdc5b50264db9a44a7f47dd19779892dcd76a04dea3ddd35"
+    },
+    "bdon_vision/cli.py": {
+      "bytes": 2620,
+      "sha256": "418346ef78258f5d35451e71fd2d9e3e2d5da21ca9513546d26bc469ea8e8407"
+    },
+    "bdon_vision/corpus.py": {
+      "bytes": 4393,
+      "sha256": "9fcccc00bccb7e98f4929f4fedaac54baa4d54c9116ef47db7a5b1efb58b6ab9"
+    },
+    "bdon_vision/diagnose_fields.py": {
+      "bytes": 4054,
+      "sha256": "42e9f43ceaf5647e4b0df8665bdeb55f7ce61e06b407cae1fc37135afa67ac57"
+    },
+    "bdon_vision/engine.py": {
+      "bytes": 16414,
+      "sha256": "5141cddb5da7e923e765078a32f5fccc33d0f0c589078a44d2d7fd152dc58b81"
+    },
+    "bdon_vision/evaluate_open_set.py": {
+      "bytes": 2906,
+      "sha256": "6cb15018d0de0b7a02be94bfa8d10eccdcec3b3d5e456e72cdd0aad00395be94"
+    },
+    "bdon_vision/fielddata.py": {
+      "bytes": 7327,
+      "sha256": "04116e8776699313e91aafc89ce80376a92a73e06c26c6756e2af736aaa602fe"
+    },
+    "bdon_vision/font.py": {
+      "bytes": 7513,
+      "sha256": "7ffe0a233823423caa8fd3787b6111a4d290211bb91fcfb019db71608973efd2"
+    },
+    "bdon_vision/inference.py": {
+      "bytes": 1985,
+      "sha256": "b79e22b66bcc358371c076154352b8bec2b94450a70b97f3371721eee65e4186"
+    },
+    "bdon_vision/native_renderer.py": {
+      "bytes": 28748,
+      "sha256": "8a125c8376fd521a1488cbb4dc6e52fe08747cbeb36023b39f4566a222e1399e"
+    },
+    "bdon_vision/ocr.py": {
+      "bytes": 5019,
+      "sha256": "668ed8204da7805d7e80f71573d91b91d52b774a25b5a5750704a92a6fdb8b23"
+    },
+    "bdon_vision/scenarios.py": {
+      "bytes": 1873,
+      "sha256": "a7469ec68f48ab5325e785de337e8fb1f6b29f1b2b4842633bf7b12ecf2cb80a"
+    },
+    "bdon_vision/server.py": {
+      "bytes": 5159,
+      "sha256": "66390c4e593830e8d7c3b6dbb7e634e040998330305d5ee08180002e9e504eca"
+    },
+    "bdon_vision/synthetic.py": {
+      "bytes": 14667,
+      "sha256": "a4fab44a69a000087141891dfecb1442e09feacb4097492da7c49ca89988dc45"
+    },
+    "bdon_vision/train.py": {
+      "bytes": 11566,
+      "sha256": "1468ac17ce7f7d45a87707a7028050f2c0df021cc349d4c00c670ad1c0b1223b"
+    },
+    "bdon_vision/train_fields.py": {
+      "bytes": 7249,
+      "sha256": "26321182c814b4af8b2ca35e8521a039b418d94f60bae028aa68eeb400a96f72"
+    },
+    "bdon_vision/train_scene_encoder.py": {
+      "bytes": 7392,
+      "sha256": "52a450f0e4c462e5ace0325463b0db206a8b6577fcb4ff6f845121f513dfbf5f"
+    },
+    "bdon_vision/web.html": {
+      "bytes": 5165,
+      "sha256": "cf267b47e977ac279f0c8ff88931326711022a1ae26e9b7a8271982ef5ed2d0c"
+    },
+    "bdon_vision/web.js": {
+      "bytes": 8250,
+      "sha256": "c4da611db039459644ed362f81b09f3fb6e8dfe35ce6f12e36e2bdd25f3c5b95"
+    },
+    "boxvision.py": {
+      "bytes": 73,
+      "sha256": "9c8e39c2a8f16f237d37e5093ffbb515d22f059dd7810750f46264f300458cc9"
+    },
+    "docs/ASSET_BOUNDARY.md": {
+      "bytes": 1695,
+      "sha256": "b1b1140b3181636846d871be1084ac6919336648d2960524c7041c5c3e5adb7f"
+    },
+    "docs/CONTRACT.md": {
+      "bytes": 3497,
+      "sha256": "011a64c34b54f61b07f99e536cc2a34b2be0a6c0d17c5d5bb9a603e422915e80"
+    },
+    "docs/COVERAGE.md": {
+      "bytes": 3336,
+      "sha256": "6fe031cbdbaeec6e649a7970ab24645a3784d6c8b11287d6de9e9d90b45518e0"
+    },
+    "docs/DATA_CARD.md": {
+      "bytes": 5063,
+      "sha256": "0a464541be60b5c0c6b3ed8db81fd24681eea3697468748091b939cdb97b2780"
+    },
+    "docs/EVALUATION.md": {
+      "bytes": 4579,
+      "sha256": "9bc35824c95741dacd31f4ca35705a055d16cb52371c3daa4c4ab18097650b69"
+    },
+    "docs/evidence/language-fonts.json": {
+      "bytes": 2299,
+      "sha256": "097bb7998febc671dd355df5899880a96f113498442b2a454a89478c5d19c761"
+    },
+    "docs/evidence/snap-display-reference.json": {
+      "bytes": 303,
+      "sha256": "5172665102f53c6711fa99cd90b3ddda0d90f40564d587ce8faaf07ec91faf67"
+    },
+    "docs/EXPERIMENTS.md": {
+      "bytes": 2265,
+      "sha256": "0b0e053e7fc37538ee58750b8c65d49e3e8697ce54b5b4c06b757df257393759"
+    },
+    "docs/MODEL_CARD.md": {
+      "bytes": 5929,
+      "sha256": "a4aae4e4b7382eeb4a9f86a9ca99630281723befb0779eb304f7a9eefa769aad"
+    },
+    "docs/NEW-CARDS.md": {
+      "bytes": 2508,
+      "sha256": "b8725f365479e0f8ad0e86e81c64a2cf330adc401a2d3a5c7d6ba0f4e2a98233"
+    },
+    "docs/REPRODUCTION.md": {
+      "bytes": 2998,
+      "sha256": "adb183e0914b21b5c6a09e8636b026509e1dff4df69b22acea3d09be11e310ae"
+    },
+    "docs/RESOURCES.md": {
+      "bytes": 3264,
+      "sha256": "325375a2055362f06cf2db7abc107400c7a120bd0a6e3f63eab810cdf1af5e51"
+    },
+    "docs/TRAINING.md": {
+      "bytes": 5103,
+      "sha256": "3ea925da36da39c0d721f0a39be90341dfa71289ff19918a104a3b5b44d27c18"
+    },
+    "LICENSE": {
+      "bytes": 1080,
+      "sha256": "13ee0a55b4b50909b685464b38013fa32814c5c1a2dcf1e3c6f402bad0cb2d8f"
+    },
+    "licenses/torchvision-BSD-3-Clause.txt": {
+      "bytes": 1516,
+      "sha256": "2b63e4f6569e0e58260881a1f7ea8b1d9802859ab3cb4b32a45cba246245c8da"
+    },
+    "pyproject.toml": {
+      "bytes": 846,
+      "sha256": "4d59f0aa7782a82fb31b11457890fecae5f2577f4fd68538c54d63defce01544"
+    },
+    "README.md": {
+      "bytes": 5280,
+      "sha256": "5ae854d86e8d621f8f2b43cd893e50c80100bf38cb6861daff0004c6506e1c80"
+    },
+    "reports/acceptance/clear-rank-matrix.json": {
+      "bytes": 9281,
+      "sha256": "da49d3a0f4590c71dd8dcc9793706ecc80342b4ec38b2ce87069e898950d0bd6"
+    },
+    "reports/acceptance/real-sample-regression.json": {
+      "bytes": 6186,
+      "sha256": "24fc6dbce8537fe4e7acfc9418e2eda0388fd1633433101cc5f6cf71dc3c7729"
+    },
+    "reports/acceptance/synthetic-data-audit.json": {
+      "bytes": 6151,
+      "sha256": "6be3c4920d66d8d8ffbc35aeedd43cb6afc32cc208ad5c2dfb6975c6b34d669b"
+    },
+    "reports/acceptance/synthetic-full-screen.json": {
+      "bytes": 134841,
+      "sha256": "8e53b9db61e8d654468bb5e926625f09330338d393494a23a9bb4ba01f0a52b0"
+    },
+    "reports/acceptance/unknown-card-results.json": {
+      "bytes": 24210,
+      "sha256": "659db8b7caa44a00485d40da8b73d4e4458b5ee9e93d20903e86ee75202cc5b2"
+    },
+    "reports/performance/cpu-2-logical-cores.json": {
+      "bytes": 12762,
+      "sha256": "769c25844cc4259edf8f709abd9ab03c2bd7aa54e60e6bce50fa9e34b5b27093"
+    },
+    "reports/performance/cpu-4-logical-cores.json": {
+      "bytes": 12798,
+      "sha256": "5aff6c8d667aee2dcea13a7014f5b29b70185b5017c39a7a90013f7a32879186"
+    },
+    "reports/README.md": {
+      "bytes": 1050,
+      "sha256": "f55b4e82c5ed198331d4653dfc7e08b61cd015c837e99db05c8495e9b3409db4"
+    },
+    "reports/training/card-coverage.json": {
+      "bytes": 13545,
+      "sha256": "fdc8352f6fb5893a847eecd6177d0b3cb9670fedc6c6bfa2d4d679efa14cc9d4"
+    },
+    "reports/training/checkpoint-selection.json": {
+      "bytes": 1060,
+      "sha256": "f9c8794fb7f743a613e04d12561646bd98ceba61ddd62c99e30a077bfc53a737"
+    },
+    "reports/training/field-learning-curve.json": {
+      "bytes": 14947,
+      "sha256": "268f23d30b956cfb8bcfa736d88636267aaae040cc1f41cd7d7e4cedd3ad5140"
+    },
+    "reports/training/hard-field-validation.json": {
+      "bytes": 3797,
+      "sha256": "ac4b522b7fea5a70d80c33743bae87ebca4490cdd71e2ae02add612f5cca8a65"
+    },
+    "reports/training/level-distribution.json": {
+      "bytes": 3321,
+      "sha256": "77da1ff83c2915e72ab74effcd3b8b8f97d4ac853b759e9fbc95929e9cc2bc26"
+    },
+    "reports/training/rank-distribution.json": {
+      "bytes": 597,
+      "sha256": "5131224dbafeed410d7657b49aeb994bbe9756288c01fd9ad7b7f6e41731033e"
+    },
+    "reproduction/metadata/checkpoint-hashes.json": {
+      "bytes": 582,
+      "sha256": "6545ae13ae4102ffe87db18eced4173f5b6b1829d2da297c1d04a91d4ec8770b"
+    },
+    "reproduction/metadata/data-audit-v10.json": {
+      "bytes": 4873,
+      "sha256": "e8d6dddeb9db2657c185d82894997d8f9e505b60215c46cfbd5162bc2e33df58"
+    },
+    "reproduction/metadata/environment.json": {
+      "bytes": 281,
+      "sha256": "feab39c20e13b16dc1f5e5f134b07360c44b9a994bafa4970db53e8c20d0230b"
+    },
+    "reproduction/metadata/resource-hashes.json": {
+      "bytes": 4273,
+      "sha256": "10a9e626404c1e68c1844af156f1e716cae3df7d847909463e108a8620982e4a"
+    },
+    "reproduction/metadata/weight-parity.json": {
+      "bytes": 841,
+      "sha256": "9113fc2ce9d2418749a741a144596e2422927c3fd317d0177abaa08f85b56d1f"
+    },
+    "reproduction/renderers/v6.py": {
+      "bytes": 27777,
+      "sha256": "87f893367cbb136be9fc3c0ce5b350d3d8b80bf468c6c4cab8d8acbff24a96b2"
+    },
+    "reproduction/renderers/v7.py": {
+      "bytes": 28264,
+      "sha256": "cb85c9a88a43a126f2e9b60d6fa7e4e9660e1d718e89d6e2548fe511badc4b8b"
+    },
+    "reproduction/renderers/v8.py": {
+      "bytes": 28264,
+      "sha256": "cb85c9a88a43a126f2e9b60d6fa7e4e9660e1d718e89d6e2548fe511badc4b8b"
+    },
+    "reproduction/source-hashes.json": {
+      "bytes": 10648,
+      "sha256": "1d1eeb6bbaad7fc71be03cf558fa38b6cbcef09173e879f76d7b32629308e649"
+    },
+    "reproduction/stages/v11/bdon_vision/__init__.py": {
+      "bytes": 56,
+      "sha256": "51810dd8dad6636cef2eda8790ed4c2ee62c4ea75f61abfc31b4f565967e0b91"
+    },
+    "reproduction/stages/v11/bdon_vision/assets.py": {
+      "bytes": 10606,
+      "sha256": "dc2e63e50134cb5b3f4b0a83d5ceaae0d4ce2f6666329f9d349458afce7d803f"
+    },
+    "reproduction/stages/v11/bdon_vision/audit_datasets.py": {
+      "bytes": 4620,
+      "sha256": "a7a315ce6ba85e434b1747ee2c2b415e3efcd50307a2185c6dd44be73cf74747"
+    },
+    "reproduction/stages/v11/bdon_vision/audit_merge.py": {
+      "bytes": 4359,
+      "sha256": "caa94798f3848f74956f6fdb51d39e3dff60e2e76df19818a5436152f85f7096"
+    },
+    "reproduction/stages/v11/bdon_vision/benchmark.py": {
+      "bytes": 5344,
+      "sha256": "05ee2b8e8cb3597fbdc5b50264db9a44a7f47dd19779892dcd76a04dea3ddd35"
+    },
+    "reproduction/stages/v11/bdon_vision/cli.py": {
+      "bytes": 2620,
+      "sha256": "418346ef78258f5d35451e71fd2d9e3e2d5da21ca9513546d26bc469ea8e8407"
+    },
+    "reproduction/stages/v11/bdon_vision/corpus.py": {
+      "bytes": 4393,
+      "sha256": "9fcccc00bccb7e98f4929f4fedaac54baa4d54c9116ef47db7a5b1efb58b6ab9"
+    },
+    "reproduction/stages/v11/bdon_vision/engine.py": {
+      "bytes": 14606,
+      "sha256": "40269ba59231fdbab8352ff3d8b42c5dde11da3f16b876fec7a137181c344970"
+    },
+    "reproduction/stages/v11/bdon_vision/evaluate_open_set.py": {
+      "bytes": 2906,
+      "sha256": "6cb15018d0de0b7a02be94bfa8d10eccdcec3b3d5e456e72cdd0aad00395be94"
+    },
+    "reproduction/stages/v11/bdon_vision/fielddata.py": {
+      "bytes": 5475,
+      "sha256": "70ac0e1515b79bdf8f8904828340954537c49df8f003c50d5f4b5e8bf2d967f4"
+    },
+    "reproduction/stages/v11/bdon_vision/font.py": {
+      "bytes": 7513,
+      "sha256": "7ffe0a233823423caa8fd3787b6111a4d290211bb91fcfb019db71608973efd2"
+    },
+    "reproduction/stages/v11/bdon_vision/inference.py": {
+      "bytes": 1985,
+      "sha256": "b79e22b66bcc358371c076154352b8bec2b94450a70b97f3371721eee65e4186"
+    },
+    "reproduction/stages/v11/bdon_vision/native_renderer.py": {
+      "bytes": 28748,
+      "sha256": "8a125c8376fd521a1488cbb4dc6e52fe08747cbeb36023b39f4566a222e1399e"
+    },
+    "reproduction/stages/v11/bdon_vision/ocr.py": {
+      "bytes": 5019,
+      "sha256": "668ed8204da7805d7e80f71573d91b91d52b774a25b5a5750704a92a6fdb8b23"
+    },
+    "reproduction/stages/v11/bdon_vision/scenarios.py": {
+      "bytes": 1873,
+      "sha256": "a7469ec68f48ab5325e785de337e8fb1f6b29f1b2b4842633bf7b12ecf2cb80a"
+    },
+    "reproduction/stages/v11/bdon_vision/server.py": {
+      "bytes": 4454,
+      "sha256": "e8e60bab6356f71b52ebd490ad535e7f24472203907d06238cb5bea0fab0aaa3"
+    },
+    "reproduction/stages/v11/bdon_vision/synthetic.py": {
+      "bytes": 14412,
+      "sha256": "dd31248e162e7a2bd6f878e9f8152e52f48b5906e732e23714cbbfb225656baf"
+    },
+    "reproduction/stages/v11/bdon_vision/train.py": {
+      "bytes": 11566,
+      "sha256": "1468ac17ce7f7d45a87707a7028050f2c0df021cc349d4c00c670ad1c0b1223b"
+    },
+    "reproduction/stages/v11/bdon_vision/train_fields.py": {
+      "bytes": 7249,
+      "sha256": "26321182c814b4af8b2ca35e8521a039b418d94f60bae028aa68eeb400a96f72"
+    },
+    "reproduction/stages/v11/bdon_vision/train_scene_encoder.py": {
+      "bytes": 7392,
+      "sha256": "52a450f0e4c462e5ace0325463b0db206a8b6577fcb4ff6f845121f513dfbf5f"
+    },
+    "reproduction/stages/v12/bdon_vision/__init__.py": {
+      "bytes": 56,
+      "sha256": "51810dd8dad6636cef2eda8790ed4c2ee62c4ea75f61abfc31b4f565967e0b91"
+    },
+    "reproduction/stages/v12/bdon_vision/assets.py": {
+      "bytes": 10606,
+      "sha256": "dc2e63e50134cb5b3f4b0a83d5ceaae0d4ce2f6666329f9d349458afce7d803f"
+    },
+    "reproduction/stages/v12/bdon_vision/audit_datasets.py": {
+      "bytes": 4620,
+      "sha256": "a7a315ce6ba85e434b1747ee2c2b415e3efcd50307a2185c6dd44be73cf74747"
+    },
+    "reproduction/stages/v12/bdon_vision/audit_merge.py": {
+      "bytes": 4359,
+      "sha256": "caa94798f3848f74956f6fdb51d39e3dff60e2e76df19818a5436152f85f7096"
+    },
+    "reproduction/stages/v12/bdon_vision/benchmark.py": {
+      "bytes": 5344,
+      "sha256": "05ee2b8e8cb3597fbdc5b50264db9a44a7f47dd19779892dcd76a04dea3ddd35"
+    },
+    "reproduction/stages/v12/bdon_vision/cli.py": {
+      "bytes": 2620,
+      "sha256": "418346ef78258f5d35451e71fd2d9e3e2d5da21ca9513546d26bc469ea8e8407"
+    },
+    "reproduction/stages/v12/bdon_vision/corpus.py": {
+      "bytes": 4393,
+      "sha256": "9fcccc00bccb7e98f4929f4fedaac54baa4d54c9116ef47db7a5b1efb58b6ab9"
+    },
+    "reproduction/stages/v12/bdon_vision/diagnose_fields.py": {
+      "bytes": 4054,
+      "sha256": "42e9f43ceaf5647e4b0df8665bdeb55f7ce61e06b407cae1fc37135afa67ac57"
+    },
+    "reproduction/stages/v12/bdon_vision/engine.py": {
+      "bytes": 14606,
+      "sha256": "40269ba59231fdbab8352ff3d8b42c5dde11da3f16b876fec7a137181c344970"
+    },
+    "reproduction/stages/v12/bdon_vision/evaluate_open_set.py": {
+      "bytes": 2906,
+      "sha256": "6cb15018d0de0b7a02be94bfa8d10eccdcec3b3d5e456e72cdd0aad00395be94"
+    },
+    "reproduction/stages/v12/bdon_vision/fielddata.py": {
+      "bytes": 7327,
+      "sha256": "04116e8776699313e91aafc89ce80376a92a73e06c26c6756e2af736aaa602fe"
+    },
+    "reproduction/stages/v12/bdon_vision/font.py": {
+      "bytes": 7513,
+      "sha256": "7ffe0a233823423caa8fd3787b6111a4d290211bb91fcfb019db71608973efd2"
+    },
+    "reproduction/stages/v12/bdon_vision/inference.py": {
+      "bytes": 1985,
+      "sha256": "b79e22b66bcc358371c076154352b8bec2b94450a70b97f3371721eee65e4186"
+    },
+    "reproduction/stages/v12/bdon_vision/native_renderer.py": {
+      "bytes": 28748,
+      "sha256": "8a125c8376fd521a1488cbb4dc6e52fe08747cbeb36023b39f4566a222e1399e"
+    },
+    "reproduction/stages/v12/bdon_vision/ocr.py": {
+      "bytes": 5019,
+      "sha256": "668ed8204da7805d7e80f71573d91b91d52b774a25b5a5750704a92a6fdb8b23"
+    },
+    "reproduction/stages/v12/bdon_vision/scenarios.py": {
+      "bytes": 1873,
+      "sha256": "a7469ec68f48ab5325e785de337e8fb1f6b29f1b2b4842633bf7b12ecf2cb80a"
+    },
+    "reproduction/stages/v12/bdon_vision/server.py": {
+      "bytes": 4454,
+      "sha256": "e8e60bab6356f71b52ebd490ad535e7f24472203907d06238cb5bea0fab0aaa3"
+    },
+    "reproduction/stages/v12/bdon_vision/synthetic.py": {
+      "bytes": 14412,
+      "sha256": "dd31248e162e7a2bd6f878e9f8152e52f48b5906e732e23714cbbfb225656baf"
+    },
+    "reproduction/stages/v12/bdon_vision/train.py": {
+      "bytes": 11566,
+      "sha256": "1468ac17ce7f7d45a87707a7028050f2c0df021cc349d4c00c670ad1c0b1223b"
+    },
+    "reproduction/stages/v12/bdon_vision/train_fields.py": {
+      "bytes": 7249,
+      "sha256": "26321182c814b4af8b2ca35e8521a039b418d94f60bae028aa68eeb400a96f72"
+    },
+    "reproduction/stages/v12/bdon_vision/train_scene_encoder.py": {
+      "bytes": 7392,
+      "sha256": "52a450f0e4c462e5ace0325463b0db206a8b6577fcb4ff6f845121f513dfbf5f"
+    },
+    "reproduction/stages/v4/bdon_vision/__init__.py": {
+      "bytes": 56,
+      "sha256": "51810dd8dad6636cef2eda8790ed4c2ee62c4ea75f61abfc31b4f565967e0b91"
+    },
+    "reproduction/stages/v4/bdon_vision/assets.py": {
+      "bytes": 6515,
+      "sha256": "4d6c919328cd18f8a87b1658205dafe79f4ceefde2c9e985c9c0995bc299c821"
+    },
+    "reproduction/stages/v4/bdon_vision/cli.py": {
+      "bytes": 2141,
+      "sha256": "28ada8afcfa89f77e3548914f8d4c6b0cada9009260277e5f8b2a4b31c084b11"
+    },
+    "reproduction/stages/v4/bdon_vision/engine.py": {
+      "bytes": 8715,
+      "sha256": "9e934061772fa4d79fffe93b1277606a9d19dbf1ba3e56798e41fe976e0d6047"
+    },
+    "reproduction/stages/v4/bdon_vision/font.py": {
+      "bytes": 4144,
+      "sha256": "ffd390b85afdbe38c1d6c09a40a1b76e5b67ef032e384bcf5c9d0c27ae58f5d5"
+    },
+    "reproduction/stages/v4/bdon_vision/ocr.py": {
+      "bytes": 1737,
+      "sha256": "14c6772809986b072deff27021ccff16ede2dc091b7a450a8e16cd32a208df9d"
+    },
+    "reproduction/stages/v4/bdon_vision/server.py": {
+      "bytes": 2967,
+      "sha256": "7c120b74d04b9310ef9712c2c382d4c452eef52eebf7949896e9a63e2f0dc3aa"
+    },
+    "reproduction/stages/v4/bdon_vision/synthetic.py": {
+      "bytes": 6721,
+      "sha256": "c9b0897a1f04266deafb1b16bf2fdb44db8580354682def3e768fcd51c22be0b"
+    },
+    "reproduction/stages/v4/bdon_vision/train.py": {
+      "bytes": 10739,
+      "sha256": "5961cf9b4a04aa7f1a39f289caf75c1abd0f0d5eebb99a78ec0c662043f1da4b"
+    },
+    "reproduction/stages/v6/bdon_vision/__init__.py": {
+      "bytes": 56,
+      "sha256": "51810dd8dad6636cef2eda8790ed4c2ee62c4ea75f61abfc31b4f565967e0b91"
+    },
+    "reproduction/stages/v6/bdon_vision/assets.py": {
+      "bytes": 6727,
+      "sha256": "b17da88df96f357ed61233f121ac85477593f94da07b41d3b3ea9faf38e1dad1"
+    },
+    "reproduction/stages/v6/bdon_vision/cli.py": {
+      "bytes": 2141,
+      "sha256": "28ada8afcfa89f77e3548914f8d4c6b0cada9009260277e5f8b2a4b31c084b11"
+    },
+    "reproduction/stages/v6/bdon_vision/engine.py": {
+      "bytes": 12845,
+      "sha256": "5faf994b911804f2c3228b3b1b6a26959e65308f1f131dfabc141086d9627a62"
+    },
+    "reproduction/stages/v6/bdon_vision/font.py": {
+      "bytes": 4144,
+      "sha256": "ffd390b85afdbe38c1d6c09a40a1b76e5b67ef032e384bcf5c9d0c27ae58f5d5"
+    },
+    "reproduction/stages/v6/bdon_vision/inference.py": {
+      "bytes": 1943,
+      "sha256": "ef5a9cab96f259f16bf126509b1a89607ad174841b9ae87d24a9f100a2ad947c"
+    },
+    "reproduction/stages/v6/bdon_vision/ocr.py": {
+      "bytes": 3755,
+      "sha256": "d2233549003459b7b404f39a4a7a4777f388849e9a29e6205389740b7f80e9a0"
+    },
+    "reproduction/stages/v6/bdon_vision/scenarios.py": {
+      "bytes": 1873,
+      "sha256": "a7469ec68f48ab5325e785de337e8fb1f6b29f1b2b4842633bf7b12ecf2cb80a"
+    },
+    "reproduction/stages/v6/bdon_vision/server.py": {
+      "bytes": 2967,
+      "sha256": "7c120b74d04b9310ef9712c2c382d4c452eef52eebf7949896e9a63e2f0dc3aa"
+    },
+    "reproduction/stages/v6/bdon_vision/synthetic.py": {
+      "bytes": 10054,
+      "sha256": "a717d6438c3d87c2637eb315ce4c6e8291b557a25a2aa64c097d3b78a6fc50eb"
+    },
+    "reproduction/stages/v6/bdon_vision/train.py": {
+      "bytes": 11566,
+      "sha256": "1468ac17ce7f7d45a87707a7028050f2c0df021cc349d4c00c670ad1c0b1223b"
+    },
+    "reproduction/stages/v7/bdon_vision/__init__.py": {
+      "bytes": 56,
+      "sha256": "51810dd8dad6636cef2eda8790ed4c2ee62c4ea75f61abfc31b4f565967e0b91"
+    },
+    "reproduction/stages/v7/bdon_vision/assets.py": {
+      "bytes": 9872,
+      "sha256": "ff613cf14f875e7da85d4fafd697a3da27f19177fe6238b62a9c1a9b8df525a9"
+    },
+    "reproduction/stages/v7/bdon_vision/cli.py": {
+      "bytes": 2141,
+      "sha256": "28ada8afcfa89f77e3548914f8d4c6b0cada9009260277e5f8b2a4b31c084b11"
+    },
+    "reproduction/stages/v7/bdon_vision/corpus.py": {
+      "bytes": 3845,
+      "sha256": "73a6d702f82fa9999b169e7c7a51dba2273a014b48f2dcd445d2f56cd60a3d73"
+    },
+    "reproduction/stages/v7/bdon_vision/engine.py": {
+      "bytes": 12960,
+      "sha256": "79d5b9a88a2aee596723d7a3e4461c91b8af1da5c2102fefac9b0a2ceeb60bc2"
+    },
+    "reproduction/stages/v7/bdon_vision/fielddata.py": {
+      "bytes": 5346,
+      "sha256": "fddcb9b50efa1b49408d13cf3f2bb6f1fe3a1ab6f8baabe612e8ed9eb2794a75"
+    },
+    "reproduction/stages/v7/bdon_vision/font.py": {
+      "bytes": 7513,
+      "sha256": "7ffe0a233823423caa8fd3787b6111a4d290211bb91fcfb019db71608973efd2"
+    },
+    "reproduction/stages/v7/bdon_vision/inference.py": {
+      "bytes": 1943,
+      "sha256": "ef5a9cab96f259f16bf126509b1a89607ad174841b9ae87d24a9f100a2ad947c"
+    },
+    "reproduction/stages/v7/bdon_vision/ocr.py": {
+      "bytes": 3755,
+      "sha256": "d2233549003459b7b404f39a4a7a4777f388849e9a29e6205389740b7f80e9a0"
+    },
+    "reproduction/stages/v7/bdon_vision/scenarios.py": {
+      "bytes": 1873,
+      "sha256": "a7469ec68f48ab5325e785de337e8fb1f6b29f1b2b4842633bf7b12ecf2cb80a"
+    },
+    "reproduction/stages/v7/bdon_vision/server.py": {
+      "bytes": 2967,
+      "sha256": "7c120b74d04b9310ef9712c2c382d4c452eef52eebf7949896e9a63e2f0dc3aa"
+    },
+    "reproduction/stages/v7/bdon_vision/synthetic.py": {
+      "bytes": 11717,
+      "sha256": "65e3b1368fd03ea740852417b4bdfb4a7fcdcfb447c19c69c61fa4e22a76b9f9"
+    },
+    "reproduction/stages/v7/bdon_vision/train.py": {
+      "bytes": 11566,
+      "sha256": "1468ac17ce7f7d45a87707a7028050f2c0df021cc349d4c00c670ad1c0b1223b"
+    },
+    "reproduction/stages/v7/bdon_vision/train_fields.py": {
+      "bytes": 4532,
+      "sha256": "ff8bae7952cca9fdb89016d1faed646bcd34def003d7e69d871714180452131d"
+    },
+    "reproduction/stages/v8/bdon_vision/__init__.py": {
+      "bytes": 56,
+      "sha256": "51810dd8dad6636cef2eda8790ed4c2ee62c4ea75f61abfc31b4f565967e0b91"
+    },
+    "reproduction/stages/v8/bdon_vision/assets.py": {
+      "bytes": 10389,
+      "sha256": "25d3ba2c279e2ce8005f276bc886ba48869dae03e9ad24cdfb99a3db1ba8f354"
+    },
+    "reproduction/stages/v8/bdon_vision/cli.py": {
+      "bytes": 2141,
+      "sha256": "28ada8afcfa89f77e3548914f8d4c6b0cada9009260277e5f8b2a4b31c084b11"
+    },
+    "reproduction/stages/v8/bdon_vision/corpus.py": {
+      "bytes": 4393,
+      "sha256": "9fcccc00bccb7e98f4929f4fedaac54baa4d54c9116ef47db7a5b1efb58b6ab9"
+    },
+    "reproduction/stages/v8/bdon_vision/engine.py": {
+      "bytes": 14184,
+      "sha256": "e553f9e53d92251735a54f486fec709e20f7f6ba3b60dae36af19b10353c5f07"
+    },
+    "reproduction/stages/v8/bdon_vision/evaluate_open_set.py": {
+      "bytes": 2906,
+      "sha256": "6cb15018d0de0b7a02be94bfa8d10eccdcec3b3d5e456e72cdd0aad00395be94"
+    },
+    "reproduction/stages/v8/bdon_vision/fielddata.py": {
+      "bytes": 5475,
+      "sha256": "70ac0e1515b79bdf8f8904828340954537c49df8f003c50d5f4b5e8bf2d967f4"
+    },
+    "reproduction/stages/v8/bdon_vision/font.py": {
+      "bytes": 7513,
+      "sha256": "7ffe0a233823423caa8fd3787b6111a4d290211bb91fcfb019db71608973efd2"
+    },
+    "reproduction/stages/v8/bdon_vision/inference.py": {
+      "bytes": 1985,
+      "sha256": "b79e22b66bcc358371c076154352b8bec2b94450a70b97f3371721eee65e4186"
+    },
+    "reproduction/stages/v8/bdon_vision/ocr.py": {
+      "bytes": 4748,
+      "sha256": "b96ef28017f2c6c03dc482434b9113da9b44214c51ffd010ff41319bafd5b30a"
+    },
+    "reproduction/stages/v8/bdon_vision/scenarios.py": {
+      "bytes": 1873,
+      "sha256": "a7469ec68f48ab5325e785de337e8fb1f6b29f1b2b4842633bf7b12ecf2cb80a"
+    },
+    "reproduction/stages/v8/bdon_vision/server.py": {
+      "bytes": 3732,
+      "sha256": "4405e29faac107760ac0706a3e70a80e3793242e36938af49f6dbb3d9242e779"
+    },
+    "reproduction/stages/v8/bdon_vision/synthetic.py": {
+      "bytes": 14403,
+      "sha256": "bd5f8b78550abd00d3fa9eaf7fcc91206aa45644ed4689ddf6a0d56e8fb4317c"
+    },
+    "reproduction/stages/v8/bdon_vision/train.py": {
+      "bytes": 11566,
+      "sha256": "1468ac17ce7f7d45a87707a7028050f2c0df021cc349d4c00c670ad1c0b1223b"
+    },
+    "reproduction/stages/v8/bdon_vision/train_fields.py": {
+      "bytes": 4891,
+      "sha256": "337f617c64671ef0cd86c7392f84fb5eab6fda0ea23b462f99d73edd9a75af52"
+    },
+    "reproduction/stages/v8/bdon_vision/train_scene_encoder.py": {
+      "bytes": 5131,
+      "sha256": "1005b97d4590326567ab61f88cfd928992e30be1788213f89cd80c0cfc35463c"
+    },
+    "requirements/resources.txt": {
+      "bytes": 204,
+      "sha256": "7a228ca3eba13862c286ffbedc2347dd1f2cbd420b4ba1d98e91ea169be1db33"
+    },
+    "requirements/runtime.txt": {
+      "bytes": 82,
+      "sha256": "5d7d6fdfe6157c5488de9c9c0a5663d574365aa89ea51596239cabac8f0978e1"
+    },
+    "schemas/box.schema.json": {
+      "bytes": 13179,
+      "sha256": "f787e1a3918efa78c23c0e0dbd9f11bde64baa303501932fd77e0e1317e3b0dc"
+    },
+    "schemas/error.schema.json": {
+      "bytes": 321,
+      "sha256": "fb40b1c1b78e2d516a8041d7894fcfe985270d587a3b3ed45b2a89fed33453a8"
+    },
+    "schemas/examples/scan-request.json": {
+      "bytes": 474,
+      "sha256": "5d68ed0164e71a4b3423edbe934695604e0571b33277f7c795f92ef6f39beea7"
+    },
+    "schemas/examples/scan-response.json": {
+      "bytes": 531,
+      "sha256": "67e45152e88eb84b3702002e645ca33971e36e547d3bc48543e0530ee37496f9"
+    },
+    "schemas/observations.schema.json": {
+      "bytes": 7189,
+      "sha256": "4f99840a874a8c46a645499e8092e2b0bbaf16849092b380338e20825fd48fbc"
+    },
+    "schemas/scan-request.schema.json": {
+      "bytes": 932,
+      "sha256": "ae26ed6b0b2fac5be0b56109f6342ea815bb9b576e9520f4863492e03fece279"
+    },
+    "schemas/scan-response.schema.json": {
+      "bytes": 23438,
+      "sha256": "834275785d9cfa259a3ebba02b5e19c39b6a041a72dda0909a8ff6b5f6a65475"
+    },
+    "scripts/audit_coverage.py": {
+      "bytes": 3451,
+      "sha256": "368c40def815ef813aa79fdd9c1e80911f4a34c9e3eb3c4b14ae76914e731cf7"
+    },
+    "scripts/diagnose_occlusion.py": {
+      "bytes": 7441,
+      "sha256": "77d19dfb15ba1636d510b2edb79241271aa4ff8ddeac8941b0f62da4409af9b4"
+    },
+    "scripts/export_fonts.py": {
+      "bytes": 5196,
+      "sha256": "4a6302c95160a12d1f88f857db9122d2c63abbc35de30ee112e7632a03370974"
+    },
+    "scripts/extract_ui.py": {
+      "bytes": 4166,
+      "sha256": "913dcffa4b8f67c25417dc57493faebc7fab60aec6955312d65241b3535b2da0"
+    },
+    "scripts/prepare.py": {
+      "bytes": 3197,
+      "sha256": "aeab6de929f221ed6521468b87de16673f2df290eefae95b4cec0cf6505a6402"
+    },
+    "scripts/publish_metrics.py": {
+      "bytes": 4763,
+      "sha256": "df9fdfb804c80f10a30a8aecdf42a43c3d1b50ce0c49437ca53d24788ceb58ad"
+    },
+    "scripts/reproduce_training.py": {
+      "bytes": 8950,
+      "sha256": "879325187cd4b1d1adfb697a54c1a568ba89bae9cadc8c1c76327542f02773c3"
+    },
+    "scripts/validate_contract.py": {
+      "bytes": 773,
+      "sha256": "6c4dfb6eecc3a4b4154e85fe51dcd2679e3025280aa7e5ee611d11b16a4441c2"
+    },
+    "scripts/verify_gallery_update.py": {
+      "bytes": 3668,
+      "sha256": "0451fd36fc86250caccfb1e8124f9caa5751f89eefdd58293f29f3c92797848b"
+    },
+    "scripts/verify_rank_matrix.py": {
+      "bytes": 7499,
+      "sha256": "ecb5be51679496dfc3efba4a787f8296c9e35fbd96c2dbe93c815efd6a0428e4"
+    },
+    "scripts/verify_weights.py": {
+      "bytes": 2178,
+      "sha256": "cb7b3344e787987d62c74d40c9640806853cefac0d6e0b66b24be65a3ce8b80b"
+    },
+    "tests/test_integrity.py": {
+      "bytes": 1940,
+      "sha256": "e8e8ed5df768b58ec7047e8ae0e2d506cbace375e14eda8c6e19b7d27af3679a"
+    },
+    "tests/test_merge.py": {
+      "bytes": 1952,
+      "sha256": "a65f2d4cd7fccd8771bd564dc95b27530410a81672e8d037c925737a2a84850f"
+    },
+    "tests/test_ui_geometry.py": {
+      "bytes": 955,
+      "sha256": "e59cf5933879299f2f9fb9192abc1993430619609ba90bed1d3fe44c4c4b2079"
+    },
+    "THIRD_PARTY_NOTICES.md": {
+      "bytes": 1209,
+      "sha256": "2749a42dfb22b9ee7d856e1c910730ff73e7609fe388d0742eaff0e14602cce2"
+    }
+  }
+}

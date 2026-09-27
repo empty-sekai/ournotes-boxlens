@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:ournotes-boxlens:schema:error:1",
+  "title": "Our Notes BoxLens error v1",
+  "type": "object",
+  "required": [
+    "error"
+  ],
+  "properties": {
+    "error": {
+      "type": "string"
+    }
+  },
+  "additionalProperties": false
+}

@@ -1,0 +1,757 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:ournotes-boxlens:schema:scan-response:1",
+  "title": "Our Notes BoxLens scan-response v1",
+  "type": "object",
+  "required": [
+    "schema",
+    "box",
+    "scans"
+  ],
+  "properties": {
+    "schema": {
+      "const": "ournotes-boxlens.scan-result/1"
+    },
+    "box": {
+      "type": "object",
+      "required": [
+        "schema",
+        "player",
+        "coverage",
+        "cards",
+        "unique_count",
+        "observations",
+        "duplicate_observations"
+      ],
+      "properties": {
+        "schema": {
+          "const": "bdon-box/1"
+        },
+        "player": {
+          "type": "string"
+        },
+        "coverage": {
+          "const": "observed_only"
+        },
+        "cards": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "kind",
+              "id",
+              "name",
+              "sources",
+              "source_ids",
+              "conflicts",
+              "level",
+              "card_rank",
+              "awake_count"
+            ],
+            "properties": {
+              "kind": {
+                "enum": [
+                  "member",
+                  "snap"
+                ]
+              },
+              "id": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "name": {
+                "type": "string"
+              },
+              "sources": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "uniqueItems": true
+              },
+              "source_ids": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "pattern": "^[0-9a-f]{64}$"
+                },
+                "uniqueItems": true
+              },
+              "conflicts": {
+                "type": "object",
+                "properties": {
+                  "level": {
+                    "type": "object",
+                    "patternProperties": {
+                      "^[1-9][0-9]*$": {
+                        "type": "array",
+                        "minItems": 1,
+                        "items": {
+                          "type": "object",
+                          "required": [
+                            "source",
+                            "source_id",
+                            "confidence"
+                          ],
+                          "properties": {
+                            "source": {
+                              "type": "string"
+                            },
+                            "source_id": {
+                              "anyOf": [
+                                {
+                                  "type": "string",
+                                  "pattern": "^[0-9a-f]{64}$"
+                                },
+                                {
+                                  "type": "null"
+                                }
+                              ]
+                            },
+                            "confidence": {
+                              "type": "number",
+                              "minimum": 0,
+                              "maximum": 1
+                            }
+                          },
+                          "additionalProperties": false
+                        }
+                      }
+                    },
+                    "additionalProperties": false
+                  },
+                  "card_rank": {
+                    "type": "object",
+                    "patternProperties": {
+                      "^[1-9][0-9]*$": {
+                        "type": "array",
+                        "minItems": 1,
+                        "items": {
+                          "type": "object",
+                          "required": [
+                            "source",
+                            "source_id",
+                            "confidence"
+                          ],
+                          "properties": {
+                            "source": {
+                              "type": "string"
+                            },
+                            "source_id": {
+                              "anyOf": [
+                                {
+                                  "type": "string",
+                                  "pattern": "^[0-9a-f]{64}$"
+                                },
+                                {
+                                  "type": "null"
+                                }
+                              ]
+                            },
+                            "confidence": {
+                              "type": "number",
+                              "minimum": 0,
+                              "maximum": 1
+                            }
+                          },
+                          "additionalProperties": false
+                        }
+                      }
+                    },
+                    "additionalProperties": false
+                  },
+                  "awake_count": {
+                    "type": "object",
+                    "patternProperties": {
+                      "^[1-9][0-9]*$": {
+                        "type": "array",
+                        "minItems": 1,
+                        "items": {
+                          "type": "object",
+                          "required": [
+                            "source",
+                            "source_id",
+                            "confidence"
+                          ],
+                          "properties": {
+                            "source": {
+                              "type": "string"
+                            },
+                            "source_id": {
+                              "anyOf": [
+                                {
+                                  "type": "string",
+                                  "pattern": "^[0-9a-f]{64}$"
+                                },
+                                {
+                                  "type": "null"
+                                }
+                              ]
+                            },
+                            "confidence": {
+                              "type": "number",
+                              "minimum": 0,
+                              "maximum": 1
+                            }
+                          },
+                          "additionalProperties": false
+                        }
+                      }
+                    },
+                    "additionalProperties": false
+                  }
+                },
+                "additionalProperties": false
+              },
+              "level": {
+                "type": "object",
+                "required": [
+                  "value",
+                  "confidence"
+                ],
+                "properties": {
+                  "value": {
+                    "anyOf": [
+                      {
+                        "type": "integer",
+                        "minimum": 1,
+                        "maximum": 100
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "confidence": {
+                    "type": "number",
+                    "minimum": 0,
+                    "maximum": 1
+                  },
+                  "reason": {
+                    "type": "string"
+                  },
+                  "source": {
+                    "const": "manual"
+                  }
+                },
+                "additionalProperties": false
+              },
+              "card_rank": {
+                "type": "object",
+                "required": [
+                  "value",
+                  "confidence"
+                ],
+                "properties": {
+                  "value": {
+                    "type": [
+                      "integer",
+                      "null"
+                    ],
+                    "minimum": 1,
+                    "maximum": 5
+                  },
+                  "confidence": {
+                    "type": "number",
+                    "minimum": 0,
+                    "maximum": 1
+                  },
+                  "reason": {
+                    "type": "string"
+                  },
+                  "source": {
+                    "const": "manual"
+                  }
+                },
+                "additionalProperties": false
+              },
+              "awake_count": {
+                "type": "object",
+                "required": [
+                  "value",
+                  "confidence"
+                ],
+                "properties": {
+                  "value": {
+                    "type": [
+                      "integer",
+                      "null"
+                    ],
+                    "minimum": 1,
+                    "maximum": 5
+                  },
+                  "confidence": {
+                    "type": "number",
+                    "minimum": 0,
+                    "maximum": 1
+                  },
+                  "reason": {
+                    "type": "string"
+                  },
+                  "source": {
+                    "const": "manual"
+                  }
+                },
+                "additionalProperties": false
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "unique_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "observations": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "duplicate_observations": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "corrections": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "kind",
+              "id",
+              "field",
+              "previous",
+              "previous_conflicts",
+              "value"
+            ],
+            "properties": {
+              "kind": {
+                "enum": [
+                  "member",
+                  "snap"
+                ]
+              },
+              "id": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "field": {
+                "enum": [
+                  "level",
+                  "card_rank",
+                  "awake_count"
+                ]
+              },
+              "previous": {
+                "type": "object",
+                "required": [
+                  "value",
+                  "confidence"
+                ],
+                "properties": {
+                  "value": {
+                    "anyOf": [
+                      {
+                        "type": "integer",
+                        "minimum": 1,
+                        "maximum": 100
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "confidence": {
+                    "type": "number",
+                    "minimum": 0,
+                    "maximum": 1
+                  },
+                  "reason": {
+                    "type": "string"
+                  },
+                  "source": {
+                    "const": "manual"
+                  }
+                },
+                "additionalProperties": false
+              },
+              "previous_conflicts": {
+                "anyOf": [
+                  {
+                    "type": "object",
+                    "patternProperties": {
+                      "^[1-9][0-9]*$": {
+                        "type": "array",
+                        "minItems": 1,
+                        "items": {
+                          "type": "object",
+                          "required": [
+                            "source",
+                            "source_id",
+                            "confidence"
+                          ],
+                          "properties": {
+                            "source": {
+                              "type": "string"
+                            },
+                            "source_id": {
+                              "anyOf": [
+                                {
+                                  "type": "string",
+                                  "pattern": "^[0-9a-f]{64}$"
+                                },
+                                {
+                                  "type": "null"
+                                }
+                              ]
+                            },
+                            "confidence": {
+                              "type": "number",
+                              "minimum": 0,
+                              "maximum": 1
+                            }
+                          },
+                          "additionalProperties": false
+                        }
+                      }
+                    },
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "value": {
+                "anyOf": [
+                  {
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 100
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "recognition_provenance": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "schema",
+              "files",
+              "inference_core_sha256",
+              "field_confidence_threshold",
+              "onnxruntime_version"
+            ],
+            "properties": {
+              "schema": {
+                "const": "ournotes-boxlens.recognition-provenance/1"
+              },
+              "files": {
+                "type": "object",
+                "additionalProperties": {
+                  "type": "string",
+                  "pattern": "^[0-9a-f]{64}$"
+                }
+              },
+              "inference_core_sha256": {
+                "type": "string",
+                "pattern": "^[0-9a-f]{64}$"
+              },
+              "field_confidence_threshold": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 1
+              },
+              "onnxruntime_version": {
+                "type": "string"
+              }
+            },
+            "additionalProperties": false
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "scans": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "source",
+          "source_id",
+          "width",
+          "height",
+          "cards",
+          "elapsed_ms",
+          "coverage"
+        ],
+        "properties": {
+          "source": {
+            "type": "string"
+          },
+          "source_id": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$"
+          },
+          "width": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "height": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "cards": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "kind",
+                "id",
+                "name",
+                "rarity",
+                "card_type",
+                "bbox",
+                "identity_confidence",
+                "inliers",
+                "visible_fraction",
+                "level",
+                "card_rank",
+                "awake_count",
+                "display_mode",
+                "review"
+              ],
+              "properties": {
+                "kind": {
+                  "enum": [
+                    "member",
+                    "snap"
+                  ]
+                },
+                "id": {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "name": {
+                  "type": "string"
+                },
+                "rarity": {
+                  "type": "integer"
+                },
+                "card_type": {
+                  "type": "integer"
+                },
+                "bbox": {
+                  "type": "array",
+                  "prefixItems": [
+                    {
+                      "type": "number"
+                    },
+                    {
+                      "type": "number"
+                    },
+                    {
+                      "type": "number",
+                      "exclusiveMinimum": 0
+                    },
+                    {
+                      "type": "number",
+                      "exclusiveMinimum": 0
+                    }
+                  ],
+                  "items": false,
+                  "minItems": 4,
+                  "maxItems": 4
+                },
+                "identity_confidence": {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 1
+                },
+                "inliers": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "visible_fraction": {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 1
+                },
+                "level": {
+                  "type": "object",
+                  "required": [
+                    "value",
+                    "confidence"
+                  ],
+                  "properties": {
+                    "value": {
+                      "anyOf": [
+                        {
+                          "type": "integer",
+                          "minimum": 1,
+                          "maximum": 100
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    },
+                    "confidence": {
+                      "type": "number",
+                      "minimum": 0,
+                      "maximum": 1
+                    },
+                    "reason": {
+                      "type": "string"
+                    },
+                    "source": {
+                      "const": "manual"
+                    }
+                  },
+                  "additionalProperties": false
+                },
+                "card_rank": {
+                  "type": "object",
+                  "required": [
+                    "value",
+                    "confidence"
+                  ],
+                  "properties": {
+                    "value": {
+                      "type": [
+                        "integer",
+                        "null"
+                      ],
+                      "minimum": 1,
+                      "maximum": 5
+                    },
+                    "confidence": {
+                      "type": "number",
+                      "minimum": 0,
+                      "maximum": 1
+                    },
+                    "reason": {
+                      "type": "string"
+                    },
+                    "source": {
+                      "const": "manual"
+                    }
+                  },
+                  "additionalProperties": false
+                },
+                "awake_count": {
+                  "type": "object",
+                  "required": [
+                    "value",
+                    "confidence"
+                  ],
+                  "properties": {
+                    "value": {
+                      "type": [
+                        "integer",
+                        "null"
+                      ],
+                      "minimum": 1,
+                      "maximum": 5
+                    },
+                    "confidence": {
+                      "type": "number",
+                      "minimum": 0,
+                      "maximum": 1
+                    },
+                    "reason": {
+                      "type": "string"
+                    },
+                    "source": {
+                      "const": "manual"
+                    }
+                  },
+                  "additionalProperties": false
+                },
+                "display_mode": {
+                  "enum": [
+                    "unknown",
+                    "other",
+                    "level",
+                    "training"
+                  ]
+                },
+                "review": {
+                  "type": "boolean"
+                },
+                "identity_method": {
+                  "const": "grid_gallery"
+                },
+                "embedding_similarity": {
+                  "type": [
+                    "number",
+                    "null"
+                  ],
+                  "minimum": -1,
+                  "maximum": 1
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          "elapsed_ms": {
+            "type": "number",
+            "minimum": 0
+          },
+          "coverage": {
+            "const": "observed_only"
+          },
+          "duplicate_image": {
+            "type": "boolean"
+          },
+          "annotated_file": {
+            "type": "string"
+          },
+          "recognition_provenance": {
+            "type": "object",
+            "required": [
+              "schema",
+              "files",
+              "inference_core_sha256",
+              "field_confidence_threshold",
+              "onnxruntime_version"
+            ],
+            "properties": {
+              "schema": {
+                "const": "ournotes-boxlens.recognition-provenance/1"
+              },
+              "files": {
+                "type": "object",
+                "additionalProperties": {
+                  "type": "string",
+                  "pattern": "^[0-9a-f]{64}$"
+                }
+              },
+              "inference_core_sha256": {
+                "type": "string",
+                "pattern": "^[0-9a-f]{64}$"
+              },
+              "field_confidence_threshold": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 1
+              },
+              "onnxruntime_version": {
+                "type": "string"
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "additionalProperties": false
+      },
+      "minItems": 1
+    }
+  },
+  "additionalProperties": false
+}

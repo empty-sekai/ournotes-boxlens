@@ -1,0 +1,47 @@
+{
+  "data": {
+    "master/MasterCharacter.json": "e7012b2aa81fc9d8a6039f9e7bd5eba62cc4c5f828030c54e12d86905a813094",
+    "master/MasterEventPickUpCard.json": "aa7c99e011d5c6089e55906d846128260a9d3b54ad4dffc6db3c82e4f3612e2c",
+    "master/MasterMemberCard.json": "ea509ce614b469538c98c8fcf4192cf7059ddc35d67824a66aaaf385f3c1b859",
+    "master/MasterMemberCardAwake.json": "7b840ed6eba07267f443066029849b1a8f4116e056140145d16b5f4053030523",
+    "master/MasterMemberCardAwakeResource.json": "6632ad02d9909e38e383dc2e91ee5ddd011db10cafaced6e3d709a20c6765592",
+    "master/MasterMemberCardLevel.json": "0e577be0c24052f485593d2cbfb1e9af3f8656c620d0676384943b99a19d6abc",
+    "master/MasterMemberCardLevelLimit.json": "7627a828b83a8897321d5604abac97a710031af0eebc4e32687c68808e4e8ebe",
+    "master/MasterMemberCardRank.json": "d852d0fd38e268736c6c7ef121ad4c3ebf54bf5ef5aa2025008e50a75ce1a989",
+    "master/MasterProfileCardItem.json": "da064b05571862684aae7800a451e9808df1062d116b4ba93b72889a653aa9d8",
+    "master/MasterSupportCard.json": "07429e7365c611a16faaceee6d8e24b07ca029c6908941cb715b9b144bec6e09",
+    "master/MasterSupportCardLevel.json": "585892ee2d8177da11fd48b9deaef6531548a39ed2997900bf5b33c0bacd0a85",
+    "master/MasterSupportCardRank.json": "ab91837bd5a031f129c18378037ba3eb1ab36a96a00254c24b4c8f4f1db39209",
+    "master/MasterText.json": "f937779ce3d9fac038668476154b8236fa1c2c1ce430a573a3f388217bbd5c15"
+  },
+  "data-v7": {
+    "master/MasterCharacter.json": "e7012b2aa81fc9d8a6039f9e7bd5eba62cc4c5f828030c54e12d86905a813094",
+    "master/MasterEventPickUpCard.json": "aa7c99e011d5c6089e55906d846128260a9d3b54ad4dffc6db3c82e4f3612e2c",
+    "master/MasterMemberCard.json": "ea509ce614b469538c98c8fcf4192cf7059ddc35d67824a66aaaf385f3c1b859",
+    "master/MasterMemberCardAwake.json": "7b840ed6eba07267f443066029849b1a8f4116e056140145d16b5f4053030523",
+    "master/MasterMemberCardAwakeResource.json": "6632ad02d9909e38e383dc2e91ee5ddd011db10cafaced6e3d709a20c6765592",
+    "master/MasterMemberCardLevel.json": "0e577be0c24052f485593d2cbfb1e9af3f8656c620d0676384943b99a19d6abc",
+    "master/MasterMemberCardLevelLimit.json": "7627a828b83a8897321d5604abac97a710031af0eebc4e32687c68808e4e8ebe",
+    "master/MasterMemberCardRank.json": "d852d0fd38e268736c6c7ef121ad4c3ebf54bf5ef5aa2025008e50a75ce1a989",
+    "master/MasterProfileCardItem.json": "da064b05571862684aae7800a451e9808df1062d116b4ba93b72889a653aa9d8",
+    "master/MasterSupportCard.json": "07429e7365c611a16faaceee6d8e24b07ca029c6908941cb715b9b144bec6e09",
+    "master/MasterSupportCardLevel.json": "585892ee2d8177da11fd48b9deaef6531548a39ed2997900bf5b33c0bacd0a85",
+    "master/MasterSupportCardRank.json": "ab91837bd5a031f129c18378037ba3eb1ab36a96a00254c24b4c8f4f1db39209",
+    "master/MasterText.json": "f937779ce3d9fac038668476154b8236fa1c2c1ce430a573a3f388217bbd5c15"
+  },
+  "data-v8-eval": {
+    "master/MasterCharacter.json": "e7012b2aa81fc9d8a6039f9e7bd5eba62cc4c5f828030c54e12d86905a813094",
+    "master/MasterEventPickUpCard.json": "aa7c99e011d5c6089e55906d846128260a9d3b54ad4dffc6db3c82e4f3612e2c",
+    "master/MasterMemberCard.json": "ea509ce614b469538c98c8fcf4192cf7059ddc35d67824a66aaaf385f3c1b859",
+    "master/MasterMemberCardAwake.json": "7b840ed6eba07267f443066029849b1a8f4116e056140145d16b5f4053030523",
+    "master/MasterMemberCardAwakeResource.json": "6632ad02d9909e38e383dc2e91ee5ddd011db10cafaced6e3d709a20c6765592",
+    "master/MasterMemberCardLevel.json": "0e577be0c24052f485593d2cbfb1e9af3f8656c620d0676384943b99a19d6abc",
+    "master/MasterMemberCardLevelLimit.json": "7627a828b83a8897321d5604abac97a710031af0eebc4e32687c68808e4e8ebe",
+    "master/MasterMemberCardRank.json": "d852d0fd38e268736c6c7ef121ad4c3ebf54bf5ef5aa2025008e50a75ce1a989",
+    "master/MasterProfileCardItem.json": "da064b05571862684aae7800a451e9808df1062d116b4ba93b72889a653aa9d8",
+    "master/MasterSupportCard.json": "07429e7365c611a16faaceee6d8e24b07ca029c6908941cb715b9b144bec6e09",
+    "master/MasterSupportCardLevel.json": "585892ee2d8177da11fd48b9deaef6531548a39ed2997900bf5b33c0bacd0a85",
+    "master/MasterSupportCardRank.json": "ab91837bd5a031f129c18378037ba3eb1ab36a96a00254c24b4c8f4f1db39209",
+    "master/MasterText.json": "f937779ce3d9fac038668476154b8236fa1c2c1ce430a573a3f388217bbd5c15"
+  }
+}

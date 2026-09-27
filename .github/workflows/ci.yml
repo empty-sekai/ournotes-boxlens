@@ -1,0 +1,23 @@
+name: CPU package checks
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7.0.1
+      - uses: actions/setup-python@v7.0.0
+        with:
+          python-version: '3.11'
+          cache: pip
+      - run: python -m pip install -e '.[test]' build
+      - run: python -m unittest discover -s tests -p 'test_*.py'
+      - run: python scripts/validate_contract.py scan-request schemas/examples/scan-request.json
+      - run: python scripts/validate_contract.py scan-response schemas/examples/scan-response.json
+      - run: python -m build

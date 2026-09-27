@@ -1,0 +1,32 @@
+{
+  "schema": "ournotes-boxlens.weight-parity/1",
+  "seed": 64291,
+  "cases": {
+    "encoder": {
+      "checkpoint_sha256": "d8c2077842dbced378cbb01277fb341cf2583f64d55ef408d7ff23db7dd4965f",
+      "onnx_sha256": "9c753ea5c56d68627618bf8db661c408aecc0ae68490522c9f3c603b364ce798",
+      "shape": [
+        4,
+        3,
+        160,
+        128
+      ],
+      "max_absolute_error": 5.7443976402282715e-06,
+      "allclose": true
+    },
+    "fields": {
+      "checkpoint_sha256": "351db40ac89f611480d05131b7e626e92a928cfdd71278865dd9e87eb2d04b1c",
+      "onnx_sha256": "c1815def0a3dc7118e5d44418bfbf5893242fc502ceb5caed08527388c174bc5",
+      "shape": [
+        4,
+        3,
+        56,
+        144
+      ],
+      "max_absolute_error": 8.58306884765625e-06,
+      "allclose": true,
+      "class_agreement": true
+    }
+  },
+  "passed": true
+}

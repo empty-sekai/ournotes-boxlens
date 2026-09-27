@@ -1,0 +1,14 @@
+{
+  "python": "3.12.13",
+  "torch": "2.12.0+git6bbd260",
+  "torchvision": "0.27.1+df56172",
+  "hip": "7.2.53211",
+  "gpu_name_reported": "",
+  "vram_gib": 191.69,
+  "libraries": {
+    "Pillow": "12.3.0",
+    "numpy": "2.3.5",
+    "onnx": "1.22.0",
+    "onnxruntime": "1.30.0"
+  }
+}
