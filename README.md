@@ -35,6 +35,16 @@ python boxvision.py scan --data DATA --threads 2 --output ./result screenshot-a.
 
 输出 `observations.json`（每张截图的定位、来源指纹和字段）、`box.json`（合并结果）、带序号及来源指纹的标注图。同名输入文件不会覆盖彼此的标注图。成员与留影使用不同 ID 命名空间。
 
+## 接入组卡推荐
+
+可选的正式 `deck-ui` 入口将截图识别、显式人工补齐和 [OurNotes Deck](https://github.com/empty-sekai/ournotes-deck) 的真实搜索连在一起：
+
+```powershell
+python boxvision.py deck-ui --data DATA --deck-data deck-data.json --solver-bin ournotes-recommend.exe --workspace ./local/deck-ui --port 18790 --box-port 18793
+```
+
+打开 `http://127.0.0.1:18790/`。需要与图库匹配的 DeckData 和支持 `ournotes-deck.recommendation-request/1` 的推荐程序；源码不附带游戏资源。未知字段不会默认填为等级／Rank 1，完整持有集合须由使用者声明。详细补齐契约、mock 复现、版本校验和目标语义见 [组卡输入管线](docs/DECK_PIPELINE.md)。
+
 ## 数据和模型
 
 运行目录需要使用者自行准备 `catalog.json`、`index.npz`、卡面／canonical 图库、卡阶精灵，再将权重包中的 `encoder.onnx` 和 `fields.onnx` 放入该目录的 `models/`。公开附件只包含源码与权重，不包含游戏资源或开箱即用的图库。缺少多模式字段模型时拒绝启动，避免旧的纯等级模型把能力值当等级。`models/gallery.npz` 是可重建的缓存。

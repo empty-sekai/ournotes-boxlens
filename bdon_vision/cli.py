@@ -19,7 +19,11 @@ def main():
     p.add_argument('images',nargs='+',type=Path);p.add_argument('--output',type=Path,required=True)
     p.add_argument('--threads',type=int,default=2)
     p=sub.add_parser('serve');p.add_argument('--data',type=Path,required=True);p.add_argument('--port',type=int,default=18776)
+    from .deck.cli import add_parsers,run
+    add_parsers(sub)
     args=parser.parse_args()
+    if args.command.startswith("deck-"):
+        raise SystemExit(run(args))
     if args.command=='prepare':
         prepare(args.data,allow_download=not args.offline)
     elif args.command=='scan':

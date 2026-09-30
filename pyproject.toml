@@ -17,18 +17,19 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
-test = ["jsonschema>=4.18,<5"]
+test = ["jsonschema>=4.18,<5", "pytest>=8,<10"]
 
 [project.scripts]
 ournotes-boxlens = "bdon_vision.cli:main"
 
 [tool.setuptools]
-packages = ["bdon_vision"]
+packages = ["bdon_vision", "bdon_vision.deck"]
 license-files = ["LICENSE", "THIRD_PARTY_NOTICES.md", "licenses/*.txt"]
 include-package-data = false
 
 [tool.setuptools.package-data]
 bdon_vision = ["web.html", "web.js"]
+"bdon_vision.deck" = ["web.html"]
 
 [tool.setuptools.exclude-package-data]
 "*" = ["__pycache__/*", "*.pyc", "*.pyo"]
