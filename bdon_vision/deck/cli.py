@@ -3,6 +3,7 @@ import json
 from pathlib import Path
 from .common import read, write, digest, strict_json
 from .adapter import inventory, adapt, IncompleteInventory
+from .review_state import begin_review, finish_review
 
 
 def add_parsers(sub):
@@ -49,17 +50,18 @@ def run(args):
         print(json.dumps({'source':'mock','screenshots':len(manifest['screenshots'])}))
     elif args.command=='deck-adapt':
         from .visual_data import binding
+        begin_review(args.output)
         inv=inventory(read(args.box),args.deck_data,mock=args.mock,region=args.region,
                       recognition_dataset=binding(args.data,args.deck_data))
         write(args.output/'inventory.json',inv)
         try:
-            result=adapt(inv,read(args.completion) if args.completion else None,args.deck_data)
+            completion=read(args.completion) if args.completion else None
+            result=adapt(inv,completion,args.deck_data)
         except IncompleteInventory as error:
             write(args.output/'needs-review.json',{'complete':False,'issues':error.issues})
             print(str(error))
             return 2
-        write(args.output/'adaptation.json',result)
-        write(args.output/'roster.json',result['roster'])
+        result=finish_review(args.output,completion,result)
         print(json.dumps({'complete':True,'mock':inv['mock'],'corrections':len(result['corrections'])}))
     elif args.command=='deck-recommend':
         from .recommend import recommend

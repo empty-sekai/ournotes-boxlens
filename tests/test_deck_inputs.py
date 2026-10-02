@@ -149,3 +149,135 @@ def test_legacy_catalog_has_explicit_identity_gap(fixture):
 def test_manifest_path_escape_rejected(fixture):
     path,data,_,_=fixture;m=read(data/'visual-data-manifest.json');m['files']['../deck.json']=digest(path);write(data/'visual-data-manifest.json',m)
     with pytest.raises(ValueError,match='outside dataset'):binding(data,path)
+
+def test_cli_failed_review_revokes_old_roster_and_can_recover(fixture,monkeypatch):
+    from types import SimpleNamespace
+    from bdon_vision.deck.cli import run
+    from bdon_vision.deck.recommend import recommend
+    from bdon_vision.deck.review_state import load_review
+    import sys
+    path,data,inv,c=fixture
+    out=path.parent/'workspace';box=path.parent/'box.json';completion=path.parent/'completion.json'
+    write(box,inv['box']);write(completion,c)
+    args=SimpleNamespace(command='deck-adapt',data=data,deck_data=path,mock=True,region='test-region',box=box,completion=completion,output=out)
+    assert run(args)==0
+    assert load_review(out)['inventorySha256']==digest(out/'inventory.json')
+    fresh=deepcopy(inv['box']);fresh['cards'][4]['id']=6;write(box,fresh)
+    args.completion=None
+    assert run(args)==2
+    assert read(out/'inventory.json')['box']['cards'][4]['id']==6
+    assert read(out/'roster.json')['members'][4]['id']==5  # retained evidence, not usable state
+    def forbidden(*args,**kwargs):raise AssertionError('solver must not run with failed current review')
+    monkeypatch.setattr('bdon_vision.deck.recommend.subprocess.run',forbidden)
+    matrix={'entries':[{'id':'audit','request':{'execution':{'kind':'power'},'metric':{'kind':'power'}}}]}
+    with pytest.raises(ValueError,match='requires successful review'):
+        recommend(sys.executable,path,out/'roster.json',matrix,path.parent/'rejected')
+    c['members'][4]['id']=6;c['player']['ownedMemberCardIds'][4]=6
+    write(completion,c);args.completion=completion
+    assert run(args)==0
+    assert not (out/'needs-review.json').exists()
+    assert load_review(out)['roster']['members'][4]['id']==6
+    def solver(command,**kwargs):
+        assert read(command[command.index('--roster')+1])['members'][4]['id']==6
+        return SimpleNamespace(stdout='{}',stderr='',returncode=0)
+    monkeypatch.setattr('bdon_vision.deck.recommend.subprocess.run',solver)
+    assert recommend(sys.executable,path,out/'roster.json',matrix,path.parent/'accepted')['cases'][0]['exitCode']==0
+
+
+def test_historical_review_requires_matching_current_inventory(fixture):
+    from bdon_vision.deck.review_state import load_review
+    path,_,inv,c=fixture;out=path.parent/'historical'
+    adapted=adapt(inv,c,path)
+    write(out/'inventory.json',inv);write(out/'adaptation.json',adapted);write(out/'roster.json',adapted['roster'])
+    assert load_review(out)==adapted  # pre-fix R3 without inventorySha256 is still supported
+    inv['box']['cards'][4]['id']=6;write(out/'inventory.json',inv)
+    with pytest.raises(ValueError,match='inventory binding mismatch'):load_review(out)
+
+
+def test_partial_review_write_never_commits_complete_state(fixture,monkeypatch):
+    from bdon_vision.deck import review_state
+    path,_,inv,c=fixture;out=path.parent/'partial'
+    write(out/'inventory.json',inv);review_state.begin_review(out)
+    original=review_state.write
+    def fail_roster(target,value):
+        if target.name=='roster.json':raise OSError('simulated disk failure')
+        original(target,value)
+    monkeypatch.setattr(review_state,'write',fail_roster)
+    with pytest.raises(OSError,match='disk failure'):review_state.finish_review(out,c,adapt(inv,c,path))
+    with pytest.raises(ValueError,match='requires successful review'):review_state.load_review(out)
+
+
+@pytest.mark.parametrize('label',['addMissingIdentities','excludeObservedIdentities'])
+@pytest.mark.parametrize('evidence',[None,'','   ',{},123])
+def test_identity_review_requires_its_own_nonempty_evidence(fixture,label,evidence):
+    path,_,inv,c=fixture
+    entry={'kind':'member','id':6 if label=='addMissingIdentities' else 5}
+    if evidence is not None:entry['evidence']=evidence
+    c[label]=[entry]
+    if label=='addMissingIdentities':
+        c['members'].append({**c['members'][0],'id':6});c['player']['ownedMemberCardIds'].append(6)
+    else:
+        c['addMissingIdentities']=[{'kind':'member','id':6,'evidence':'explicit replacement'}]
+        c['members'][4]['id']=6;c['player']['ownedMemberCardIds'][4]=6
+    assert c['evidence']
+    with pytest.raises(ValueError,match='per-identity evidence'):adapt(inv,c,path)
+    c[label][0]['evidence']='Explicit manual identity review'
+    result=adapt(inv,c,path)
+    assert result['complete'] and result['addedIdentities']==c['addMissingIdentities']
+    assert result['excludedIdentities']==c['excludeObservedIdentities']
+
+
+@pytest.mark.parametrize("state",["failed","legacy","updated"])
+def test_http_run_preserves_only_current_review_and_results(fixture,monkeypatch,state):
+    import io,threading
+    from types import SimpleNamespace
+    from bdon_vision.deck import server
+    from bdon_vision.deck.review_state import begin_review,finish_review
+    path,data,inv,c=fixture;out=path.parent/'http'
+    adapted=adapt(inv,c,path)
+    for name,value in [('inventory',inv),('adaptation',adapted),('roster',adapted['roster']),('scene-matrix',{'entries':[]}),('baseline-live.stdout',{'old':True})]:write(out/(name+'.json'),value)
+    write(out/'recommendations/recommendations.json',{'rosterSha256':digest(out/'roster.json'),'old':True})
+    if state=='failed':
+        begin_review(out)
+        inv['box']['cards'][4]['id']=6;write(out/'inventory.json',inv)
+    elif state=='updated':
+        begin_review(out);c['members'][0]['level']=1
+        finish_review(out,c,adapt(inv,c,path))
+    lock=threading.Lock()
+    monkeypatch.setattr(server,'threading',SimpleNamespace(Lock=lambda:lock))
+    monkeypatch.setattr(server.subprocess,'Popen',lambda *a,**k:SimpleNamespace(poll=lambda:None,terminate=lambda:None,wait=lambda **k:0))
+    monkeypatch.setattr(server,'urlopen',lambda *a,**k:io.BytesIO(b'{"status":"ok"}'))
+    responses=[]
+    def http_server(address,handler_class):
+        def serve_forever():
+            handler=object.__new__(handler_class);handler.path='/api/run'
+            handler.send=lambda body,*a,**k:responses.append(body)
+            started=threading.Event();finished=threading.Event()
+            def get():
+                started.set()
+                try:handler.do_GET()
+                finally:finished.set()
+            lock.acquire()  # simulate an in-flight POST workspace mutation
+            thread=threading.Thread(target=get)
+            try:
+                thread.start();assert started.wait(2)
+                assert not finished.wait(.1), 'GET must wait for the shared mutation lock'
+            finally:
+                lock.release();thread.join(2)
+            assert not thread.is_alive() and finished.is_set()
+        return SimpleNamespace(serve_forever=serve_forever)
+    monkeypatch.setattr(server,'ThreadingHTTPServer',http_server)
+    server.serve(out,port=0,boxport=0,data=data,deck_data=path)
+    response=responses[0]
+    if state=='failed':
+        assert response['inventory']['box']['cards'][4]['id']==6
+        assert response['reviewRequired'] is True
+        assert not {'roster','adaptation','baseline','recommendations'} & response.keys()
+    elif state=='legacy':
+        assert response['roster']==adapted['roster']
+        assert response['baseline']['old'] and response['recommendations']['old']
+        assert not response.get('reviewRequired')
+    else:
+        assert response['roster']['members'][0]['level']==1
+        assert 'baseline' not in response and 'recommendations' not in response
+        assert not response.get('reviewRequired')

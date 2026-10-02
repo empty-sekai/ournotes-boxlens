@@ -14,6 +14,8 @@ python boxvision.py deck-ui --data DATA --deck-data deck-data.json --solver-bin 
 
 选择截图，声明是否为 mock，然后识别。所有冲突和低置信度保留未知；下一步上传人工补齐 JSON。输入完整且通过实际 master 校验后，才能选择场景运行推荐。切换场景、重扫或重新补齐会清除旧队伍，并拒绝迟到的旧响应；场景选择保持不变。刷新可载入 workspace 原有的样本，页面明确标注其来源。
 
+CLI 和 HTTP 补齐共用工作区审阅状态。补齐开始即写入 `needs-review.json`，失败时旧文件仅保留为历史证据，推荐与页面均不将其视为当前完成数据；只有全部新审阅文件写入成功后才清除该标记。新审阅还记录精确 `inventorySha256`，旧 R3 审阅在没有待审标记、原始观察／区服／版本／mock 声明及 Roster 全部匹配时继续可用。存在待审标记的历史工作区需要重新完成补齐。重新补齐后，页面不会载入与当前 Roster 哈希不符的旧推荐或未绑定的新审阅前 baseline。
+
 ## 数据身份与拥有集合
 
 `visual-data-manifest.json` 支持 `region`、`masterVersion`、`deckDataSha256`、`resourceVersion`、`resourceHash`、`officialCatalogSha256`、`catalogSha256`、`indexSha256`、`encoderSha256`、`fieldModelSha256`、`gallerySha256` 及 `files` 相对路径哈希字典。出现的声明均与实际加载内容核对；DeckData 从同一字节快照解析和计算 SHA256。篡改 master 行但保留自报版本也会拒绝。每个推荐请求另冻结实际 DeckData／Roster 字节供程序读取，并保存这些真实输入的哈希与命令。

@@ -4,6 +4,7 @@ from copy import deepcopy
 from datetime import datetime, timedelta
 from pathlib import Path
 from .common import read, write, rows, digest, strict_json
+from .review_state import load_review
 
 def write_request(entry, path):
     """Keep uploaded legal numeric tokens intact; never collapse duplicate keys."""
@@ -119,13 +120,12 @@ def recommend(binary, deck_path, roster_path, matrix, out):
     out=Path(out);out.mkdir(parents=True,exist_ok=True)
     sidecar=Path(roster_path).parent/'adaptation.json'
     if not sidecar.exists():raise ValueError('Strict pipeline requires reviewed adaptation.json alongside Roster; use solver directly for independent raw-Roster tests')
-    review=read(sidecar)
     # Preserve exact numeric tokens, and bind actual bytes used by the executable.
     # External source files may change while a long search is running.
     import hashlib,json
     deck_bytes=Path(deck_path).read_bytes();roster_bytes=Path(roster_path).read_bytes()
     deck_sha=hashlib.sha256(deck_bytes).hexdigest();roster_sha=hashlib.sha256(roster_bytes).hexdigest()
-    if review.get('complete') is not True or review.get('deckDataSha256')!=deck_sha or review.get('roster')!=strict_json(roster_bytes):raise ValueError('Reviewed roster binding mismatch')
+    review=load_review(Path(roster_path).parent,deck_sha=deck_sha,roster=strict_json(roster_bytes))
     result=[];start=time.perf_counter()
     if matrix.get('deckDataSha256') not in (None,deck_sha):raise ValueError('Scene matrix DeckData hash mismatch')
     entries=matrix.get('entries',matrix.get('cases',[]))

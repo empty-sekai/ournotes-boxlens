@@ -118,6 +118,17 @@ def adapt(inv, completion, deck_path, minimum_confidence=.8):
             requested[ident]=entry
     add=c.get('addMissingIdentities',[])  # explicit evidence-backed consent; never auto-add truth
     exclude=c.get('excludeObservedIdentities',[])
+    for label, entries in [('addMissingIdentities',add),('excludeObservedIdentities',exclude)]:
+        if not isinstance(entries,list):raise ValueError(label+' must be an array')
+        seen=set()
+        for entry in entries:
+            if not isinstance(entry,dict) or entry.get('kind') not in FIELDS or type(entry.get('id')) is not int or entry['id']<1:
+                raise ValueError('Invalid '+label+' identity')
+            ident=(entry['kind'],entry['id'])
+            if ident in seen:raise ValueError('Duplicate '+label+' identity')
+            seen.add(ident)
+            if not isinstance(entry.get('evidence'),str) or not entry['evidence'].strip():
+                raise ValueError(label+' requires nonempty per-identity evidence')
     addkeys={(r['kind'],r['id']) for r in add}
     exkeys={(r['kind'],r['id']) for r in exclude}
     identities=(observed.keys() | addkeys) - exkeys

@@ -6,6 +6,7 @@ from urllib.request import urlopen, Request
 from urllib.parse import unquote
 from .common import read, write, digest, strict_json
 from .adapter import inventory,adapt,IncompleteInventory
+from .review_state import begin_review,finish_review,load_review
 
 def serve(run,port=18790,solver_bin=None,boxport=18793,*,data,deck_data):
     data=Path(data).resolve();deck_data=Path(deck_data).resolve()
@@ -38,14 +39,22 @@ def serve(run,port=18790,solver_bin=None,boxport=18793,*,data,deck_data):
                     if self.path=='/':return self.send(Path(__file__).with_name('web.html').read_bytes(),mime='text/html; charset=utf-8')
                     if self.path=='/health':return self.send({'status':'ok','ports':[port,boxport],'run':str(run),'solver':str(solver_bin) if solver_bin else None,'deckDataSha256':loaded_visual['boundDeckDataSha256'],'visualManifestSha256':loaded_visual['datasetManifestSha256'],'visualIdentityCounts':loaded_visual['identityCounts']})
                     if self.path=='/api/run':
-                        d={"boxLensUrl":f"http://127.0.0.1:{boxport}/","loadedVisualData":loaded_visual}
-                        for key,name in [('inventory','inventory.json'),('adaptation','adaptation.json'),('roster','roster.json'),('manifest','fixtures/fixture-manifest.json'),('scan','scan/box.json'),('baseline','baseline-live.stdout.json'),('metrics','e2e-report.json'),('matrix','scene-matrix.json'),('recommendations','recommendations-final/recommendations.json' if (run/'recommendations-final/recommendations.json').exists() else 'recommendations-r3/recommendations.json' if (run/'recommendations-r3/recommendations.json').exists() else 'recommendations-r2/recommendations.json' if (run/'recommendations-r2/recommendations.json').exists() else 'recommendations/recommendations.json')]:
-                            if (run/name).exists():d[key]=read(run/name)
-                        if 'matrix' not in d:
-                            from .recommend import scene_matrix
-                            d['matrix']=scene_matrix(deck_data)
-                        d['hasMockTruth']=(run/'fixtures/completion.json').is_file()
-                        return self.send(d)
+                        with lock:
+                            d={"boxLensUrl":f"http://127.0.0.1:{boxport}/","loadedVisualData":loaded_visual}
+                            for key,name in [('inventory','inventory.json'),('adaptation','adaptation.json'),('roster','roster.json'),('manifest','fixtures/fixture-manifest.json'),('scan','scan/box.json'),('baseline','baseline-live.stdout.json'),('metrics','e2e-report.json'),('matrix','scene-matrix.json'),('recommendations','recommendations-final/recommendations.json' if (run/'recommendations-final/recommendations.json').exists() else 'recommendations-r3/recommendations.json' if (run/'recommendations-r3/recommendations.json').exists() else 'recommendations-r2/recommendations.json' if (run/'recommendations-r2/recommendations.json').exists() else 'recommendations/recommendations.json')]:
+                                if (run/name).exists():d[key]=read(run/name)
+                            if 'matrix' not in d:
+                                from .recommend import scene_matrix
+                                d['matrix']=scene_matrix(deck_data)
+                            d['hasMockTruth']=(run/'fixtures/completion.json').is_file()
+                            try:
+                                reviewed=load_review(run,deck_sha=loaded_visual['boundDeckDataSha256'])
+                                if 'inventorySha256' in reviewed:d.pop('baseline',None)
+                                if d.get('recommendations',{}).get('rosterSha256')!=digest(run/'roster.json'):d.pop('recommendations',None)
+                            except (ValueError,OSError):
+                                for key in ('adaptation','roster','baseline','recommendations'):d.pop(key,None)
+                                d['reviewRequired']=True
+                            return self.send(d)
                     if self.path.startswith('/files/'):
                         target=(run/unquote(self.path[7:])).resolve()
                         if run not in target.parents or not target.is_file():return self.send({'error':'not found'},404)
@@ -75,6 +84,7 @@ def serve(run,port=18790,solver_bin=None,boxport=18793,*,data,deck_data):
                         if sid not in sessions:raise ValueError('Unknown scan session')
                         dest=sessions[sid]
                         if self.path=='/api/adapt':
+                            begin_review(dest)
                             inv=read(dest/'inventory.json')
                             if body.get('completionJson') is not None:body['completion']=strict_json(body['completionJson'])
                             c=read(run/'fixtures/completion.json') if body.get('useMockTruth') else body.get('completion')
@@ -83,7 +93,7 @@ def serve(run,port=18790,solver_bin=None,boxport=18793,*,data,deck_data):
                                 known={(r['kind'],r['id']) for r in inv['box']['cards']}
                                 c['addMissingIdentities']=[{'kind':kind,'id':r['id'],'evidence':'Explicitly selected mock truth completion'} for kind,key in [('member','members'),('snap','snaps')] for r in c[key] if (kind,r['id']) not in known]
                             adapted=adapt(inv,c,deck_data)
-                            write(dest/'reviewed-completion.json',c);write(dest/'adaptation.json',adapted);write(dest/'roster.json',adapted['roster'])
+                            adapted=finish_review(dest,c,adapted)
                             return self.send({'inputBinding':{'sessionId':sid,'inventorySha256':digest(dest/'inventory.json'),'rosterSha256':digest(dest/'roster.json'),'clientInputVersion':body.get('clientInputVersion'),'clientRequestId':body.get('clientRequestId')},'sessionId':sid,'adaptation':adapted,'roster':adapted['roster']})
                         if self.path=='/api/recommend':
                             if solver_bin is None or not Path(solver_bin).exists():return self.send({'error':'Final solver binary not configured'},503)
