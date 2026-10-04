@@ -78,7 +78,7 @@ def serve(data,port,host='127.0.0.1'):
                         if image is None or image.shape[0]*image.shape[1]>20_000_000:
                             raise ValueError('无法读取图片，或分辨率超过 2000 万像素')
                         scan=engine.scan(image,source);cache[digest]=scan;scans.append(scan)
-                self.send({'schema':'ournotes-boxlens.scan-result/1','box':merge(scans,player=player),'scans':scans})
+                self.send({'schema':'ournotes-boxlens.scan-result/2','box':merge(scans,player=player),'scans':scans})
             except (ValueError,KeyError,TypeError) as error:
                 self.send({'error':str(error)},400)
 

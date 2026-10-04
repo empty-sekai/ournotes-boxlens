@@ -1,0 +1,1035 @@
+{
+  "schema": "ournotes-boxlens.model-selection/1",
+  "release": "0.2.0",
+  "rule": "Every checkpoint and threshold was chosen on development sets (profiles validation and stress, plus held-out crop banks); the final-profile sets were scored only after freezing.",
+  "models": {
+    "locator": {
+      "onnx_sha256": "f160f2a5022a9ff1295426014bd03a76815d42a0bba8826dda93d8dc54120ec6",
+      "pt_sha256": "67b2be9f43f301790381379358198b9384afb06a6670ea3c3090c22cb28f36ca",
+      "architecture": "MobileNetV3-Large features, stride-8 feature pyramid (width 96), per-class centre heatmap, tile size and centre offset heads",
+      "stages": [
+        {
+          "initial": "torchvision MobileNetV3-Large ImageNet weights (backbone only)",
+          "train_sets": [
+            "v2-train",
+            "synthetic.py train screens (16 sets x 40, seeds 300000-315000)"
+          ],
+          "validation_set": "v2-validation (600 evenly sampled screens)",
+          "args": {
+            "validation_limit": 600,
+            "steps": 15000,
+            "batch": 32,
+            "crop": 512,
+            "width": 96,
+            "lr": 0.002,
+            "backbone_lr": 0.5,
+            "weight_decay": 0.0001,
+            "warmup": 500,
+            "l1_weight": 0.5,
+            "giou_weight": 2.0,
+            "eval_every": 1000,
+            "eval_edge": 640,
+            "seed": 1,
+            "bf16": true
+          },
+          "train_scenes": 16640,
+          "best": {
+            "step": 3000,
+            "ap50": 0.9999963717864261,
+            "ap75": 0.9999963717864261,
+            "at_0.3": {
+              "truth": 8187,
+              "iou0.5": {
+                "recall": 1.0,
+                "precision": 0.9995116591380784,
+                "false_positives": 4,
+                "false_positives_on_ui": 0,
+                "kind_accuracy": 1.0,
+                "recalled": 8187,
+                "kind_correct": 8187
+              },
+              "iou0.75": {
+                "recall": 1.0,
+                "precision": 0.9995116591380784,
+                "false_positives": 4,
+                "false_positives_on_ui": 0,
+                "kind_accuracy": 1.0,
+                "recalled": 8187,
+                "kind_correct": 8187
+              }
+            },
+            "score": 3.9990160618490087
+          }
+        },
+        {
+          "initial": "stage 1 best checkpoint",
+          "train_sets": [
+            "v2.1-train",
+            "v2-train",
+            "synthetic.py train screens (16 sets x 40, seeds 300000-315000)"
+          ],
+          "validation_set": "v2.1-validation (600 evenly sampled screens)",
+          "args": {
+            "validation_limit": 600,
+            "steps": 4000,
+            "batch": 32,
+            "crop": 512,
+            "width": 96,
+            "lr": 0.0006,
+            "backbone_lr": 0.5,
+            "weight_decay": 0.0001,
+            "warmup": 100,
+            "l1_weight": 0.5,
+            "giou_weight": 2.0,
+            "eval_every": 500,
+            "eval_edge": 640,
+            "seed": 3,
+            "bf16": true
+          },
+          "train_scenes": 32640,
+          "best": {
+            "step": 500,
+            "ap50": 0.9900965646083006,
+            "ap75": 0.9900965646083006,
+            "at_0.3": {
+              "truth": 8106,
+              "iou0.5": {
+                "recall": 0.9998766345916605,
+                "precision": 0.9995067209273647,
+                "false_positives": 4,
+                "false_positives_on_ui": 0,
+                "kind_accuracy": 1.0,
+                "recalled": 8105,
+                "kind_correct": 8105
+              },
+              "iou0.75": {
+                "recall": 0.9998766345916605,
+                "precision": 0.9995067209273647,
+                "false_positives": 4,
+                "false_positives_on_ui": 0,
+                "kind_accuracy": 1.0,
+                "recalled": 8105,
+                "kind_correct": 8105
+              }
+            },
+            "score": 3.9789599619618
+          }
+        }
+      ],
+      "deployment": {
+        "long_edge": 640,
+        "threshold": 0.4
+      }
+    },
+    "member-encoder": {
+      "onnx_sha256": "e2110efcbef161a7f0783841d07be6f7da742ccd6a5406361e59ae728a837b9a",
+      "pt_sha256": "1cca598adf035eedccf6c15921fb99c2d8aaec84cf5a038e90002d2acf6bd0cb",
+      "architecture": "MobileNetV3-Small features, fixed 2x2 average pooling, linear projection to 128-d, L2 normalisation",
+      "initial": "shared encoder of release 0.1.0 (encoder.pt, sha256 8d67b87580188473d3408c4c1995f0e20b943d40ddcd2f8fc6a0f7a7fd26abda)",
+      "train_bank": "tile crops of v2.1-train, identities with id % 7 == 0 excluded from queries and references",
+      "config": {
+        "kind": "member",
+        "steps": 3000,
+        "batch": 256,
+        "lr": 0.00012,
+        "head_lr": 0.00012,
+        "weight_decay": 0.0001,
+        "warmup": 100,
+        "temperature": 0.08,
+        "margin": 0.0,
+        "unknown_level": 0.55,
+        "open_weight": 0.0,
+        "cos_weight": 0.15,
+        "same_name_margin": 0.0,
+        "kd_weight": 1.0,
+        "ref_mode": "frozen",
+        "ref_every": 20,
+        "cross_kind": true,
+        "own_fraction": 0.6,
+        "shift": 0.05,
+        "scale_jitter": 0.07,
+        "min_resolution": 0.35,
+        "overlay_prob": 0.5,
+        "erase_prob": 0.3,
+        "edge_prob": 0.1,
+        "min_inside": 0.999,
+        "eval_every": 250,
+        "seed": 52817,
+        "augmentation": {
+          "shift": 0.05,
+          "scale": 0.07,
+          "aspect": 0.03,
+          "color": 1.0,
+          "min_resolution": 0.35,
+          "resolution_prob": 0.5,
+          "overlay_prob": 0.5,
+          "erase_prob": 0.3,
+          "edge_prob": 0.1,
+          "noise": 0.02
+        },
+        "train_queries": {
+          "member": 27437,
+          "snap": 28688
+        },
+        "dropped_queries": {
+          "member": {
+            "held_out_identity": 0,
+            "foreign": 4605,
+            "window_partly_outside": 3566
+          },
+          "snap": {
+            "held_out_identity": 0,
+            "foreign": 4431,
+            "window_partly_outside": 1974
+          }
+        },
+        "train_identities": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20,
+          22,
+          23,
+          24,
+          25,
+          26,
+          27,
+          29,
+          30,
+          31,
+          32,
+          33,
+          34,
+          36,
+          37,
+          38,
+          39,
+          40,
+          41,
+          43,
+          44,
+          45,
+          46,
+          47,
+          48,
+          50,
+          51,
+          52,
+          53,
+          54,
+          55,
+          57,
+          58,
+          59,
+          60,
+          61,
+          62,
+          64
+        ],
+        "held_out_identities": [
+          7,
+          14,
+          21,
+          28,
+          35,
+          42,
+          49,
+          56,
+          63
+        ],
+        "train_identities_without_queries": [],
+        "train_fingerprints": {
+          "member": [
+            "d105ede90410c4c38e30d72afd4531ba3392c4e403d8114223099204d755d25c"
+          ],
+          "snap": [
+            "0831db4c72b2ff8a035ad272f3b73435abe57f100b8058071264bb5d127a8b7e"
+          ]
+        },
+        "initial_sha256": "8d67b87580188473d3408c4c1995f0e20b943d40ddcd2f8fc6a0f7a7fd26abda",
+        "bank_on_gpu": true
+      },
+      "selection": {
+        "rule": "max validation score = mean(seen, unseen) accepted-correct rate at thresholds with unseen leave-true-out and foreign false accepts <= 1% and accepted precision >= 99.5%; ties broken by stress score at the validation thresholds, then earlier step",
+        "step": 1750,
+        "validation_score": 0.9910454164857482,
+        "stress_score": 0.8461126419604923,
+        "thresholds": {
+          "similarity": 0.88,
+          "margin": 0.15,
+          "score": 0.9910454164857482,
+          "feasible": true,
+          "max_false_accept": 0.01,
+          "min_precision": 0.995,
+          "tied_similarity_range": [
+            0.88,
+            0.88
+          ]
+        }
+      },
+      "export_checks": {
+        "torch_vs_onnx_max_abs_diff": 7.227063179016113e-07,
+        "torch_vs_onnx_random_max_abs_diff": 5.513429641723633e-07,
+        "batch_vs_single_max_abs_diff": 0.0,
+        "vector_norm_range": [
+          0.9999997615814209,
+          1.000000238418579
+        ],
+        "alternative_resampling_cosine_min": 0.9972051382064819,
+        "alternative_resampling_cosine_mean": 0.9997297525405884,
+        "alternative_resampling_self_retrieval": 64,
+        "cards": 64
+      }
+    },
+    "snap-encoder": {
+      "onnx_sha256": "ef3db30237d3d840727c298c7100b86c56dfec77a83aff6faa7712bfcee33b93",
+      "pt_sha256": "75b41723536e86a0044be429a40de83f7529bd4ce291aab6936b9367ee46d182",
+      "architecture": "MobileNetV3-Small features, fixed 2x2 average pooling, linear projection to 128-d, L2 normalisation",
+      "initial": "shared encoder of release 0.1.0 (encoder.pt, sha256 8d67b87580188473d3408c4c1995f0e20b943d40ddcd2f8fc6a0f7a7fd26abda)",
+      "train_bank": "tile crops of v2.1-train, identities with id % 7 == 0 excluded from queries and references",
+      "config": {
+        "kind": "snap",
+        "steps": 3000,
+        "batch": 256,
+        "lr": 0.00012,
+        "head_lr": 0.00012,
+        "weight_decay": 0.0001,
+        "warmup": 100,
+        "temperature": 0.08,
+        "margin": 0.0,
+        "unknown_level": 0.55,
+        "open_weight": 0.0,
+        "cos_weight": 0.15,
+        "same_name_margin": 0.0,
+        "kd_weight": 1.0,
+        "ref_mode": "frozen",
+        "ref_every": 20,
+        "cross_kind": true,
+        "own_fraction": 0.6,
+        "shift": 0.05,
+        "scale_jitter": 0.07,
+        "min_resolution": 0.35,
+        "overlay_prob": 0.5,
+        "erase_prob": 0.3,
+        "edge_prob": 0.1,
+        "min_inside": 0.999,
+        "eval_every": 250,
+        "seed": 52817,
+        "augmentation": {
+          "shift": 0.05,
+          "scale": 0.07,
+          "aspect": 0.03,
+          "color": 1.0,
+          "min_resolution": 0.35,
+          "resolution_prob": 0.5,
+          "overlay_prob": 0.5,
+          "erase_prob": 0.3,
+          "edge_prob": 0.1,
+          "noise": 0.02
+        },
+        "train_queries": {
+          "snap": 28688,
+          "member": 27437
+        },
+        "dropped_queries": {
+          "snap": {
+            "held_out_identity": 0,
+            "foreign": 4431,
+            "window_partly_outside": 1974
+          },
+          "member": {
+            "held_out_identity": 0,
+            "foreign": 4605,
+            "window_partly_outside": 3566
+          }
+        },
+        "train_identities": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20,
+          22,
+          23,
+          24,
+          25,
+          26,
+          27,
+          29,
+          30,
+          31,
+          32,
+          33,
+          34,
+          36,
+          37,
+          38,
+          39,
+          40,
+          41,
+          43,
+          44,
+          45,
+          46,
+          47,
+          48,
+          50,
+          51,
+          52,
+          53,
+          54,
+          55,
+          57,
+          58,
+          59,
+          60,
+          61,
+          62,
+          64
+        ],
+        "held_out_identities": [
+          7,
+          14,
+          21,
+          28,
+          35,
+          42,
+          49,
+          56,
+          63,
+          70
+        ],
+        "train_identities_without_queries": [],
+        "train_fingerprints": {
+          "snap": [
+            "0831db4c72b2ff8a035ad272f3b73435abe57f100b8058071264bb5d127a8b7e"
+          ],
+          "member": [
+            "d105ede90410c4c38e30d72afd4531ba3392c4e403d8114223099204d755d25c"
+          ]
+        },
+        "initial_sha256": "8d67b87580188473d3408c4c1995f0e20b943d40ddcd2f8fc6a0f7a7fd26abda",
+        "bank_on_gpu": true
+      },
+      "selection": {
+        "rule": "max validation score = mean(seen, unseen) accepted-correct rate at thresholds with unseen leave-true-out and foreign false accepts <= 1% and accepted precision >= 99.5%; ties broken by stress score at the validation thresholds, then earlier step",
+        "step": 1000,
+        "validation_score": 0.9905531422536268,
+        "stress_score": 0.8422593021915821,
+        "thresholds": {
+          "similarity": 0.81,
+          "margin": 0.16,
+          "score": 0.9905531422536268,
+          "feasible": true,
+          "max_false_accept": 0.01,
+          "min_precision": 0.995,
+          "tied_similarity_range": [
+            0.81,
+            0.82
+          ]
+        }
+      },
+      "export_checks": {
+        "torch_vs_onnx_max_abs_diff": 7.413327693939209e-07,
+        "torch_vs_onnx_random_max_abs_diff": 4.991888999938965e-07,
+        "batch_vs_single_max_abs_diff": 0.0,
+        "vector_norm_range": [
+          0.9999998211860657,
+          1.0000001192092896
+        ],
+        "alternative_resampling_cosine_min": 0.9975796341896057,
+        "alternative_resampling_cosine_mean": 0.9997220635414124,
+        "alternative_resampling_self_retrieval": 65,
+        "cards": 65
+      }
+    },
+    "member-fields": {
+      "onnx_sha256": "bc6ff2c7221d0ea197661dd6670fb12d3bd8d0e6811c00b8caa904a793b59264",
+      "pt_sha256": "d86eb13d221864f87de0d93c4d7898c5761d3968c2f2c040f2203388fa7da603",
+      "architecture": "four-block CNN (24/48/64/96 channels) with a linear head",
+      "train_banks": [
+        "parameter-field crops of v2.1-train",
+        "hard-g acquisition-degraded crops (member)"
+      ],
+      "dev_sets": [
+        "v2.1-validation crops",
+        "v2.1-stress crops",
+        "hard-l acquisition-degraded validation crops (member)"
+      ],
+      "initial": "stage 1 selected checkpoint (see stage1)",
+      "config": {
+        "kind": "member",
+        "steps": 3000,
+        "batch": 512,
+        "eval_every": 250,
+        "lr": 0.0001,
+        "hard_fraction": 0.4,
+        "freeze_bn": false,
+        "jitter": {
+          "shift_px": [
+            4.0,
+            7.0
+          ],
+          "scale": 0.035,
+          "stored_margin_px": 8,
+          "reach_px": [
+            6.503,
+            7.963
+          ]
+        },
+        "train_counts": {
+          "scenes": 98353,
+          "hard": 60000
+        },
+        "dev_counts": {
+          "validation": 12806,
+          "stress": 6033,
+          "hard": 16000
+        },
+        "acceptance": {
+          "confidence": 0.995,
+          "margin": 0.5
+        },
+        "schedule": "linear warmup 5% then cosine decay",
+        "selection_rule": "per checkpoint: lowest confidence threshold (not below the default, margin fixed) with no misread on any development crop; choose the highest recall of normal and stress scene targets at that threshold, then the highest recall on degraded crops; checkpoints where no threshold removes every misread rank after all others, by fewest misreads at the default threshold, then recall"
+      },
+      "selected_step": 2500,
+      "selected": {
+        "step": 2500,
+        "train_loss": 0.018748672679066658,
+        "sets": {
+          "validation": {
+            "visible_total": 3548,
+            "hidden_total": 9258,
+            "correct": 3534,
+            "wrong": 0,
+            "unknown": 14,
+            "false_visible": 3,
+            "false_visible_latent_match": 3,
+            "false_visible_latent_mismatch": 0,
+            "errors": 0,
+            "coverage": 0.996054114994363
+          },
+          "stress": {
+            "visible_total": 1824,
+            "hidden_total": 4209,
+            "correct": 1369,
+            "wrong": 1,
+            "unknown": 454,
+            "false_visible": 1,
+            "false_visible_latent_match": 1,
+            "false_visible_latent_mismatch": 0,
+            "errors": 1,
+            "coverage": 0.7505482456140351
+          },
+          "hard": {
+            "visible_total": 9091,
+            "hidden_total": 6909,
+            "correct": 8215,
+            "wrong": 0,
+            "unknown": 876,
+            "false_visible": 174,
+            "false_visible_latent_match": 172,
+            "false_visible_latent_mismatch": 2,
+            "errors": 2,
+            "coverage": 0.903640963590364
+          }
+        },
+        "zero_misread": {
+          "threshold": 0.9993960857391359,
+          "achievable": true,
+          "highest_misread_confidence": 0.9993960857391357,
+          "misreads_at_default": 3,
+          "recall": {
+            "scenes": 0.8790022338049144,
+            "hard": 0.8329116708832912
+          },
+          "recall_at_default": {
+            "scenes": 0.9126954579300074,
+            "hard": 0.903640963590364
+          },
+          "per_set": {
+            "validation": {
+              "zero_misread_threshold": 0.995,
+              "achievable": true,
+              "recall_at_zero_misread_threshold": 0.996054114994363,
+              "misreads_at_default": 0
+            },
+            "stress": {
+              "zero_misread_threshold": 0.9987905621528627,
+              "achievable": true,
+              "recall_at_zero_misread_threshold": 0.7138157894736842,
+              "misreads_at_default": 1
+            },
+            "hard": {
+              "zero_misread_threshold": 0.9993960857391359,
+              "achievable": true,
+              "recall_at_zero_misread_threshold": 0.8329116708832912,
+              "misreads_at_default": 2
+            }
+          }
+        }
+      },
+      "deployment_accept": {
+        "confidence": 0.9994,
+        "margin": 0.5
+      },
+      "stage1": {
+        "initial": "shared field model of release 0.1.0 (fields.pt, sha256 15351548a593c67cd939b72c3b03908e2665be5c39a0ca8148bd0cfc33feb0ce)",
+        "config": {
+          "kind": "member",
+          "steps": 8000,
+          "batch": 512,
+          "eval_every": 500,
+          "lr": 0.0003,
+          "hard_fraction": 0.4,
+          "freeze_bn": false,
+          "train_counts": {
+            "scenes": 98353,
+            "hard": 60000
+          },
+          "dev_counts": {
+            "validation": 12806,
+            "stress": 6033,
+            "hard": 16000
+          },
+          "acceptance": {
+            "confidence": 0.995,
+            "margin": 0.5
+          },
+          "schedule": "linear warmup 5% then cosine decay",
+          "selection_rule": "per checkpoint: lowest confidence threshold (not below the default, margin fixed) with no misread on any development crop; choose the highest recall of normal and stress scene targets at that threshold, then the highest recall on degraded crops; checkpoints where no threshold removes every misread rank after all others, by fewest misreads at the default threshold, then recall"
+        },
+        "selected_step": 6500
+      }
+    },
+    "snap-fields": {
+      "onnx_sha256": "fa35b8a80688e3c1f92b3dbd6c567364b842a3a8f25387fac0879b7f740591b4",
+      "pt_sha256": "3917584b999cfe3ea9d359c6da3af38ee06c3631fc68b3a56b6d708ec3f6891b",
+      "architecture": "four-block CNN (24/48/64/96 channels) with a linear head",
+      "train_banks": [
+        "parameter-field crops of v2.1-train",
+        "hard-g acquisition-degraded crops (snap)"
+      ],
+      "dev_sets": [
+        "v2.1-validation crops",
+        "v2.1-stress crops",
+        "hard-l acquisition-degraded validation crops (snap)"
+      ],
+      "initial": "shared field model of release 0.1.0 (fields.pt, sha256 15351548a593c67cd939b72c3b03908e2665be5c39a0ca8148bd0cfc33feb0ce)",
+      "config": {
+        "kind": "snap",
+        "steps": 8000,
+        "batch": 512,
+        "eval_every": 500,
+        "lr": 0.0003,
+        "hard_fraction": 0.4,
+        "freeze_bn": false,
+        "train_counts": {
+          "scenes": 99860,
+          "hard": 60000
+        },
+        "dev_counts": {
+          "validation": 12991,
+          "stress": 6392,
+          "hard": 16000
+        },
+        "acceptance": {
+          "confidence": 0.995,
+          "margin": 0.5
+        },
+        "schedule": "linear warmup 5% then cosine decay",
+        "selection_rule": "per checkpoint: lowest confidence threshold (not below the default, margin fixed) with no misread on any development crop; choose the highest recall of normal and stress scene targets at that threshold, then the highest recall on degraded crops; checkpoints where no threshold removes every misread rank after all others, by fewest misreads at the default threshold, then recall"
+      },
+      "selected_step": 4000,
+      "selected": {
+        "step": 4000,
+        "train_loss": 0.018172895535826683,
+        "sets": {
+          "validation": {
+            "visible_total": 2797,
+            "hidden_total": 10194,
+            "correct": 2701,
+            "wrong": 0,
+            "unknown": 96,
+            "false_visible": 3,
+            "false_visible_latent_match": 3,
+            "false_visible_latent_mismatch": 0,
+            "errors": 0,
+            "coverage": 0.9656775116195924
+          },
+          "stress": {
+            "visible_total": 1226,
+            "hidden_total": 5166,
+            "correct": 871,
+            "wrong": 0,
+            "unknown": 355,
+            "false_visible": 2,
+            "false_visible_latent_match": 2,
+            "false_visible_latent_mismatch": 0,
+            "errors": 0,
+            "coverage": 0.7104404567699837
+          },
+          "hard": {
+            "visible_total": 9310,
+            "hidden_total": 6690,
+            "correct": 8341,
+            "wrong": 0,
+            "unknown": 969,
+            "false_visible": 20,
+            "false_visible_latent_match": 20,
+            "false_visible_latent_mismatch": 0,
+            "errors": 0,
+            "coverage": 0.8959183673469387
+          }
+        },
+        "zero_misread": {
+          "threshold": 0.995,
+          "achievable": true,
+          "highest_misread_confidence": 0.9916692972183228,
+          "misreads_at_default": 0,
+          "recall": {
+            "scenes": 0.8878946060154114,
+            "hard": 0.8959183673469387
+          },
+          "recall_at_default": {
+            "scenes": 0.8878946060154114,
+            "hard": 0.8959183673469387
+          },
+          "per_set": {
+            "validation": {
+              "zero_misread_threshold": 0.995,
+              "achievable": true,
+              "recall_at_zero_misread_threshold": 0.9656775116195924,
+              "misreads_at_default": 0
+            },
+            "stress": {
+              "zero_misread_threshold": 0.995,
+              "achievable": true,
+              "recall_at_zero_misread_threshold": 0.7104404567699837,
+              "misreads_at_default": 0
+            },
+            "hard": {
+              "zero_misread_threshold": 0.995,
+              "achievable": true,
+              "recall_at_zero_misread_threshold": 0.8959183673469387,
+              "misreads_at_default": 0
+            }
+          }
+        }
+      },
+      "deployment_accept": {
+        "confidence": 0.995,
+        "margin": 0.5
+      }
+    },
+    "member-rank": {
+      "onnx_sha256": "e8e8daa2a28def53b7d1baca281980db118fc9a3364cfde02f4bd8b3f8af68fc",
+      "pt_sha256": "d918e88fac08ced7c2687b2cae654261e96ec1e51ea7e5b5a74d76b636044e01",
+      "architecture": "five-block CNN (32/32/64/96/128 channels) with a linear head",
+      "train_banks": [
+        "card-rank icon crops of v2.1-train",
+        "hard-n acquisition-degraded crops (member)"
+      ],
+      "dev_sets": [
+        "v2.1-validation crops",
+        "v2.1-stress crops",
+        "hard-l acquisition-degraded validation crops (member)"
+      ],
+      "initial": "random initialisation",
+      "config": {
+        "kind": "member",
+        "steps": 6000,
+        "batch": 256,
+        "eval_every": 500,
+        "lr": 0.002,
+        "hard_fraction": 0.4,
+        "train_counts": {
+          "scenes": 109594,
+          "hard": 60000
+        },
+        "dev_counts": {
+          "validation": 13954,
+          "stress": 6673,
+          "hard": 16000
+        },
+        "input": {
+          "side": 48,
+          "logical_side": 96
+        },
+        "acceptance": {
+          "confidence": 0.995,
+          "margin": 0.5
+        },
+        "selection_rule": "per checkpoint: lowest confidence threshold (not below the default, margin fixed) with no misread on any development crop; choose the highest recall of normal and stress scene targets at that threshold, then the highest recall on degraded crops; checkpoints where no threshold removes every misread rank after all others, by fewest misreads at the default threshold, then recall; icon-inside crops only"
+      },
+      "selected_step": 3500,
+      "selected": {
+        "step": 3500,
+        "train_loss": 1.9801658709184267e-05,
+        "sets": {
+          "validation": {
+            "visible_total": 10814,
+            "hidden_total": 1876,
+            "correct": 10794,
+            "wrong": 0,
+            "unknown": 20,
+            "false_visible": 3,
+            "false_visible_latent_match": 3,
+            "false_visible_latent_mismatch": 0,
+            "errors": 0,
+            "coverage": 0.9981505455890513,
+            "outside_emitted": 0
+          },
+          "stress": {
+            "visible_total": 5197,
+            "hidden_total": 808,
+            "correct": 4988,
+            "wrong": 0,
+            "unknown": 209,
+            "false_visible": 15,
+            "false_visible_latent_match": 15,
+            "false_visible_latent_mismatch": 0,
+            "errors": 0,
+            "coverage": 0.9597844910525303,
+            "outside_emitted": 5
+          },
+          "hard": {
+            "visible_total": 13184,
+            "hidden_total": 2816,
+            "correct": 13175,
+            "wrong": 0,
+            "unknown": 9,
+            "false_visible": 327,
+            "false_visible_latent_match": 317,
+            "false_visible_latent_mismatch": 10,
+            "errors": 10,
+            "coverage": 0.999317354368932,
+            "outside_emitted": 0
+          }
+        },
+        "zero_misread": {
+          "threshold": 0.9997752308845521,
+          "achievable": true,
+          "highest_misread_confidence": 0.999775230884552,
+          "misreads_at_default": 10,
+          "recall": {
+            "scenes": 0.9732059209293611,
+            "hard": 0.9941595873786407
+          },
+          "recall_at_default": {
+            "scenes": 0.985697333083505,
+            "hard": 0.999317354368932
+          },
+          "per_set": {
+            "validation": {
+              "zero_misread_threshold": 0.995,
+              "achievable": true,
+              "recall_at_zero_misread_threshold": 0.9981505455890513,
+              "misreads_at_default": 0
+            },
+            "stress": {
+              "zero_misread_threshold": 0.995,
+              "achievable": true,
+              "recall_at_zero_misread_threshold": 0.9597844910525303,
+              "misreads_at_default": 0
+            },
+            "hard": {
+              "zero_misread_threshold": 0.9997752308845521,
+              "achievable": true,
+              "recall_at_zero_misread_threshold": 0.9941595873786407,
+              "misreads_at_default": 10
+            }
+          }
+        }
+      },
+      "deployment_accept": {
+        "confidence": 0.9998,
+        "margin": 0.5
+      }
+    },
+    "snap-rank": {
+      "onnx_sha256": "38c5eb44cecc3380bcc2adf3c0f59049e904b5618593950b27c2d552412883f1",
+      "pt_sha256": "6fc054aae5f03f43f51ee4b64692f9a13a324a7f60f536c2bbcdb4c43245a363",
+      "architecture": "five-block CNN (32/32/64/96/128 channels) with a linear head",
+      "train_banks": [
+        "card-rank icon crops of v2.1-train",
+        "hard-g acquisition-degraded crops (snap)"
+      ],
+      "dev_sets": [
+        "v2.1-validation crops",
+        "v2.1-stress crops",
+        "hard-l acquisition-degraded validation crops (snap)"
+      ],
+      "initial": "random initialisation",
+      "config": {
+        "kind": "snap",
+        "steps": 6000,
+        "batch": 256,
+        "eval_every": 500,
+        "lr": 0.002,
+        "hard_fraction": 0.4,
+        "train_counts": {
+          "scenes": 105912,
+          "hard": 60000
+        },
+        "dev_counts": {
+          "validation": 13719,
+          "stress": 6814,
+          "hard": 16000
+        },
+        "input": {
+          "side": 48,
+          "logical_side": 96
+        },
+        "acceptance": {
+          "confidence": 0.995,
+          "margin": 0.5
+        },
+        "selection_rule": "per checkpoint: lowest confidence threshold (not below the default, margin fixed) with no misread on any development crop; choose the highest recall of normal and stress scene targets at that threshold, then the highest recall on degraded crops; checkpoints where no threshold removes every misread rank after all others, by fewest misreads at the default threshold, then recall; icon-inside crops only"
+      },
+      "selected_step": 6000,
+      "selected": {
+        "step": 6000,
+        "train_loss": 0.004346613772213459,
+        "sets": {
+          "validation": {
+            "visible_total": 10585,
+            "hidden_total": 2384,
+            "correct": 10543,
+            "wrong": 0,
+            "unknown": 42,
+            "false_visible": 1,
+            "false_visible_latent_match": 1,
+            "false_visible_latent_mismatch": 0,
+            "errors": 0,
+            "coverage": 0.9960321209258385,
+            "outside_emitted": 3
+          },
+          "stress": {
+            "visible_total": 5230,
+            "hidden_total": 1145,
+            "correct": 4755,
+            "wrong": 0,
+            "unknown": 475,
+            "false_visible": 0,
+            "false_visible_latent_match": 0,
+            "false_visible_latent_mismatch": 0,
+            "errors": 0,
+            "coverage": 0.9091778202676865,
+            "outside_emitted": 1
+          },
+          "hard": {
+            "visible_total": 13259,
+            "hidden_total": 2741,
+            "correct": 13202,
+            "wrong": 0,
+            "unknown": 57,
+            "false_visible": 2,
+            "false_visible_latent_match": 2,
+            "false_visible_latent_mismatch": 0,
+            "errors": 0,
+            "coverage": 0.9957010332604269,
+            "outside_emitted": 0
+          }
+        },
+        "zero_misread": {
+          "threshold": 0.995,
+          "achievable": true,
+          "highest_misread_confidence": null,
+          "misreads_at_default": 0,
+          "recall": {
+            "scenes": 0.9673095162820108,
+            "hard": 0.9957010332604269
+          },
+          "recall_at_default": {
+            "scenes": 0.9673095162820108,
+            "hard": 0.9957010332604269
+          },
+          "per_set": {
+            "validation": {
+              "zero_misread_threshold": 0.995,
+              "achievable": true,
+              "recall_at_zero_misread_threshold": 0.9960321209258385,
+              "misreads_at_default": 0
+            },
+            "stress": {
+              "zero_misread_threshold": 0.995,
+              "achievable": true,
+              "recall_at_zero_misread_threshold": 0.9091778202676865,
+              "misreads_at_default": 0
+            },
+            "hard": {
+              "zero_misread_threshold": 0.995,
+              "achievable": true,
+              "recall_at_zero_misread_threshold": 0.9957010332604269,
+              "misreads_at_default": 0
+            }
+          }
+        }
+      },
+      "deployment_accept": {
+        "confidence": 0.995,
+        "margin": 0.5
+      }
+    }
+  },
+  "crop_banks": {
+    "hard-g": {
+      "module": "bdon_vision.kind_hardcrops",
+      "count": 60000,
+      "seeds": {
+        "member": 190001,
+        "snap": 190003
+      },
+      "split": "train",
+      "occlusion_rate": 0.08
+    },
+    "hard-n": {
+      "module": "bdon_vision.kind_hardcrops",
+      "count": 60000,
+      "seeds": {
+        "member": 180001,
+        "snap": 180003
+      },
+      "split": "train",
+      "occlusion_rate": 0
+    },
+    "hard-l": {
+      "module": "bdon_vision.kind_hardcrops",
+      "count": 16000,
+      "seeds": {
+        "member": 170001,
+        "snap": 170003
+      },
+      "split": "validation"
+    }
+  }
+}

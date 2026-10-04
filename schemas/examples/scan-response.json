@@ -1,5 +1,5 @@
 {
-  "schema": "ournotes-boxlens.scan-result/1",
+  "schema": "ournotes-boxlens.scan-result/2",
   "box": {
     "schema": "bdon-box/1",
     "player": "example",
@@ -16,6 +16,7 @@
       "height": 64,
       "source_id": "bd724c65d1ae73db8ab90fce38e0d27028b2ce45cabdcca9e42774871ebce58c",
       "cards": [],
+      "unidentified": [],
       "elapsed_ms": 1.38,
       "coverage": "observed_only"
     }

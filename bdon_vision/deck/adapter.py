@@ -1,5 +1,6 @@
 """Strict evidence gate in front of the EXISTING Rust Roster, no scoring model."""
 from copy import deepcopy
+from .. import __version__
 from .common import read, digest, rows, load_deck
 
 FIELDS = {'member': {'level': 'level', 'awake': 'awake_count', 'rank': 'card_rank'},
@@ -23,7 +24,7 @@ def inventory(box, deck_path, *, mock=False, region=None, fixture_manifest=None,
     return {'schema': 'ournotes.player-inventory/1', 'source': 'boxlens', 'mock': mock,
             'region': region, 'deckDataSha256': deck_sha,
             'masterVersion': deck['provenance']['master']['version'],
-            'boxlensVersion': '0.1.0', 'boxlensCommit':'2ea25d8e2fdcbd3d1514b101a13b34d3e70d2ff1',
+            'boxlensVersion': __version__,
             'modelScope':'Offline native model 1.0.1-25; JP client 1.0.4 equivalence not inferred', 'box': deepcopy(box),
             'recognitionProvenance': box.get('recognition_provenance', []),
             'recognitionDataset':deepcopy(recognition_dataset),'fixtureManifest': fixture_manifest, 'coverage': 'observed_only'}

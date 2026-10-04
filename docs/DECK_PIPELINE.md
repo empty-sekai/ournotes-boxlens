@@ -18,7 +18,7 @@ CLI 和 HTTP 补齐共用工作区审阅状态。补齐开始即写入 `needs-re
 
 ## 数据身份与拥有集合
 
-`visual-data-manifest.json` 支持 `region`、`masterVersion`、`deckDataSha256`、`resourceVersion`、`resourceHash`、`officialCatalogSha256`、`catalogSha256`、`indexSha256`、`encoderSha256`、`fieldModelSha256`、`gallerySha256` 及 `files` 相对路径哈希字典。出现的声明均与实际加载内容核对；DeckData 从同一字节快照解析和计算 SHA256。篡改 master 行但保留自报版本也会拒绝。每个推荐请求另冻结实际 DeckData／Roster 字节供程序读取，并保存这些真实输入的哈希与命令。
+`visual-data-manifest.json` 支持 `region`、`masterVersion`、`deckDataSha256`、`resourceVersion`、`resourceHash`、`officialCatalogSha256`、`catalogSha256`、`recognitionModelsSha256` 及 `files` 相对路径哈希字典。出现的声明均与实际加载内容核对；DeckData 从同一字节快照解析和计算 SHA256。篡改 master 行但保留自报版本也会拒绝。每个推荐请求另冻结实际 DeckData／Roster 字节供程序读取，并保存这些真实输入的哈希与命令。
 
 无 manifest 的旧目录会明确报告缺失／多余身份，不声称完整覆盖。图库身份覆盖只表示识别能力，不能扩大玩家持有集合。`coverage: observed_only` 在人工明确完成所有持有和培养信息前始终保留。不在绑定 master 的身份（例如旧快照留影 #70 不在当前 JP 数据中）不会被映射成其他卡片。
 
@@ -88,4 +88,4 @@ python -m pip install -e ".[test]"
 python -m pytest -q tests
 ```
 
-公共回归使用手写 synthetic master 和无游戏图像的 JSON，不分发原始 master、chart、APK、截图、卡面、账号或内部协作文件。原有 scan、serve 与训练路径继续可用。根目录 public-manifest.json 记录原 v0.1.0 发布基线；此 PR 的新输入管线由 git commit 与构建结果记录，未更新或重标旧发布／模型证据。
+公共回归使用手写 synthetic master 和无游戏图像的 JSON，不分发原始 master、chart、APK、截图、卡面、账号或内部协作文件。根目录 public-manifest.json 记录发布源码各文件的字节数和 SHA-256。

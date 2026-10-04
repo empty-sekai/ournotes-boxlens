@@ -21,7 +21,7 @@ python scripts/prepare.py --master-dir MASTER --ui-dir exports/game-ui --font-di
 
 `--offline` 禁止联网。省略该选项时，缺少的卡图按准备器中的现有 bdon.moe 路由下载；实际目录记录来源 URL 和哈希。解密后的 UI/font 数据和用户截图不因运行本工具而上传到任何地方。
 
-组装过程复制本项目内的静态渲染器，解码卡阶等精灵，生成 canonical 图、catalog 和 RootSIFT 索引，并为导出资源记录哈希。模型权重单独放入 `data/models/encoder.onnx` 和 `data/models/fields.onnx`；第一次推理会生成可重建图库缓存。没有权重也可以先运行合成数据生成。以上提取结果仅保留在使用者本地，不属于公开源码／权重附件；禁止将其加入本项目公开发布包。
+组装过程复制本项目内的静态渲染器，解码卡阶等精灵，生成 canonical 图和 catalog，并为导出资源记录哈希。权重包 `models/` 中的 7 个 ONNX 文件和 `recognition.json` 单独放入 `data/models/`；放入后运行 `boxvision.py prepare --data data` 或第一次推理时会生成可重建的图库缓存。没有权重也可以先运行合成数据生成。以上提取结果仅保留在使用者本地，不属于公开源码／权重附件；禁止将其加入本项目公开发布包。
 
 ## 已验证的复现范围
 

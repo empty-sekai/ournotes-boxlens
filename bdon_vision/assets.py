@@ -8,9 +8,11 @@ from concurrent.futures import ThreadPoolExecutor
 from functools import lru_cache
 from pathlib import Path
 
-import cv2
-import numpy as np
 from PIL import Image, ImageOps
+
+from . import __version__
+
+USER_AGENT = f'ournotes-boxlens/{__version__}'
 
 
 def read(path):
@@ -44,6 +46,9 @@ def native_module(data):
     old_line="text_values[ref('_statusValueText')]=str({'total':sum(state.power),'performance':state.power[0],'technic':state.power[1],'visual':state.power[2]}.get(state.param,''))"
     new_line=old_line+"\n            if variant in ('snap','formation_snap') and state.param in ('performance','technic','visual'):\n                text_values[ref('_statusValueText')]=format({'performance':state.power[0],'technic':state.power[1],'visual':state.power[2]}[state.param]/100.,'.2f')+'%'"
     if new_line not in code:code=code.replace(old_line,new_line)
+    # The list-row frame gradient catalogs carry key 20 (BD rarity) next to 2/3/4/10.
+    code=code.replace("if self.rarity not in (2,3,4,10): raise ValueError('Unknown rarity')",
+                      "if self.rarity not in (2,3,4,10,20): raise ValueError('Unknown rarity')")
     if code!=original:
         temporary=source.with_name(source.name+f'.{os.getpid()}.tmp')
         temporary.write_text(code,encoding='utf-8');os.replace(temporary,source)
@@ -51,6 +56,18 @@ def native_module(data):
     module = importlib.util.module_from_spec(spec)
     sys.modules[spec.name] = module
     spec.loader.exec_module(module)
+    crop=module.crop_sprites
+    def crop_sprites():
+        # Reuse the cropped sprite set when it matches the sprite table, so that
+        # many renderer processes can start without rewriting shared files.
+        index=module.UI/'sprite-index.json'
+        if index.exists():
+            sprites=read(index)
+            if sprites.keys()==read(module.UI/'sprites.json').keys() and all(
+                    (module.UI/s.get('file','')).is_file() for s in sprites.values()):
+                return sprites
+        return crop()
+    module.crop_sprites=crop_sprites
     from .font import NativeFont
     module.GameText = lambda: NativeFont(data)
     base=module.CardRenderer
@@ -103,7 +120,7 @@ def prepare(data,allow_download=True):
         url = f'https://assets.bdon.moe/zh-Hans/{directory}/{asset}/{stem}/{stem}.webp'
         if not f.exists():
             if not allow_download:raise FileNotFoundError(f'Missing local artwork: {f.name}')
-            request = urllib.request.Request(url, headers={'Referer': 'https://bdon.moe/', 'User-Agent': 'BDON-box-vision/0.1'})
+            request = urllib.request.Request(url, headers={'Referer': 'https://bdon.moe/', 'User-Agent': USER_AGENT})
             with urllib.request.urlopen(request, timeout=45) as response:
                 body = response.read()
             f.write_bytes(body)
@@ -116,7 +133,7 @@ def prepare(data,allow_download=True):
             square_url = f'https://assets.bdon.moe/zh-Hans/MemberCard/{asset}/member_thumbnail/square.webp'
             if not square.exists():
                 if not allow_download:raise FileNotFoundError(f'Missing local artwork: {square.name}')
-                req = urllib.request.Request(square_url, headers={'Referer':'https://bdon.moe/', 'User-Agent':'BDON-box-vision/0.1'})
+                req = urllib.request.Request(square_url, headers={'Referer':'https://bdon.moe/', 'User-Agent':USER_AGENT})
                 with urllib.request.urlopen(req, timeout=45) as response:
                     square.write_bytes(response.read())
             with Image.open(square) as im:
@@ -145,42 +162,7 @@ def prepare(data,allow_download=True):
     print(json.dumps({'catalog': len(completed), 'unavailable': failures}), flush=True)
     if not completed:
         raise RuntimeError('No artwork available')
-    build_index(data)
-    if (data/'models/encoder.onnx').exists():
-        from .inference import Gallery
-        Gallery(data,read(data/'catalog.json')['cards'])
-        print(json.dumps({'embedding_gallery':'updated'}),flush=True)
-
-
-def build_index(data):
-    data = Path(data)
-    cv2.setNumThreads(2)
-    sift = cv2.SIFT_create(nfeatures=260, contrastThreshold=.018, edgeThreshold=12)
-    descriptors, points, owners = [], [], []
-    cards = read(data / 'catalog.json')['cards']
-    for i, card in enumerate(cards):
-        im = cv2.imread(str(data / card.get('match_file', card['file'])))
-        # Match at list-thumbnail resolution; original coordinates are retained.
-        h, w = im.shape[:2]
-        scales = [min(1., 220 / w)]
-        for scale in scales:
-            gray = cv2.cvtColor(cv2.resize(im, None, fx=scale, fy=scale), cv2.COLOR_BGR2GRAY)
-            mask = np.full(gray.shape, 255, np.uint8)
-            mh, mw = mask.shape
-            mask[int(mh*.82):, :int(mw*.4)] = 0
-            mask[int(mh*.72):, int(mw*.76):] = 0
-            mask[:int(mh*.18), :int(mw*.15)] = 0
-            kp, desc = sift.detectAndCompute(gray, mask)
-            if desc is None:
-                continue
-            # RootSIFT improves matching under screenshot compression.
-            desc = np.sqrt(desc / (desc.sum(axis=1, keepdims=True) + 1e-8))
-            descriptors.append(desc)
-            points.extend([(k.pt[0] / scale, k.pt[1] / scale) for k in kp])
-            owners.extend([i] * len(kp))
-        card['width'], card['height'] = w, h
-    np.savez_compressed(data / 'index.npz', descriptors=np.vstack(descriptors),
-                        points=np.array(points, np.float32), owners=np.array(owners, np.int32))
-    write(data / 'catalog.json', {'schema': 'bdon-box-catalog/1', 'cards': cards,
-                               'unavailable': read(data / 'catalog.json').get('unavailable', [])})
-    print(json.dumps({'index_descriptors': len(points)}), flush=True)
+    if (data/'models/recognition.json').exists():
+        from .engine import Engine
+        engine=Engine(data)
+        print(json.dumps({'galleries':{kind:len(g.indices) for kind,g in engine.galleries.items()}}),flush=True)

@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "urn:ournotes-boxlens:schema:observations:1",
-  "title": "Our Notes BoxLens observations v1",
+  "$id": "urn:ournotes-boxlens:schema:observations:2",
+  "title": "Our Notes BoxLens observations v2",
   "type": "array",
   "items": {
     "type": "object",
@@ -11,6 +11,7 @@
       "width",
       "height",
       "cards",
+      "unidentified",
       "elapsed_ms",
       "coverage"
     ],
@@ -41,9 +42,10 @@
             "rarity",
             "card_type",
             "bbox",
-            "identity_confidence",
-            "inliers",
+            "locator_score",
             "visible_fraction",
+            "identity_similarity",
+            "identity_margin",
             "level",
             "card_rank",
             "awake_count",
@@ -90,21 +92,28 @@
               ],
               "items": false,
               "minItems": 4,
-              "maxItems": 4
+              "maxItems": 4,
+              "description": "Card tile rectangle [x, y, w, h] in image pixels"
             },
-            "identity_confidence": {
+            "locator_score": {
               "type": "number",
               "minimum": 0,
               "maximum": 1
-            },
-            "inliers": {
-              "type": "integer",
-              "minimum": 0
             },
             "visible_fraction": {
               "type": "number",
               "minimum": 0,
               "maximum": 1
+            },
+            "identity_similarity": {
+              "type": "number",
+              "minimum": -1,
+              "maximum": 1
+            },
+            "identity_margin": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 2
             },
             "level": {
               "type": "object",
@@ -207,17 +216,206 @@
             },
             "review": {
               "type": "boolean"
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "unidentified": {
+        "type": "array",
+        "description": "Located tiles whose artwork matched no gallery card",
+        "items": {
+          "type": "object",
+          "required": [
+            "kind",
+            "bbox",
+            "locator_score",
+            "visible_fraction",
+            "identity_similarity",
+            "identity_margin",
+            "candidate",
+            "level",
+            "card_rank",
+            "awake_count",
+            "display_mode",
+            "review"
+          ],
+          "properties": {
+            "kind": {
+              "enum": [
+                "member",
+                "snap"
+              ]
             },
-            "identity_method": {
-              "const": "grid_gallery"
-            },
-            "embedding_similarity": {
-              "type": [
-                "number",
-                "null"
+            "bbox": {
+              "type": "array",
+              "prefixItems": [
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "number",
+                  "exclusiveMinimum": 0
+                },
+                {
+                  "type": "number",
+                  "exclusiveMinimum": 0
+                }
               ],
+              "items": false,
+              "minItems": 4,
+              "maxItems": 4,
+              "description": "Card tile rectangle [x, y, w, h] in image pixels"
+            },
+            "locator_score": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            },
+            "visible_fraction": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            },
+            "identity_similarity": {
+              "type": "number",
               "minimum": -1,
               "maximum": 1
+            },
+            "identity_margin": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 2
+            },
+            "candidate": {
+              "description": "Closest gallery card, below the acceptance thresholds",
+              "anyOf": [
+                {
+                  "type": "null"
+                },
+                {
+                  "type": "object",
+                  "required": [
+                    "id",
+                    "name"
+                  ],
+                  "properties": {
+                    "id": {
+                      "type": "integer",
+                      "minimum": 1
+                    },
+                    "name": {
+                      "type": "string"
+                    }
+                  },
+                  "additionalProperties": false
+                }
+              ]
+            },
+            "level": {
+              "type": "object",
+              "required": [
+                "value",
+                "confidence"
+              ],
+              "properties": {
+                "value": {
+                  "anyOf": [
+                    {
+                      "type": "integer",
+                      "minimum": 1,
+                      "maximum": 100
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "confidence": {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 1
+                },
+                "reason": {
+                  "type": "string"
+                },
+                "source": {
+                  "const": "manual"
+                }
+              },
+              "additionalProperties": false
+            },
+            "card_rank": {
+              "type": "object",
+              "required": [
+                "value",
+                "confidence"
+              ],
+              "properties": {
+                "value": {
+                  "type": [
+                    "integer",
+                    "null"
+                  ],
+                  "minimum": 1,
+                  "maximum": 5
+                },
+                "confidence": {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 1
+                },
+                "reason": {
+                  "type": "string"
+                },
+                "source": {
+                  "const": "manual"
+                }
+              },
+              "additionalProperties": false
+            },
+            "awake_count": {
+              "type": "object",
+              "required": [
+                "value",
+                "confidence"
+              ],
+              "properties": {
+                "value": {
+                  "type": [
+                    "integer",
+                    "null"
+                  ],
+                  "minimum": 1,
+                  "maximum": 5
+                },
+                "confidence": {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 1
+                },
+                "reason": {
+                  "type": "string"
+                },
+                "source": {
+                  "const": "manual"
+                }
+              },
+              "additionalProperties": false
+            },
+            "display_mode": {
+              "enum": [
+                "unknown",
+                "other",
+                "level",
+                "training"
+              ]
+            },
+            "review": {
+              "const": true
             }
           },
           "additionalProperties": false
@@ -241,13 +439,13 @@
         "required": [
           "schema",
           "files",
+          "galleries",
           "inference_core_sha256",
-          "field_confidence_threshold",
           "onnxruntime_version"
         ],
         "properties": {
           "schema": {
-            "const": "ournotes-boxlens.recognition-provenance/1"
+            "const": "ournotes-boxlens.recognition-provenance/2"
           },
           "files": {
             "type": "object",
@@ -256,14 +454,27 @@
               "pattern": "^[0-9a-f]{64}$"
             }
           },
+          "galleries": {
+            "type": "object",
+            "properties": {
+              "member": {
+                "type": "string",
+                "pattern": "^[0-9a-f]{64}$"
+              },
+              "snap": {
+                "type": "string",
+                "pattern": "^[0-9a-f]{64}$"
+              }
+            },
+            "required": [
+              "member",
+              "snap"
+            ],
+            "additionalProperties": false
+          },
           "inference_core_sha256": {
             "type": "string",
             "pattern": "^[0-9a-f]{64}$"
-          },
-          "field_confidence_threshold": {
-            "type": "number",
-            "minimum": 0,
-            "maximum": 1
           },
           "onnxruntime_version": {
             "type": "string"

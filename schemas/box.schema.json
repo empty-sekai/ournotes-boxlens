@@ -432,13 +432,13 @@
         "required": [
           "schema",
           "files",
+          "galleries",
           "inference_core_sha256",
-          "field_confidence_threshold",
           "onnxruntime_version"
         ],
         "properties": {
           "schema": {
-            "const": "ournotes-boxlens.recognition-provenance/1"
+            "const": "ournotes-boxlens.recognition-provenance/2"
           },
           "files": {
             "type": "object",
@@ -447,14 +447,27 @@
               "pattern": "^[0-9a-f]{64}$"
             }
           },
+          "galleries": {
+            "type": "object",
+            "properties": {
+              "member": {
+                "type": "string",
+                "pattern": "^[0-9a-f]{64}$"
+              },
+              "snap": {
+                "type": "string",
+                "pattern": "^[0-9a-f]{64}$"
+              }
+            },
+            "required": [
+              "member",
+              "snap"
+            ],
+            "additionalProperties": false
+          },
           "inference_core_sha256": {
             "type": "string",
             "pattern": "^[0-9a-f]{64}$"
-          },
-          "field_confidence_threshold": {
-            "type": "number",
-            "minimum": 0,
-            "maximum": 1
           },
           "onnxruntime_version": {
             "type": "string"
