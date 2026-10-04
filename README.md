@@ -83,3 +83,11 @@ python -m unittest discover -s tests -p "test_*.py"
 涵盖模型清单校验、跨图合并、同名不同来源、冲突保存、隐藏字段及裁切字段／图标等数据完整性回归。
 
 可用 `python -m pip install -e ".[test]"` 安装开发入口和 Schema 校验依赖，再执行 `python scripts/validate_contract.py box result/box.json`。安装后提供 `ournotes-boxlens` 命令，参数与 `python boxvision.py` 相同。
+
+## 版本记录
+
+每个版本的改动见 [CHANGELOG.md](CHANGELOG.md)，由 [git-cliff](https://git-cliff.org/) 根据提交（Conventional Commits）生成。发版时，改版本号的那个提交同时重新生成它：
+
+```bash
+git cliff --tag vX.Y.Z -o CHANGELOG.md
+```
