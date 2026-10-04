@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "ournotes-boxlens"
-version = "0.1.0"
+version = "0.2.0"
 description = "CPU screenshot importer for BanG Dream! Our Notes player collections"
 license = {file = "LICENSE"}
 readme = "README.md"
