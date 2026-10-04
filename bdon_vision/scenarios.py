@@ -11,6 +11,10 @@ PROFILES={
         ui_scale=(.88,1.04),resize=(.62,.94),quality=[57,69,81,91],blur=(.1,.65),rounds=[2,3]),
     'stress':dict(resolutions=[(960,540),(2280,1080),(2532,1170),(2800,1752),(3840,2160)],
         ui_scale=(.65,1.28),resize=(.30,.78),quality=[30,42,51,78],blur=(.2,1.15),rounds=[2,3,4]),
+    # Held-back acquisition for a single evaluation after all models are frozen:
+    # its screen sizes and quality steps appear in no other profile.
+    'final':dict(resolutions=[(1334,750),(1792,828),(2224,1668),(2400,1080),(2388,1668)],
+        ui_scale=(.86,1.06),resize=(.50,.92),quality=[47,64,77,88],blur=(.05,.8),rounds=[1,2,3]),
 }
 
 

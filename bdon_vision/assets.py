@@ -44,6 +44,9 @@ def native_module(data):
     old_line="text_values[ref('_statusValueText')]=str({'total':sum(state.power),'performance':state.power[0],'technic':state.power[1],'visual':state.power[2]}.get(state.param,''))"
     new_line=old_line+"\n            if variant in ('snap','formation_snap') and state.param in ('performance','technic','visual'):\n                text_values[ref('_statusValueText')]=format({'performance':state.power[0],'technic':state.power[1],'visual':state.power[2]}[state.param]/100.,'.2f')+'%'"
     if new_line not in code:code=code.replace(old_line,new_line)
+    # The list-row frame gradient catalogs carry key 20 (BD rarity) next to 2/3/4/10.
+    code=code.replace("if self.rarity not in (2,3,4,10): raise ValueError('Unknown rarity')",
+                      "if self.rarity not in (2,3,4,10,20): raise ValueError('Unknown rarity')")
     if code!=original:
         temporary=source.with_name(source.name+f'.{os.getpid()}.tmp')
         temporary.write_text(code,encoding='utf-8');os.replace(temporary,source)
@@ -51,6 +54,18 @@ def native_module(data):
     module = importlib.util.module_from_spec(spec)
     sys.modules[spec.name] = module
     spec.loader.exec_module(module)
+    crop=module.crop_sprites
+    def crop_sprites():
+        # Reuse the cropped sprite set when it matches the sprite table, so that
+        # many renderer processes can start without rewriting shared files.
+        index=module.UI/'sprite-index.json'
+        if index.exists():
+            sprites=read(index)
+            if sprites.keys()==read(module.UI/'sprites.json').keys() and all(
+                    (module.UI/s.get('file','')).is_file() for s in sprites.values()):
+                return sprites
+        return crop()
+    module.crop_sprites=crop_sprites
     from .font import NativeFont
     module.GameText = lambda: NativeFont(data)
     base=module.CardRenderer

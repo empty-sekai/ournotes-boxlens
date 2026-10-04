@@ -26,6 +26,18 @@ python -m bdon_vision.audit_merge --dataset synthetic/validation --observations 
 
 数据生成最后才将 `complete` 置为 true。训练裁块构建检查全部截图哈希。评估要求身份及 bbox IoU≥0.5，记录漏卡、多报、字段正确／错误／未知、隐藏字段误报，以及按语言、卡片尺寸、压缩和分辨率分层。`audit_merge` 额外检查 box 合并后的字段、凭空出现的值、虚假冲突和真实冲突丢失。
 
+## 列表整屏场景
+
+`bdon_vision.scenes` 按列表组件的原生几何放置原生卡块：1920×1080 参考画布按 `min(W/1920, H/1080)` 缩放，成员每行 6 张、留影每行 4 张并水平居中，顶部留白 180 个参考单位，再加滚动偏移。画面另含带雾感的模糊背景、顶栏标题与排序／视图按钮、少量界面干扰、图库外美术卡块和无卡负样本。可选的场景背景放在 `DATA/backgrounds/adv-stage/*.webp`，由使用者自行准备；缺失时只用卡面模糊、噪声和渐变背景。
+
+```bash
+python -m bdon_vision.scenes generate --data DATA --output scenes/train --count 16000 --seed 1 --profile train --workers 48
+python -m bdon_vision.scenes verify scenes/train
+python -m bdon_vision.scenes stats scenes/train --output scenes/train-stats.json
+```
+
+真值仍是 `bdon-synthetic/2`：`cards`、`ignored_cards` 语义不变，新增字段列在 `truth.json` 的 `schema_extension` 中。`visible_fraction` 同时扣除屏外部分和界面遮挡；`foreign_cards` 记录图库外美术的卡框和字段，不含 `id`。train 档排除 `id % 7 == 0` 的身份，外来卡来源和卡面背景也排除；编号是 5 的倍数的场景背景只用于非训练档。`final` 采集档的分辨率和压缩质量与其他档都不同，只在模型冻结后使用。图片可存为无损 WebP，像素与施加采集损伤后的结果一致。每张图由 profile、seed 和序号单独决定，与进程数和分块方式无关。
+
 ## 场景微调
 
 GPU 环境使用已验证的 PyTorch／ONNX 依赖；不要把 GPU 包加入普通 CPU 使用者的运行依赖。实际训练脚本及模型的 JSON 报告保存参数、步数、样本量和数据指纹。
