@@ -1,0 +1,604 @@
+{
+  "schema": "ournotes-boxlens.scene-coverage/1",
+  "scope": "Counts from saved truth files: presence of identities, views and field values, not recognition accuracy.",
+  "catalog": {
+    "cards": 129,
+    "by_kind_rarity": {
+      "member/BD": 1,
+      "member/R": 25,
+      "member/SR": 26,
+      "member/SSR": 12,
+      "snap/EX": 2,
+      "snap/R": 25,
+      "snap/SR": 26,
+      "snap/SSR": 12
+    },
+    "catalog_sha256": "c6995ccac52fa98438eeca3cd82e375e6e417e64b5b0f3e91ecacfb5fee8647e"
+  },
+  "sets": {
+    "v2-train": {
+      "generator": "scenes-v2",
+      "profile": "train",
+      "seed": 20261101,
+      "truth_sha256": "6ac1a0a291daa836049f478c94abbf0790f3e95382d3577e551d2a0e76be50bd",
+      "screens": 16000,
+      "negative_screens": 802,
+      "cards": 187844,
+      "member": 96181,
+      "partly_outside": 25912,
+      "occluded": 8501,
+      "foreign_cards": 26722,
+      "snap": 91663,
+      "unique_identities": 110,
+      "unique_by_kind_rarity": {
+        "member/BD": 1,
+        "member/R": 22,
+        "member/SR": 21,
+        "member/SSR": 11,
+        "snap/EX": 1,
+        "snap/R": 22,
+        "snap/SR": 22,
+        "snap/SSR": 10
+      },
+      "heldout_identities_present": 0,
+      "locales": {
+        "en": 3178,
+        "zh-Hans": 3206,
+        "ko": 3194,
+        "ja": 3216,
+        "zh-Hant": 3206
+      },
+      "display_modes": {
+        "visual": 32252,
+        "technic": 32027,
+        "performance": 31976,
+        "level": 32253,
+        "hide": 32755,
+        "total": 13665,
+        "training": 12916
+      },
+      "source_resolutions": {
+        "1600x900": 3173,
+        "1280x720": 3197,
+        "2160x1080": 3206,
+        "1440x1080": 3127,
+        "1920x1080": 3297
+      },
+      "visible_level_bins": {
+        "1": 557,
+        "2-20": 10722,
+        "21-40": 10340,
+        "41-60": 6118,
+        "61-80": 1977,
+        "81-100": 150
+      },
+      "visible_levels_distinct": 90,
+      "visible_level_max": 90,
+      "visible_rank": {
+        "1": 28518,
+        "2": 28421,
+        "3": 28466,
+        "4": 28240,
+        "5": 28209
+      },
+      "visible_training_count": {
+        "1": 2310,
+        "2": 2381,
+        "3": 2298,
+        "4": 2278,
+        "5": 2264
+      }
+    },
+    "v2.1-train": {
+      "generator": "scenes-v2.1",
+      "profile": "train",
+      "seed": 20261111,
+      "truth_sha256": "73ad36ee216e8852ad8dbf89aedb24fe4fa2f13d4ea845098420ea6be450c079",
+      "screens": 16000,
+      "negative_screens": 808,
+      "cards": 188200,
+      "member": 95728,
+      "partly_outside": 26685,
+      "occluded": 8926,
+      "foreign_cards": 27306,
+      "snap": 92472,
+      "unique_identities": 110,
+      "unique_by_kind_rarity": {
+        "member/BD": 1,
+        "member/R": 22,
+        "member/SR": 21,
+        "member/SSR": 11,
+        "snap/EX": 1,
+        "snap/R": 22,
+        "snap/SR": 22,
+        "snap/SSR": 10
+      },
+      "heldout_identities_present": 0,
+      "locales": {
+        "en": 3239,
+        "zh-Hans": 3176,
+        "ko": 3130,
+        "ja": 3211,
+        "zh-Hant": 3244
+      },
+      "display_modes": {
+        "level": 31686,
+        "hide": 32149,
+        "performance": 32346,
+        "visual": 32194,
+        "technic": 31953,
+        "training": 13391,
+        "total": 14481
+      },
+      "source_resolutions": {
+        "1600x900": 3158,
+        "2160x1080": 3141,
+        "1280x720": 3261,
+        "1920x1080": 3245,
+        "1440x1080": 3195
+      },
+      "visible_level_bins": {
+        "1": 504,
+        "2-20": 10389,
+        "21-40": 10253,
+        "41-60": 5905,
+        "61-80": 1986,
+        "81-100": 139
+      },
+      "visible_levels_distinct": 90,
+      "visible_level_max": 90,
+      "visible_rank": {
+        "1": 28421,
+        "2": 28352,
+        "3": 28798,
+        "4": 28396,
+        "5": 28443
+      },
+      "visible_training_count": {
+        "1": 2368,
+        "2": 2395,
+        "3": 2328,
+        "4": 2405,
+        "5": 2403
+      }
+    },
+    "v2-validation": {
+      "generator": "scenes-v2",
+      "profile": "validation",
+      "seed": 20261102,
+      "truth_sha256": "2f8a72da4d3dbc001e4d9364cf9243035fb6f99befde2b7e8d8be4abbe7269ac",
+      "screens": 2000,
+      "negative_screens": 98,
+      "cards": 24326,
+      "member": 12281,
+      "partly_outside": 3129,
+      "occluded": 1119,
+      "foreign_cards": 3419,
+      "snap": 12045,
+      "unique_identities": 129,
+      "unique_by_kind_rarity": {
+        "member/BD": 1,
+        "member/R": 25,
+        "member/SR": 26,
+        "member/SSR": 12,
+        "snap/EX": 2,
+        "snap/R": 25,
+        "snap/SR": 26,
+        "snap/SSR": 12
+      },
+      "heldout_identities_present": 19,
+      "locales": {
+        "ja": 403,
+        "zh-Hans": 394,
+        "en": 396,
+        "ko": 384,
+        "zh-Hant": 423
+      },
+      "display_modes": {
+        "training": 1947,
+        "technic": 3880,
+        "level": 4214,
+        "hide": 4276,
+        "visual": 3978,
+        "total": 1656,
+        "performance": 4375
+      },
+      "source_resolutions": {
+        "1920x1200": 374,
+        "1366x768": 401,
+        "2340x1080": 409,
+        "2560x1440": 397,
+        "2048x1536": 419
+      },
+      "visible_level_bins": {
+        "1": 75,
+        "2-20": 1453,
+        "21-40": 1346,
+        "41-60": 786,
+        "61-80": 273,
+        "81-100": 21
+      },
+      "visible_levels_distinct": 88,
+      "visible_level_max": 90,
+      "visible_rank": {
+        "1": 3770,
+        "2": 3661,
+        "3": 3774,
+        "4": 3680,
+        "5": 3683
+      },
+      "visible_training_count": {
+        "1": 356,
+        "2": 360,
+        "3": 345,
+        "4": 363,
+        "5": 350
+      }
+    },
+    "v2.1-validation": {
+      "generator": "scenes-v2.1",
+      "profile": "validation",
+      "seed": 20261112,
+      "truth_sha256": "9ff9dd478f3b239874e48e9f8e9b0d13a54314eef121dd657009db24abe345fb",
+      "screens": 2000,
+      "negative_screens": 106,
+      "cards": 24031,
+      "member": 12065,
+      "partly_outside": 3169,
+      "occluded": 1196,
+      "foreign_cards": 3642,
+      "snap": 11966,
+      "unique_identities": 129,
+      "unique_by_kind_rarity": {
+        "member/BD": 1,
+        "member/R": 25,
+        "member/SR": 26,
+        "member/SSR": 12,
+        "snap/EX": 2,
+        "snap/R": 25,
+        "snap/SR": 26,
+        "snap/SSR": 12
+      },
+      "heldout_identities_present": 19,
+      "locales": {
+        "en": 419,
+        "ko": 385,
+        "zh-Hans": 418,
+        "ja": 404,
+        "zh-Hant": 374
+      },
+      "display_modes": {
+        "level": 4392,
+        "hide": 4006,
+        "technic": 3981,
+        "visual": 4571,
+        "performance": 3926,
+        "training": 1450,
+        "total": 1705
+      },
+      "source_resolutions": {
+        "2048x1536": 399,
+        "1366x768": 377,
+        "2340x1080": 420,
+        "2560x1440": 397,
+        "1920x1200": 407
+      },
+      "visible_level_bins": {
+        "1": 80,
+        "2-20": 1473,
+        "21-40": 1450,
+        "41-60": 786,
+        "61-80": 283,
+        "81-100": 26
+      },
+      "visible_levels_distinct": 88,
+      "visible_level_max": 90,
+      "visible_rank": {
+        "1": 3818,
+        "2": 3707,
+        "3": 3665,
+        "4": 3682,
+        "5": 3663
+      },
+      "visible_training_count": {
+        "1": 260,
+        "2": 263,
+        "3": 264,
+        "4": 257,
+        "5": 299
+      }
+    },
+    "v2-stress": {
+      "generator": "scenes-v2",
+      "profile": "stress",
+      "seed": 20261103,
+      "truth_sha256": "ed8516c4cd3d6b603d4e5bff5480f7f8e17f3e1e2eebd8205e64e08e770745e0",
+      "screens": 1000,
+      "negative_screens": 58,
+      "cards": 11239,
+      "member": 5536,
+      "partly_outside": 1591,
+      "occluded": 467,
+      "foreign_cards": 1663,
+      "snap": 5703,
+      "unique_identities": 129,
+      "unique_by_kind_rarity": {
+        "member/BD": 1,
+        "member/R": 25,
+        "member/SR": 26,
+        "member/SSR": 12,
+        "snap/EX": 2,
+        "snap/R": 25,
+        "snap/SR": 26,
+        "snap/SSR": 12
+      },
+      "heldout_identities_present": 19,
+      "locales": {
+        "en": 188,
+        "zh-Hant": 194,
+        "ja": 204,
+        "ko": 196,
+        "zh-Hans": 218
+      },
+      "display_modes": {
+        "total": 708,
+        "performance": 2172,
+        "training": 574,
+        "visual": 1747,
+        "technic": 1976,
+        "level": 2008,
+        "hide": 2054
+      },
+      "source_resolutions": {
+        "2800x1752": 190,
+        "2280x1080": 181,
+        "3840x2160": 215,
+        "2532x1170": 204,
+        "960x540": 210
+      },
+      "visible_level_bins": {
+        "1": 34,
+        "2-20": 670,
+        "21-40": 639,
+        "41-60": 378,
+        "61-80": 121,
+        "81-100": 4
+      },
+      "visible_levels_distinct": 83,
+      "visible_level_max": 90,
+      "visible_rank": {
+        "1": 1672,
+        "2": 1662,
+        "3": 1707,
+        "4": 1623,
+        "5": 1709
+      },
+      "visible_training_count": {
+        "1": 94,
+        "2": 111,
+        "3": 93,
+        "4": 111,
+        "5": 92
+      }
+    },
+    "v2.1-stress": {
+      "generator": "scenes-v2.1",
+      "profile": "stress",
+      "seed": 20261113,
+      "truth_sha256": "7335344a89024d1dbf0b6b0bfe197c64f1523303dd2812087810a47146a7da0c",
+      "screens": 1000,
+      "negative_screens": 49,
+      "cards": 11831,
+      "member": 5810,
+      "partly_outside": 1703,
+      "occluded": 522,
+      "foreign_cards": 1656,
+      "snap": 6021,
+      "unique_identities": 129,
+      "unique_by_kind_rarity": {
+        "member/BD": 1,
+        "member/R": 25,
+        "member/SR": 26,
+        "member/SSR": 12,
+        "snap/EX": 2,
+        "snap/R": 25,
+        "snap/SR": 26,
+        "snap/SSR": 12
+      },
+      "heldout_identities_present": 19,
+      "locales": {
+        "ja": 198,
+        "ko": 215,
+        "zh-Hant": 206,
+        "en": 190,
+        "zh-Hans": 191
+      },
+      "display_modes": {
+        "hide": 1784,
+        "performance": 1996,
+        "technic": 2077,
+        "level": 2156,
+        "visual": 2274,
+        "training": 769,
+        "total": 775
+      },
+      "source_resolutions": {
+        "2280x1080": 215,
+        "960x540": 205,
+        "2800x1752": 190,
+        "3840x2160": 203,
+        "2532x1170": 187
+      },
+      "visible_level_bins": {
+        "1": 40,
+        "2-20": 727,
+        "21-40": 690,
+        "41-60": 399,
+        "61-80": 128,
+        "81-100": 6
+      },
+      "visible_levels_distinct": 84,
+      "visible_level_max": 86,
+      "visible_rank": {
+        "1": 1907,
+        "2": 1809,
+        "3": 1839,
+        "4": 1806,
+        "5": 1835
+      },
+      "visible_training_count": {
+        "1": 145,
+        "2": 143,
+        "3": 141,
+        "4": 138,
+        "5": 139
+      }
+    },
+    "v2-final": {
+      "generator": "scenes-v2",
+      "profile": "final",
+      "seed": 20261104,
+      "truth_sha256": "6f78126d3708361bb4e79f458b89da8cff7b0f6cbfb07e51bdfd975353365ab3",
+      "screens": 2000,
+      "negative_screens": 106,
+      "cards": 24405,
+      "member": 12247,
+      "partly_outside": 3019,
+      "occluded": 946,
+      "foreign_cards": 3493,
+      "snap": 12158,
+      "unique_identities": 129,
+      "unique_by_kind_rarity": {
+        "member/BD": 1,
+        "member/R": 25,
+        "member/SR": 26,
+        "member/SSR": 12,
+        "snap/EX": 2,
+        "snap/R": 25,
+        "snap/SR": 26,
+        "snap/SSR": 12
+      },
+      "heldout_identities_present": 19,
+      "locales": {
+        "en": 413,
+        "ja": 387,
+        "zh-Hans": 420,
+        "ko": 388,
+        "zh-Hant": 392
+      },
+      "display_modes": {
+        "total": 1853,
+        "level": 4428,
+        "technic": 4271,
+        "hide": 3971,
+        "visual": 4003,
+        "performance": 3941,
+        "training": 1938
+      },
+      "source_resolutions": {
+        "1792x828": 403,
+        "2224x1668": 438,
+        "2388x1668": 374,
+        "2400x1080": 406,
+        "1334x750": 379
+      },
+      "visible_level_bins": {
+        "1": 96,
+        "2-20": 1443,
+        "21-40": 1436,
+        "41-60": 831,
+        "61-80": 275,
+        "81-100": 23
+      },
+      "visible_levels_distinct": 88,
+      "visible_level_max": 90,
+      "visible_rank": {
+        "1": 3827,
+        "2": 3745,
+        "3": 3788,
+        "4": 3764,
+        "5": 3776
+      },
+      "visible_training_count": {
+        "1": 378,
+        "2": 333,
+        "3": 366,
+        "4": 344,
+        "5": 368
+      }
+    },
+    "v2.1-final": {
+      "generator": "scenes-v2.1",
+      "profile": "final",
+      "seed": 20261114,
+      "truth_sha256": "83dda3e94d5ce63e6df93e957f5e405a444ee9b9ce74aa377a4465d9a48ddfbc",
+      "screens": 2000,
+      "negative_screens": 99,
+      "cards": 24604,
+      "member": 12594,
+      "partly_outside": 3165,
+      "occluded": 952,
+      "foreign_cards": 3725,
+      "snap": 12010,
+      "unique_identities": 129,
+      "unique_by_kind_rarity": {
+        "member/BD": 1,
+        "member/R": 25,
+        "member/SR": 26,
+        "member/SSR": 12,
+        "snap/EX": 2,
+        "snap/R": 25,
+        "snap/SR": 26,
+        "snap/SSR": 12
+      },
+      "heldout_identities_present": 19,
+      "locales": {
+        "ko": 375,
+        "zh-Hans": 417,
+        "ja": 396,
+        "en": 411,
+        "zh-Hant": 401
+      },
+      "display_modes": {
+        "visual": 4023,
+        "hide": 4103,
+        "total": 1620,
+        "level": 4578,
+        "performance": 3986,
+        "technic": 4608,
+        "training": 1686
+      },
+      "source_resolutions": {
+        "2224x1668": 377,
+        "2400x1080": 404,
+        "1792x828": 430,
+        "2388x1668": 409,
+        "1334x750": 380
+      },
+      "visible_level_bins": {
+        "1": 80,
+        "2-20": 1490,
+        "21-40": 1445,
+        "41-60": 843,
+        "61-80": 309,
+        "81-100": 23
+      },
+      "visible_levels_distinct": 88,
+      "visible_level_max": 89,
+      "visible_rank": {
+        "1": 3870,
+        "2": 3723,
+        "3": 3797,
+        "4": 3709,
+        "5": 3739
+      },
+      "visible_training_count": {
+        "1": 285,
+        "2": 312,
+        "3": 320,
+        "4": 344,
+        "5": 303
+      }
+    }
+  }
+}

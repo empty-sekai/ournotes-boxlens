@@ -1,9 +1,10 @@
 # Published reports
 
-This directory contains the compact evidence needed to understand the released training coverage, final acceptance, and CPU performance. Reports are grouped by their purpose rather than by internal experiment version.
+This directory contains the compact evidence behind the released models: training-data coverage, model selection on development sets, and acceptance on frozen test sets.
 
-- `training/` records card/rank coverage, level and rank sample counts, hard-field learning curves, and the selected checkpoints.
-- `acceptance/` records the clear rank matrix, stratified full-screen synthetic results, data audit, open-set check, and a sanitized real-sample regression summary.
-- `performance/` contains each measured CPU benchmark run.
+- `training/scene-coverage.json` counts screenshots, cards, identities, display modes, resolutions and visible field values of every full-screen set.
+- `training/model-selection.json` records, for each of the seven models, its architecture, initialisation, training settings, selected checkpoint with its development metrics, deployment thresholds and weight hashes.
+- `acceptance/holdout-full-screen.json` holds the stratified end-to-end results of `bdon_vision.evaluate_engine` on the two final-profile sets, scored after all models and thresholds were frozen.
+- `acceptance/real-sample-regression.json` summarises the real-screenshot regression set without the images.
 
-The repository omits intermediate smoke outputs, superseded per-run reports, per-screenshot traces, screenshots, game assets, and private calibration details. The full-screen aggregate preserves counts and test strata; its raw source report SHA-256 values remain in that summary. Scope limits and denominators are documented in [EVALUATION.md](../docs/EVALUATION.md), [DATA_CARD.md](../docs/DATA_CARD.md), and [TRAINING.md](../docs/TRAINING.md).
+Per-screenshot traces, screenshots and game assets are not included. Scope limits and denominators are documented in [EVALUATION.md](../docs/EVALUATION.md), [DATA_CARD.md](../docs/DATA_CARD.md) and [TRAINING.md](../docs/TRAINING.md).
