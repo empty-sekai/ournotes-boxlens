@@ -42,10 +42,10 @@ def fixture(tmp_path):
     inv=inventory(box,path,mock=True,region='test-region')
     c={'schema':'ournotes.inventory-completion/1','source':'mock-truth','evidence':'Hand-authored synthetic fixture, no actual player','mock':True,'deckDataSha256':digest(path),'ownershipComplete':True,'playerStateComplete':True,'player':{'characterRanks':{str(i):10 for i in range(1,8)},'bandItems':{'100':1},'vipRank':2,'events':[],'memory':{'musicRanks':{},'unlockedMembers':[],'unlockedSupports':[]},'ownedMemberCardIds':list(range(1,6)),'ownedSupportCardIds':[1]},'members':[{'id':i,'level':20,'rank':1,'awake':1,'liveSkillLevel':2,'gekisouSkillLevel':2} for i in range(1,6)],'snaps':[{'id':1,'level':20,'rank':1}],'addMissingIdentities':[],'excludeObservedIdentities':[]}
     data=tmp_path/'visual'
-    for name in ['index.npz','models/encoder.onnx','models/fields.onnx']:
+    for name in ['models/recognition.json']:
         p=data/name;p.parent.mkdir(parents=True,exist_ok=True);p.write_bytes(b'synthetic-not-a-real-model')
     write(data/'catalog.json',{'schema':'bdon-box-catalog/1','cards':[{'kind':'member','id':i} for i in range(1,8)]+[{'kind':'snap','id':i} for i in range(1,4)]})
-    write(data/'visual-data-manifest.json',{'region':'test-region','masterVersion':'synthetic-1','deckDataSha256':digest(path),'files':{'index.npz':digest(data/'index.npz')}})
+    write(data/'visual-data-manifest.json',{'region':'test-region','masterVersion':'synthetic-1','deckDataSha256':digest(path),'files':{'models/recognition.json':digest(data/'models/recognition.json')}})
     return path,data,inv,c
 
 
@@ -117,7 +117,7 @@ def test_identity_outside_bound_master_is_not_remapped(fixture):
     assert any(i['path']=='snap:70' for i in error.value.issues)
 
 
-@pytest.mark.parametrize('name,value',[('deckDataSha256','0'*64),('region','wrong'),('masterVersion','wrong'),('indexSha256','0'*64)])
+@pytest.mark.parametrize('name,value',[('deckDataSha256','0'*64),('region','wrong'),('masterVersion','wrong'),('recognitionModelsSha256','0'*64)])
 def test_visual_manifest_binding(fixture,name,value):
     path,data,_,_=fixture;m=read(data/'visual-data-manifest.json');m[name]=value;write(data/'visual-data-manifest.json',m)
     with pytest.raises(ValueError):binding(data,path)
@@ -133,7 +133,7 @@ def test_changed_actual_deck_bytes_with_same_reported_provenance_rejected_before
 
 
 def test_changed_visual_file_rejected(fixture):
-    path,data,_,_=fixture;(data/'index.npz').write_bytes(b'mutated')
+    path,data,_,_=fixture;(data/'models/recognition.json').write_bytes(b'mutated')
     with pytest.raises(ValueError,match='hash mismatch'):binding(data,path)
 
 

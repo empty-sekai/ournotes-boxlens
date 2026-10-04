@@ -1,15 +1,40 @@
+"""Screenshot recognition: card-frame locator, per-kind identity and field readers.
+
+One scan runs three stages:
+
+1. ``locator.onnx`` finds member and Snap card tiles (and their kind) anywhere
+   in the screenshot, including cards that are not in the local gallery.
+2. The per-kind artwork encoder embeds each tile's artwork window and compares
+   it with the gallery of the same kind. A tile is identified only when the
+   best cosine similarity and its gap to the runner-up both reach the model's
+   thresholds; otherwise it is reported as unidentified.
+3. Per-kind field and card-rank classifiers read the parameter field (level or
+   member training count) and the card-rank icon of every located tile.
+
+Every model file, its SHA-256 and its acceptance thresholds come from
+``models/recognition.json``. The gallery is computed from the user's local
+catalog artwork and cached in ``models/<kind>-gallery.npz``; adding a card only
+adds a gallery vector.
+"""
 import hashlib
-import math
-import time
-import json
 import importlib.metadata
+import json
+import os
+import time
 from collections import defaultdict
 from pathlib import Path
 
 import cv2
 import numpy as np
 
+from . import kind_fields
 from .assets import read
+from .kind_geometry import KINDS, query_crop, to_chw
+from .locator import Locator, visible_fraction
+
+MODELS_SCHEMA = 'ournotes-boxlens.recognition-models/2'
+PROVENANCE_SCHEMA = 'ournotes-boxlens.recognition-provenance/2'
+GALLERY_SCHEMA = 'ournotes-boxlens.gallery-cache/2'
 
 
 def field(value=None, confidence=0., reason=None):
@@ -19,252 +44,194 @@ def field(value=None, confidence=0., reason=None):
     return out
 
 
-def overlap(a, b):
-    x = max(0., min(a[0]+a[2], b[0]+b[2])-max(a[0], b[0]))
-    y = max(0., min(a[1]+a[3], b[1]+b[3])-max(a[1], b[1]))
-    return x*y / max(1., min(a[2]*a[3], b[2]*b[3]))
+def sha256(path):
+    return hashlib.sha256(Path(path).read_bytes()).hexdigest()
+
+
+def load_models(data):
+    """Read ``models/recognition.json`` and check every referenced file's hash."""
+    folder = Path(data) / 'models'
+    path = folder / 'recognition.json'
+    if not path.is_file():
+        raise FileNotFoundError(f'Missing model manifest: {path}. Unpack the released weights into {folder}.')
+    manifest = read(path)
+    if manifest.get('schema') != MODELS_SCHEMA:
+        raise ValueError(f'Unsupported model manifest schema in {path}: {manifest.get("schema")!r}')
+    entries = [('locator', manifest['locator'])]
+    entries += [(f'{kind}-{role}', manifest[role][kind]) for role in ('encoders', 'fields', 'ranks') for kind in KINDS]
+    for name, entry in entries:
+        file = folder / entry['file']
+        if not file.is_file():
+            raise FileNotFoundError(f'Missing model file for {name}: {file}')
+        if sha256(file) != entry['sha256']:
+            raise ValueError(f'Model file hash mismatch for {name}: {file}')
+    return manifest
+
+
+def session(path, threads):
+    import onnxruntime as ort
+    options = ort.SessionOptions()
+    options.intra_op_num_threads = threads
+    options.inter_op_num_threads = 1
+    return ort.InferenceSession(str(path), sess_options=options, providers=['CPUExecutionProvider'])
+
+
+def run(model, batch, chunk=64):
+    if not len(batch):
+        return np.zeros((0, model.get_outputs()[0].shape[-1]), np.float32)
+    return np.concatenate([model.run(None, {'image': np.ascontiguousarray(batch[i:i+chunk], np.float32)})[0]
+                           for i in range(0, len(batch), chunk)])
+
+
+class Gallery:
+    """Reference embeddings of one kind, rebuilt when the model or artwork changes."""
+
+    def __init__(self, data, cards, kind, model, model_sha256, use_cache=True):
+        from .kind_encoder import reference_array, reference_source
+        data = Path(data)
+        self.kind = kind
+        self.indices = [i for i, c in enumerate(cards) if c['kind'] == kind]
+        sources = [reference_source(data, cards[i]) for i in self.indices]
+        fingerprint = hashlib.sha256(f'{GALLERY_SCHEMA}:{kind}:{model_sha256}'.encode())
+        for i, source in zip(self.indices, sources):
+            fingerprint.update(f":{cards[i]['id']}:".encode())
+            fingerprint.update(source.read_bytes())
+        digest = fingerprint.hexdigest()
+        cache = data / f'models/{kind}-gallery.npz'
+        if use_cache and cache.exists():
+            with np.load(cache, allow_pickle=False) as saved:
+                if str(saved['fingerprint']) == digest:
+                    self.vectors = saved['vectors'].copy()
+                    self.fingerprint = digest
+                    return
+        references = np.stack([reference_array(kind, source) for source in sources]) if sources else np.zeros((0, 3, 1, 1), np.float32)
+        self.vectors = run(model, references) if sources else np.zeros((0, 128), np.float32)
+        self.fingerprint = digest
+        if use_cache:
+            temporary = cache.with_name(f'{cache.stem}.{os.getpid()}.tmp.npz')
+            np.savez_compressed(temporary, vectors=self.vectors, fingerprint=digest)
+            os.replace(temporary, cache)
+
+    def retrieve(self, embeddings):
+        """Per query: (catalog index or None, similarity, gap to the runner-up)."""
+        if not len(self.indices):
+            return [(None, 0., 0.) for _ in embeddings]
+        scores = embeddings @ self.vectors.T
+        out = []
+        for row in scores:
+            order = np.argsort(row)
+            best = float(row[order[-1]])
+            second = float(row[order[-2]]) if len(order) > 1 else -1.
+            out.append((self.indices[int(order[-1])], best, best - second))
+        return out
 
 
 class Engine:
-    def __init__(self, data, threads=2,excluded_identities=None):
+    def __init__(self, data, threads=2, excluded_identities=None):
         self.data = Path(data)
-        from .ocr import FIELD_CONFIDENCE
-        core=hashlib.sha256()
-        for name in ['engine.py','ocr.py','inference.py']:
-            core.update(name.encode());core.update((Path(__file__).parent/name).read_bytes())
-        self.provenance={'schema':'ournotes-boxlens.recognition-provenance/1',
-            'files':{name:hashlib.sha256((self.data/name).read_bytes()).hexdigest()
-                for name in ['catalog.json','index.npz','models/encoder.onnx','models/fields.onnx'] if (self.data/name).exists()},
-            'inference_core_sha256':core.hexdigest(),'field_confidence_threshold':FIELD_CONFIDENCE,
-            'onnxruntime_version':importlib.metadata.version('onnxruntime')}
+        self.models = load_models(self.data)
+        folder = self.data / 'models'
         cv2.setNumThreads(threads)
-        cv2.setRNGSeed(12345)
         self.cards = read(self.data / 'catalog.json')['cards']
-        index = np.load(self.data / 'index.npz')
-        self.points = index['points']
-        self.owners = index['owners']
-        descriptors=index['descriptors'].astype(np.float32)
         if excluded_identities:
-            allowed=np.array([(c['kind'],c['id']) not in excluded_identities for c in self.cards])
-            mapping=np.cumsum(allowed)-1;selected=allowed[self.owners]
-            self.points=self.points[selected];self.owners=mapping[self.owners[selected]]
-            descriptors=descriptors[selected];self.cards=[c for c,keep in zip(self.cards,allowed) if keep]
-        self.matcher = cv2.FlannBasedMatcher(dict(algorithm=1, trees=4), dict(checks=64))
-        self.matcher.add([descriptors])
-        self.matcher.train()
-        self.sift = cv2.SIFT_create(nfeatures=8000, contrastThreshold=.018, edgeThreshold=12)
-        self.art = [cv2.imread(str(self.data / c.get('match_file',c['file']))) for c in self.cards]
-        self.ranks = {}
-        for kind, prefix in [('member', 'CardRank'), ('snap', 'snaplimit_')]:
-            self.ranks[kind] = [cv2.imread(str(self.data / f'native/game-ui/sprites/{prefix}{i}.png'), cv2.IMREAD_UNCHANGED) for i in range(6)]
-        from .ocr import NumberReader
-        self.numbers = NumberReader(self.data,threads)
-        self.gallery=None
-        if (self.data/'models/encoder.onnx').exists():
-            from .inference import Gallery
-            self.gallery=Gallery(self.data,self.cards,threads,use_cache=not bool(excluded_identities))
+            self.cards = [c for c in self.cards if (c['kind'], c['id']) not in excluded_identities]
+        locator = self.models['locator']
+        self.locator = Locator(folder / locator['file'], long_edge=locator['long_edge'], threads=threads,
+                               threshold=locator['threshold'])
+        self.encoders = {k: session(folder / self.models['encoders'][k]['file'], threads) for k in KINDS}
+        self.fields = {k: session(folder / self.models['fields'][k]['file'], threads) for k in KINDS}
+        self.ranks = {k: session(folder / self.models['ranks'][k]['file'], threads) for k in KINDS}
+        self.galleries = {k: Gallery(self.data, self.cards, k, self.encoders[k], self.models['encoders'][k]['sha256'],
+                                     use_cache=not excluded_identities) for k in KINDS}
+        core = hashlib.sha256()
+        for name in ['engine.py', 'locator.py', 'kind_geometry.py', 'kind_encoder.py', 'kind_fields.py']:
+            core.update(name.encode())
+            core.update((Path(__file__).parent / name).read_bytes())
+        self.provenance = {
+            'schema': PROVENANCE_SCHEMA,
+            'files': {name: sha256(self.data / name) for name in ['catalog.json', 'models/recognition.json']},
+            'galleries': {k: self.galleries[k].fingerprint for k in KINDS},
+            'inference_core_sha256': core.hexdigest(),
+            'onnxruntime_version': importlib.metadata.version('onnxruntime')}
 
-    def fill_grid(self,image,items):
-        """Recover weak-feature cards only at grid positions supported by matches."""
-        def clusters(values,tolerance):
-            groups=[]
-            for value in sorted(values):
-                if groups and abs(value-np.median(groups[-1]))<tolerance:groups[-1].append(value)
-                else:groups.append([value])
-            return [float(np.median(group)) for group in groups]
-        def axis(values,size):
-            points=clusters(values,size*.18)
-            gaps=np.diff(points)
-            if len(gaps)>1:
-                pitch=float(np.min(gaps))
-                if 1.02*size<pitch<1.6*size:
-                    points=sorted(set(points+[points[i]+pitch*j for i,gap in enumerate(gaps)
-                        for j in range(1,round(gap/pitch)) if abs(gap/pitch-round(gap/pitch))<.08]))
-            return points
-        for kind in ('member','snap'):
-            seed=[c for c in items if c['kind']==kind]
-            if len(seed)<3:continue
-            sizes=np.array([c['bbox'][2:] for c in seed]);w,h=np.median(sizes,axis=0)
-            if np.max(np.std(sizes,axis=0)/[w,h])>.08:continue
-            xs=axis([c['bbox'][0] for c in seed],w);ys=axis([c['bbox'][1] for c in seed],h)
-            proposals=[];patches=[]
-            for y in ys:
-                for x in xs:
-                    bbox=[x,y,float(w),float(h)]
-                    if any(overlap(bbox,c['bbox'])>.4 for c in items):continue
-                    if min(x,y)<0 or x+w>image.shape[1] or y+h>image.shape[0]:continue
-                    patch=cv2.getRectSubPix(image,(round(w),round(h)),(x+w/2,y+h/2))
-                    proposals.append(bbox);patches.append(patch)
-            if not proposals:continue
-            candidates=[i for i,c in enumerate(self.cards) if c['kind']==kind]
-            mask=np.ones((48,48),bool);mask[37:]=False;mask[:9,:10]=False
-            art=np.stack([cv2.resize(self.art[i],(48,48))[mask].ravel() for i in candidates]).astype(float)
-            art-=art.mean(axis=1,keepdims=True);art/=np.maximum(np.linalg.norm(art,axis=1,keepdims=True),1e-8)
-            learned=self.gallery.retrieve(patches,kind) if self.gallery else [None]*len(patches)
-            for bbox,patch,neural in zip(proposals,patches,learned):
-                query=cv2.resize(patch,(48,48))[mask].ravel().astype(float)
-                query-=query.mean();query/=max(np.linalg.norm(query),1e-8)
-                scores=art@query;order=np.argsort(scores);i=candidates[int(order[-1])]
-                score=float(scores[order[-1]]);margin=float(scores[order[-1]]-scores[order[-2]])
-                if neural:
-                    ni,ns,ngap=neural
-                    if ni!=i or ns<.72 or ngap<.06:continue
-                strong_neural=neural is not None and neural[1]>=.72 and neural[2]>=.25
-                if score<(.60 if strong_neural else .78) or margin<.08:continue
-                card=self.cards[i]
-                items.append({'kind':kind,'id':card['id'],'name':card['name'],'rarity':card['rarity'],
-                    'card_type':card['card_type'],'bbox':[round(v,2) for v in bbox],
-                    'identity_confidence':round(score,4),'identity_method':'grid_gallery',
-                    'embedding_similarity':round(neural[1],4) if neural else None,
-                    'inliers':0,'visible_fraction':1.,'_index':i})
-        return sorted(items,key=lambda c:(round(c['bbox'][1]/20),c['bbox'][0]))
+    def identify(self, image, detections):
+        """Gallery decision for each detection: (catalog index or None, similarity, gap, candidate index)."""
+        out = [None] * len(detections)
+        for kind in KINDS:
+            chosen = [i for i, d in enumerate(detections) if d['kind'] == kind]
+            if not chosen:
+                continue
+            crops = np.stack([to_chw(query_crop(image, kind, detections[i]['bbox'])) for i in chosen])
+            accept = self.models['encoders'][kind]['accept']
+            for i, (index, similarity, gap) in zip(chosen, self.galleries[kind].retrieve(run(self.encoders[kind], crops))):
+                identified = index is not None and similarity >= accept['similarity'] and gap >= accept['margin']
+                out[i] = (index if identified else None, similarity, gap, index)
+        return out
 
-    def identify(self, im):
-        h, w = im.shape[:2]
-        factor = min(1., 1500 / max(h, w))
-        small = cv2.resize(im, None, fx=factor, fy=factor) if factor < 1 else im
-        gray = cv2.cvtColor(small, cv2.COLOR_BGR2GRAY)
-        kp, desc = self.sift.detectAndCompute(gray, None)
-        if desc is None:
-            return []
-        desc = np.sqrt(desc / (desc.sum(axis=1, keepdims=True) + 1e-8))
-        grouped = defaultdict(list)
-        for matches in self.matcher.knnMatch(desc, k=2):
-            if len(matches) == 2 and matches[0].distance < .76 * matches[1].distance:
-                m = matches[0]
-                grouped[int(self.owners[m.trainIdx])].append((m.trainIdx, m.queryIdx, m.distance))
-        found = []
-        for i, matches in grouped.items():
-            if len(matches) < 5:
-                continue
-            src = np.float32([self.points[t] for t, q, d in matches])
-            dst = np.float32([kp[q].pt for t, q, d in matches]) / factor
-            transform, inliers = cv2.estimateAffine2D(src, dst, method=cv2.RANSAC,
-                                                           ransacReprojThreshold=2.5/factor, maxIters=1500)
-            if transform is None or int(inliers.sum()) < 5:
-                continue
-            scale = math.hypot(transform[0, 0], transform[1, 0])
-            scale_y = math.hypot(transform[0, 1], transform[1, 1])
-            angle = math.degrees(math.atan2(transform[1, 0], transform[0, 0]))
-            c = self.cards[i]
-            if abs(angle) > 4 or abs(transform[0,1]) > .08*scale_y or not .55 < scale/scale_y < 1.8 or not 55 < c['width']*scale < w*.9:
-                continue
-            x, y = transform[:, 2]
-            bw, bh = c['width']*scale, c['height']*scale_y
-            if x+bw < 0 or y+bh < 0 or x > w or y > h:
-                continue
-            # Check the actual artwork, not only local-feature correspondence.
-            recovered = cv2.warpAffine(im, cv2.invertAffineTransform(transform),
-                                       (c['width'], c['height']), flags=cv2.INTER_LINEAR,
-                                       borderMode=cv2.BORDER_CONSTANT)
-            a = cv2.resize(self.art[i], (48, 64 if c['kind']=='member' else 27)).astype(float)
-            b = cv2.resize(recovered, (a.shape[1], a.shape[0])).astype(float)
-            valid = (b.max(axis=2) > 0)
-            valid[int(len(valid)*.80):] = False
-            valid[:max(1,int(len(valid)*.1)), :8] = False
-            if valid.sum() < 150:
-                continue
-            aa, bb = a[valid].ravel(), b[valid].ravel()
-            similarity = float(np.corrcoef(aa, bb)[0, 1])
-            if not np.isfinite(similarity) or similarity < .68:
-                continue
-            visible = max(0,min(w,x+bw)-max(0,x))*max(0,min(h,y+bh)-max(0,y))/(bw*bh)
-            found.append({'kind': c['kind'], 'id': c['id'], 'name': c['name'],
-                'rarity': c['rarity'], 'card_type': c['card_type'],
-                'bbox': [round(float(v),2) for v in (x,y,bw,bh)],
-                'identity_confidence': round(similarity,4), 'inliers': int(inliers.sum()),
-                'visible_fraction': round(float(visible),4), '_index': i})
-        accepted=[]
-        for item in sorted(found, key=lambda x:(x['identity_confidence'],x['inliers']), reverse=True):
-            if not any(overlap(item['bbox'], other['bbox']) > .5 for other in accepted):
-                accepted.append(item)
-        return sorted(accepted, key=lambda x:(round(x['bbox'][1]/20),x['bbox'][0]))
-
-    def ui_bbox(self, item):
-        """Convert the matched full artwork box to its aspect-fill UI window.
-
-        Member references are already canonical 212x282 crops. Snap references
-        retain the full artwork; their 314x172 UI window crops its center.
-        """
-        x,y,w,h=item['bbox']
-        if item['kind']!='snap':return [x,y,w,h]
-        ah,aw=self.art[item['_index']].shape[:2]
-        art_ratio=aw/ah;frame_ratio=314/172
-        if art_ratio<frame_ratio:
-            frame_h=h*art_ratio/frame_ratio
-            return [x,y+(h-frame_h)/2,w,frame_h]
-        frame_w=w*frame_ratio/art_ratio
-        return [x+(w-frame_w)/2,y,frame_w,h]
-
-    def read_rank(self, image, item):
-        x,y,w,h = self.ui_bbox(item)
-        if y+h+6*w/(212 if item['kind']=='member' else 314) > image.shape[0]-2:
-            return field(reason='cropped')
-        member=item['kind']=='member'
-        scale=w/(212 if member else 314)
-        cx=x+(188.5 if member else 300.1)*scale
-        cy=y+(261.2 if member else 147.8)*scale
-        # The icon extends beyond the artwork. remap's default black padding
-        # can resemble dark lobes and falsely identify a clipped right edge.
-        half_width=32*scale*1.03+.8
-        half_height=32*scale*1.03*95/102+.8
-        if (cx-half_width<2 or cy-half_height<2 or
-                cx+half_width>image.shape[1]-2 or cy+half_height>image.shape[0]-2):
-            return field(reason='cropped_rank_icon')
-        sprites=np.stack(self.ranks[item['kind']]).astype(np.float32)
-        alpha=sprites[:,:,:,3:4]/255.
-        mask=alpha.max(axis=0)[:,:,0]>.45
-        different=(np.ptp(sprites,axis=0).max(axis=2)>35)&mask
-        # Rank 0 has translucent dark lobes. An opaque-only mask incorrectly
-        # ignores the colored lobes and systematically prefers rank 0.
-        weights=(mask.astype(np.float32)+different*3)[:,:,None]
-        art=self.art[item['_index']];ah,aw=art.shape[:2]
-        art_x,art_y,art_w,art_h=item['bbox']
-        scores=[(-1.,i) for i in range(6)]
-        for ratio in [.97,1.,1.03]:
-            sw=64*scale*ratio;sh=sw*95/102
-            for dx,dy in [(0,0),(-.8,0),(.8,0),(0,-.8),(0,.8)]:
-                gx=np.linspace(cx+dx-sw/2,cx+dx+sw/2,102,dtype=np.float32)
-                gy=np.linspace(cy+dy-sh/2,cy+dy+sh/2,95,dtype=np.float32)
-                mx,my=np.meshgrid(gx,gy)
-                observed=cv2.remap(image,mx,my,cv2.INTER_LINEAR).astype(np.float32)
-                bg=cv2.remap(art,(mx-art_x)*aw/art_w,(my-art_y)*ah/art_h,cv2.INTER_LINEAR,
-                             borderMode=cv2.BORDER_REPLICATE).astype(np.float32)
-                expected=sprites[:,:,:,:3]*alpha+bg[None]*(1-alpha)
-                error=(np.abs(expected-observed[None])*weights).sum(axis=(1,2,3))/(weights.sum()*3*255)
-                for rank,e in enumerate(error):
-                    scores[rank]=(max(scores[rank][0],1-float(e)),rank)
-        scores.sort(reverse=True)
-        if len(scores)<2:
-            return field(reason='unreadable')
-        best,rank=scores[0]
-        gap=best-scores[1][0]
-        if rank==0:return field(confidence=best,reason='no_owned_rank_icon')
-        if best < .78 or gap < .007:
-            return field(confidence=best,reason='ambiguous_icon')
-        return field(rank,best)
+    def read_fields(self, image, detections):
+        """Parameter-field and card-rank readings for each detection."""
+        height, width = image.shape[:2]
+        out = [{'level': field(reason='cropped'), 'awake_count': field(reason='cropped'), 'display_mode': 'unknown',
+                'card_rank': field(reason='cropped_rank_icon')} for _ in detections]
+        for kind in KINDS:
+            chosen = [i for i, d in enumerate(detections) if d['kind'] == kind]
+            readable = [i for i in chosen if kind_fields.field_inside(kind, detections[i]['bbox'], width, height)]
+            if readable:
+                crops = kind_fields.to_input([kind_fields.crop_field(image, kind, detections[i]['bbox']) for i in readable])
+                accept = self.models['fields'][kind]['accept']
+                for i, p in zip(readable, kind_fields.softmax(run(self.fields[kind], crops))):
+                    decision = kind_fields.decide_field(kind, p, accept['confidence'], accept['margin'])
+                    confidence, reason = decision['confidence'], decision.get('reason')
+                    if decision['level'] is not None:
+                        level, awake = field(decision['level'], confidence), field(reason='not_visible_in_level_view')
+                    elif decision['awake_count'] is not None:
+                        level, awake = field(reason='not_visible_in_training_view'), field(decision['awake_count'], confidence)
+                    else:
+                        level = awake = field(confidence=confidence, reason=reason)
+                    out[i].update(level=level, awake_count=awake, display_mode=decision['display_mode'])
+            readable = [i for i in chosen if kind_fields.rank_icon_inside(kind, detections[i]['bbox'], width, height)]
+            if readable:
+                crops = kind_fields.to_input([kind_fields.crop_rank(image, kind, detections[i]['bbox']) for i in readable])
+                accept = self.models['ranks'][kind]['accept']
+                for i, p in zip(readable, kind_fields.softmax(run(self.ranks[kind], crops))):
+                    decision = kind_fields.decide_rank(p, accept['confidence'], accept['margin'])
+                    out[i]['card_rank'] = field(decision['value'], decision['confidence'], decision.get('reason'))
+        return out
 
     def scan(self, image, source='image'):
-        started=time.perf_counter()
-        items=self.fill_grid(image,self.identify(image))
-        field_items=[{**item,'bbox':self.ui_bbox(item)} for item in items]
-        fields=self.numbers.read_fields(image,field_items)
-        for item,values in zip(items,fields):
-            item['card_rank']=self.read_rank(image,item)
-            item.update(values)
-            catalog=self.cards[item['_index']]
-            maximum=catalog.get('max_level')
-            rank=item['card_rank']['value']
-            if rank is not None:maximum=catalog.get('rank_level_limits',{}).get(str(rank),maximum)
-            if maximum and item['level']['value'] is not None and item['level']['value']>maximum:
-                item['level']=field(reason='outside_masterdata_level_limit')
-            item['review']=any(item[k]['value'] is None for k in ('level','card_rank'))
-            item.pop('_index',None)
-        return {'source':source,'width':image.shape[1],'height':image.shape[0],
-                'recognition_provenance':self.provenance,
-                'source_id':hashlib.sha256(str(image.shape).encode()+image.tobytes()).hexdigest(),
-                'cards':items,'elapsed_ms':round((time.perf_counter()-started)*1000,2),
-                'coverage':'observed_only'}
+        started = time.perf_counter()
+        height, width = image.shape[:2]
+        detections = self.locator(np.ascontiguousarray(image[:, :, ::-1]))
+        identities = self.identify(image, detections)
+        readings = self.read_fields(image, detections)
+        cards, unidentified = [], []
+        for detection, (index, similarity, gap, candidate), values in zip(detections, identities, readings):
+            item = {'kind': detection['kind'], 'bbox': [round(float(v), 2) for v in detection['bbox']],
+                    'locator_score': round(detection['score'], 4),
+                    'visible_fraction': round(visible_fraction(detection['bbox'], (width, height)), 4),
+                    'identity_similarity': round(similarity, 4), 'identity_margin': round(gap, 4), **values}
+            if index is None:
+                item['candidate'] = None if candidate is None else {'id': self.cards[candidate]['id'], 'name': self.cards[candidate]['name']}
+                item['review'] = True
+                unidentified.append(item)
+                continue
+            catalog = self.cards[index]
+            maximum = catalog.get('max_level')
+            rank = item['card_rank']['value']
+            if rank is not None:
+                maximum = catalog.get('rank_level_limits', {}).get(str(rank), maximum)
+            if maximum and item['level']['value'] is not None and item['level']['value'] > maximum:
+                item['level'] = field(reason='outside_masterdata_level_limit')
+            cards.append({'kind': item['kind'], 'id': catalog['id'], 'name': catalog['name'], 'rarity': catalog['rarity'],
+                          'card_type': catalog['card_type'], **{k: v for k, v in item.items() if k != 'kind'},
+                          'review': any(item[k]['value'] is None for k in ('level', 'card_rank'))})
+        order = lambda c: (round(c['bbox'][1] / 20), c['bbox'][0])
+        return {'source': source, 'width': width, 'height': height,
+                'recognition_provenance': self.provenance,
+                'source_id': hashlib.sha256(str(image.shape).encode() + image.tobytes()).hexdigest(),
+                'cards': sorted(cards, key=order), 'unidentified': sorted(unidentified, key=order),
+                'elapsed_ms': round((time.perf_counter() - started) * 1000, 2),
+                'coverage': 'observed_only'}
 
 
 def merge(scans, player='local'):

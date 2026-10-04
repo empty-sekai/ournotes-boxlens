@@ -6,7 +6,7 @@ from .common import read,digest,rows,load_deck
 def binding(data,deck_path):
     data=Path(data).resolve()
     deck,deck_sha=load_deck(deck_path)
-    required=['catalog.json','index.npz','models/encoder.onnx','models/fields.onnx']
+    required=['catalog.json','models/recognition.json']
     absent=[name for name in required if not (data/name).is_file()]
     if absent:raise ValueError('Visual dataset missing required files: '+', '.join(absent))
     cat=read(data/'catalog.json')
@@ -24,7 +24,7 @@ def binding(data,deck_path):
         catalog=deck['provenance'].get('catalog',{})
         for key,deck_key in [('resourceVersion','resourceVersion'),('resourceHash','resourceHash'),('officialCatalogSha256','sha256')]:
             if key in manifest and manifest[key]!=catalog.get(deck_key):raise ValueError('Visual bundle '+key+' does not match DeckData')
-    files={name:digest(data/name) for name in ['catalog.json','index.npz','models/encoder.onnx','models/fields.onnx','models/gallery.npz','master/MasterMemberCard.json','master/MasterSupportCard.json'] if (data/name).exists()}
+    files={name:digest(data/name) for name in ['catalog.json','models/recognition.json','models/member-gallery.npz','models/snap-gallery.npz','master/MasterMemberCard.json','master/MasterSupportCard.json'] if (data/name).exists()}
     if manifest:
         claimed=manifest.get('files',{})
         if not isinstance(claimed,dict):raise ValueError('Visual manifest files must be a hash map')
@@ -33,6 +33,6 @@ def binding(data,deck_path):
             if data not in path.parents or not path.is_file():raise ValueError('Visual manifest file absent or outside dataset: '+name)
             expected=value.get('sha256') if isinstance(value,dict) else value
             if not isinstance(expected,str) or digest(path)!=expected:raise ValueError('Visual dataset manifest hash mismatch: '+name)
-        for key,name in [('catalogSha256','catalog.json'),('indexSha256','index.npz'),('encoderSha256','models/encoder.onnx'),('fieldModelSha256','models/fields.onnx'),('gallerySha256','models/gallery.npz')]:
+        for key,name in [('catalogSha256','catalog.json'),('recognitionModelsSha256','models/recognition.json')]:
             if key in manifest and manifest[key]!=files.get(name):raise ValueError('Visual dataset manifest hash mismatch: '+name)
     return {'schema':'ournotes.loaded-visual-data/1','dataPath':str(data),'boundDeckDataSha256':deck_sha,'boundDeckRegion':deck['provenance']['region'],'boundDeckMasterVersion':deck['provenance']['master']['version'],'identityCounts':dict(Counter(k for k,_ in present)),'identities':[{'kind':k,'id':i} for k,i in sorted(present)],'missingBoundIdentities':[{'kind':k,'id':i} for k,i in missing],'extraIdentities':[{'kind':k,'id':i} for k,i in extra],'coversBoundMasterIdentities':not missing and not extra,'files':files,'datasetManifest':manifest,'datasetManifestSha256':digest(manifest_path) if manifest else None,'scope':'Visual recognition capability only; not player ownership, runtime equivalence, or OCR field accuracy'}

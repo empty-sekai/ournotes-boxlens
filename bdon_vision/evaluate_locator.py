@@ -1,4 +1,4 @@
-"""Evaluate card-frame locators and the RootSIFT baseline on scene and real sets.
+"""Evaluate card-frame locators on scene and real sets.
 
 Writes one JSON report with recall / precision at IoU 0.5 and 0.75, card kind
 accuracy, strata by card width and resolution, and per-image results for
@@ -8,7 +8,6 @@ real screenshots. The score threshold is chosen on the first scene set
 import argparse
 import json
 import time
-from multiprocessing import Pool
 from pathlib import Path
 
 import cv2
@@ -148,53 +147,6 @@ def real_row(scene, image, detections, overlay=None, tag=''):
             'false_positive_boxes': false_positives, 'cards': cards}
 
 
-_ENGINE = None
-
-
-def _baseline_worker(args):
-    data, path, grid, excluded = args
-    global _ENGINE
-    if _ENGINE is None:
-        from .engine import Engine
-        _ENGINE = Engine(data, threads=1, excluded_identities=excluded or None)
-    image = cv2.imread(path, cv2.IMREAD_COLOR)
-    started = time.perf_counter()
-    items = _ENGINE.identify(image)
-    if grid:
-        items = _ENGINE.fill_grid(image, items)
-    elapsed = time.perf_counter() - started
-    out = []
-    for item in items:
-        x, y, w, h = _ENGINE.ui_bbox(item)
-        s = w / (212 if item['kind'] == 'member' else 314)
-        out.append({'kind': item['kind'], 'score': float(item['identity_confidence']), 'id': item['id'],
-                    'bbox': [x - 6 * s, y - 6 * s, w + 12 * s, h + 12 * s]})
-    return out, elapsed
-
-
-def evaluate_baseline(data, sets, real=None, workers=8, grid=False, overlay=None, excluded=()):
-    excluded = {(kind, int(i)) for kind, i in excluded}
-    report = {'method': 'RootSIFT + FLANN gallery matching' + (' + grid fill' if grid else ''),
-              'excluded_identities': sorted(excluded),
-              'tile_box': 'matched artwork window expanded by 6 logical pixels per side', 'sets': {}}
-    with Pool(workers) as pool:
-        for name, scenes in sets:
-            results = pool.map(_baseline_worker, [(data, s['path'], grid, excluded) for s in scenes], chunksize=2)
-            acc = Accumulator()
-            for scene, (detections, _) in zip(scenes, results):
-                image = cv2.imread(scene['path'], cv2.IMREAD_UNCHANGED)
-                h, w = image.shape[:2]
-                acc.add(detections, scene, w, h, 640 / max(w, h))
-            report['sets'][name] = {'strata': acc.summary(-1.),
-                                    'median_s': float(np.median([e for _, e in results]))}
-            print(json.dumps({'baseline': name, 'overall': report['sets'][name]['strata'].get('overall')}), flush=True)
-        if real:
-            results = pool.map(_baseline_worker, [(data, s['path'], grid, excluded) for s in real], chunksize=1)
-            report['real'] = [real_row(scene, read_rgb(scene['path']), detections, overlay, 'baseline')
-                              for scene, (detections, _) in zip(real, results)]
-    return report
-
-
 def main():
     p = argparse.ArgumentParser(description=__doc__.split('\n')[0])
     p.add_argument('--model', help='Locator state dict (.pt, GPU) or exported .onnx (CPU)')
@@ -205,11 +157,6 @@ def main():
     p.add_argument('--sizes', type=int, nargs='+', default=[640])
     p.add_argument('--threshold', type=float)
     p.add_argument('--aspect-tolerance', type=float, help='Drop tiles whose aspect differs from the class by more')
-    p.add_argument('--baseline-data', help='Data directory for the RootSIFT baseline')
-    p.add_argument('--baseline-grid', action='store_true')
-    p.add_argument('--baseline-exclude', nargs='*', default=[], metavar='KIND:ID',
-                   help='Remove identities from the baseline gallery (simulates cards added after it was built)')
-    p.add_argument('--workers', type=int, default=8, help='Baseline worker processes')
     p.add_argument('--threads', type=int, default=4, help='onnxruntime CPU threads')
     p.add_argument('--overlay', help='Directory for annotated real screenshots')
     p.add_argument('--output', required=True)
@@ -223,9 +170,6 @@ def main():
     if a.model:
         predictor = OnnxPredictor(a.model, a.threads) if a.model.endswith('.onnx') else TorchPredictor(a.model, a.width)
         report['locator'] = evaluate_sets(predictor, sets, a.sizes, a.threshold, real, a.overlay, a.aspect_tolerance)
-    if a.baseline_data:
-        excluded = [item.split(':') for item in a.baseline_exclude]
-        report['baseline'] = evaluate_baseline(a.baseline_data, sets, real, a.workers, a.baseline_grid, a.overlay, excluded)
     write_json(a.output, report)
 
 

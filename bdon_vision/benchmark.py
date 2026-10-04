@@ -66,18 +66,18 @@ def benchmark(data,images,output,cpus=2,repeats=3):
             cpu_start=time.process_time()
             result=engine.scan(image,path.name)
             records.append({'file':path.name,'repeat':repeat,'pixels':[image.shape[1],image.shape[0]],
-                'cards':len(result['cards']),'elapsed_ms':result['elapsed_ms'],
+                'cards':len(result['cards']),'unidentified':len(result['unidentified']),'elapsed_ms':result['elapsed_ms'],
                 'process_cpu_ms':round((time.process_time()-cpu_start)*1000,2)})
     times=[r['elapsed_ms'] for r in records]
     report={'logical_cpu_affinity':affinity,'threads':cpus,'platform':platform.platform(),
         'processor':platform.processor(),'host_logical_cpus':os.cpu_count(),
-        'model_sha256':{n:hashlib.sha256((Path(data)/'models'/n).read_bytes()).hexdigest() for n in ['encoder.onnx','fields.onnx']},
+        'model_manifest_sha256':hashlib.sha256((Path(data)/'models/recognition.json').read_bytes()).hexdigest(),
         'startup_ms':round(startup,2),'startup_memory':startup_memory,'final_memory':memory_usage(),
         'input_sha256':{p.name:hashlib.sha256(p.read_bytes()).hexdigest() for p in images},
         'warmup':'one pass of all images','repeats':repeats,
         'median_ms':float(np.median(times)),'p95_ms':float(np.percentile(times,95)),
         'min_ms':min(times),'max_ms':max(times),'measurements':records,
-        'scope':'Same process constrained to listed logical CPUs. Scan includes localization and field reading; excludes file decoding and HTTP. Other host workloads are not controlled.'}
+        'scope':'Same process constrained to listed logical CPUs. Scan includes localization, identity retrieval and field and rank reading; excludes file decoding and HTTP. Other host workloads are not controlled.'}
     write(output,report);print({k:v for k,v in report.items() if k!='measurements'})
 
 

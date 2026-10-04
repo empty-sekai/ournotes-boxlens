@@ -95,7 +95,9 @@ $('scan').onclick=async()=>{
     const body=await response.json();if(!response.ok)throw Error(body.error);
     for(const url of imageURLs)URL.revokeObjectURL(url);imageURLs=selected.map(f=>URL.createObjectURL(f));result=body;draw();
     const other=body.scans.filter(s=>s.cards.length&&s.cards.filter(c=>c.display_mode==='other').length>=Math.ceil(s.cards.length/2)).length;
+    const unknown=body.scans.reduce((n,s)=>n+s.unidentified.length,0);
     $('status').textContent='已完成 · '+body.box.unique_count+' 张不同卡片 · '+(body.scans.reduce((n,s)=>n+s.elapsed_ms,0)/1000).toFixed(2)+' 秒'+
+      (unknown?'。有 '+unknown+' 张卡片未能确认身份；如果是新卡，请更新 master 数据并重新运行 prepare 后再识别。':'')+
       (other?'。部分截图显示其他参数；要补齐等级或特训次数，请上传对应显示模式的截图。':'');
   }catch(e){$('status').textContent='识别失败：'+e.message}
   finally{$('scan').disabled=!files.length;$('reset').disabled=false}
