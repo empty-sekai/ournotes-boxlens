@@ -21,14 +21,12 @@ def scene_matrix(deck_path):
     shortest=min(d['charts'],key=lambda c:len(c['notes']['id']))
     sid=shortest['scoreId']
     base=next(r for r in rows(d,'MasterLiveMusic') if sid in [r.get('_easyID'),r.get('_normalID'),r.get('_hardID'),r.get('_expertID')])
-    seed={'atoms':[[1,1],[-1,1],[42,1]],'provenance':'Declared illustrative mock finite native root law; not the real TickCount/server distribution'}
     specs=[]
     def add(id_, execution, scenario=None, metric=None, expected='supported'):
-        req={'format':'ournotes-deck.recommendation-request/1','execution':execution,'metric':metric or {'kind':'score'},
+        req={'format':'ournotes-deck.search-request/1','execution':execution,'metric':metric or {'kind':'score'},
             'constraints':{'noSnaps':False},'k':3,'strategy':{'kind':'exhaustive'},
             'limits':{'timeLimitMs':30000,'maxCandidates':20000,'cacheEntries':2048}}
         if scenario: req['scenario']=scenario
-        if execution['kind']=='live': req['seedLaw']=seed
         specs.append({'id':id_,'request':req,'expected':expected})
     add('songless-power',{'kind':'power'},metric={'kind':'power'})
     for mode in ['free','mission','battle']:
@@ -114,7 +112,7 @@ def scene_matrix(deck_path):
             entry['request']['strategy']={'kind':'candidate','powerSeeds':2,'proposals':600,'proposalSeed':20261001}
             entry['request']['limits']={'timeLimitMs':10000,'maxCandidates':1000,'cacheEntries':1024}
     return {'schema':'ournotes.integration-scene-matrix/1','owner':'BoxLens optional Deck recommendation workflow',
-        'deckDataSha256':digest(deck_path),'entries':specs,'liveIsSeparate':True,'capabilitySource':'ournotes-deck.recommendation-request/1','randomScope':'Explicit finite native root law and theoretical play; unknown real native TickCount distribution','unsupportedScope':'Battle/Arena require explicitly provided aggregate peer confirmations. Conditional mock Battle cases are separate; current JP has no Arena master rows'}
+        'deckDataSha256':digest(deck_path),'entries':specs,'liveIsSeparate':True,'capabilitySource':'ournotes-deck.search-request/1','randomScope':'Solver-reported probability law and theoretical-best play','unsupportedScope':'Battle/Arena require explicitly provided aggregate peer confirmations; available scenes depend on the bound regional master'}
 
 def recommend(binary, deck_path, roster_path, matrix, out):
     out=Path(out);out.mkdir(parents=True,exist_ok=True)
@@ -141,7 +139,7 @@ def recommend(binary, deck_path, roster_path, matrix, out):
         if 'request' not in entry:
             result.append({'id':id_,'state':'Unavailable','reason':entry.get('reason'),'complete':False});continue
         request=entry['request'];reqfile=out/(id_+'-request.json');write_request(entry,reqfile)
-        command=[str(binary),'--data',str(frozen_deck),'--roster',str(frozen_roster),'--request',str(reqfile)]
+        command=[str(binary),'recommend','--data',str(frozen_deck),'--roster',str(frozen_roster),'--request',str(reqfile)]
         t=time.perf_counter()
         try:
             p=subprocess.run(command,capture_output=True,encoding='utf-8',errors='replace',timeout=min(600,max(180,(request.get('limits',{}).get('timeLimitMs') or 165000)/1000+15)))

@@ -48,10 +48,10 @@ python boxvision.py scan --data DATA --threads 2 --output ./result screenshot-a.
 可选的正式 `deck-ui` 入口将截图识别、显式人工补齐和 [OurNotes Deck](https://github.com/empty-sekai/ournotes-deck) 的真实搜索连在一起：
 
 ```powershell
-python boxvision.py deck-ui --data DATA --deck-data deck-data.json --solver-bin ournotes-recommend.exe --workspace ./local/deck-ui --port 18790 --box-port 18793
+python boxvision.py deck-ui --data DATA --deck-data deck-data.json --solver-bin ournotes-deck.exe --workspace ./local/deck-ui --port 18790 --box-port 18793
 ```
 
-打开 `http://127.0.0.1:18790/`。需要与图库匹配的 DeckData 和支持 `ournotes-deck.recommendation-request/1` 的推荐程序；源码不附带游戏资源。未知字段不会默认填为等级／Rank 1，完整持有集合须由使用者声明。详细补齐契约、mock 复现、版本校验和目标语义见 [组卡输入管线](docs/DECK_PIPELINE.md)。
+打开 `http://127.0.0.1:18790/`。需要与图库匹配的 DeckData 和 ournotes-deck v0.0.3（`recommend` 子命令、`ournotes-deck.search-request/1` 请求）；源码不附带游戏资源。未知字段不会默认填为等级／Rank 1，完整持有集合须由使用者声明。详细补齐契约、mock 复现、版本校验和目标语义见 [组卡输入管线](docs/DECK_PIPELINE.md)。
 
 ## 数据和模型
 

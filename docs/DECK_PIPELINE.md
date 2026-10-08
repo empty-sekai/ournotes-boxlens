@@ -4,10 +4,10 @@ BoxLens 的可选 `deck-ui` 入口调用现有识别器和独立的 ournotes-dec
 
 ## 启动
 
-安装本仓库后，准备自己的完整视觉 `DATA`、同区服 DeckData 和支持 v1 推荐接口的程序：
+安装本仓库后，准备自己的完整视觉 `DATA`、同区服 DeckData 和 ournotes-deck v0.0.3 推荐程序：
 
 ```powershell
-python boxvision.py deck-ui --data DATA --deck-data deck-data.json --solver-bin ournotes-recommend.exe --workspace ./local/deck-ui --port 18790 --box-port 18793
+python boxvision.py deck-ui --data DATA --deck-data deck-data.json --solver-bin ournotes-deck.exe --workspace ./local/deck-ui --port 18790 --box-port 18793
 ```
 
 浏览器打开 `http://127.0.0.1:18790/`。两项服务仅绑定回环地址，端口占用会拒绝启动，可改为其他独立端口。空 workspace 可直接上传自己的截图；也可使用明确生成的 mock workspace。使用 Ctrl+C 关闭时，界面会终止自己启动的识别子进程。
@@ -65,21 +65,21 @@ CLI 和 HTTP 补齐共用工作区审阅状态。补齐开始即写入 `needs-re
 python boxvision.py deck-mock --data DATA --deck-data deck-data.json --members 7 --snaps 3 --output ./local/mock/fixtures
 python boxvision.py scan --data DATA --threads 1 --output ./local/mock/scan ./local/mock/fixtures/01-level-a.png ./local/mock/fixtures/02-level-overlap.png ./local/mock/fixtures/03-training.png ./local/mock/fixtures/04-hidden.png ./local/mock/fixtures/05-snap.png ./local/mock/fixtures/06-conflict.png ./local/mock/fixtures/07-degraded-fields.png ./local/mock/fixtures/08-duplicate.png
 python boxvision.py deck-adapt --data DATA --deck-data deck-data.json --region jp --mock --box ./local/mock/scan/box.json --completion ./local/mock/fixtures/completion.json --output ./local/mock
-python boxvision.py deck-recommend --deck-data deck-data.json --solver-bin ournotes-recommend.exe --roster ./local/mock/roster.json --request request.json --output ./local/recommend-new
-python boxvision.py deck-ui --data DATA --deck-data deck-data.json --solver-bin ournotes-recommend.exe --workspace ./local/mock
+python boxvision.py deck-recommend --deck-data deck-data.json --solver-bin ournotes-deck.exe --roster ./local/mock/roster.json --request request.json --output ./local/recommend-new
+python boxvision.py deck-ui --data DATA --deck-data deck-data.json --solver-bin ournotes-deck.exe --workspace ./local/mock
 ```
 
-每次生成和推荐使用新的输出目录，避免覆盖证据。三留影布局包含可见边界断言。推荐需要与 Roster 相邻的 `adaptation.json`，拒绝未经审阅的库存。请求文件遵循 solver 的 `ournotes-deck.recommendation-request/1`；可由界面选择预置场景或上传明确提供的请求。
+每次生成和推荐使用新的输出目录，避免覆盖证据。三留影布局包含可见边界断言。推荐需要与 Roster 相邻的 `adaptation.json`，拒绝未经审阅的库存。请求文件遵循 solver 的 `ournotes-deck.search-request/1`；可由界面选择预置场景或上传明确提供的请求。
 
 上传 JSON 在浏览器使用严格 UTF-8 解码并保留原文本传入 HTTP；服务拒绝顶层／嵌套／转义后重复键、NaN、Infinity、非法 UTF-8 和畸形 JSON。合法大整数、小数 token 与 CRLF 原样保存至实际 CLI 请求，浏览器不会先 JSON.parse 再 stringify 将它们丢失。
 
 ## 目标与完成状态
 
-综合力按综合力单位显示，不附加随机根种子条件。演出期望、阈值概率和活动指标显示各自语义与有限 seedLaw／声明打法／模型条件。Complete 表示程序确实穷尽了请求范围，最优性限定于该卡池、约束、外部输入、打法与声明根分布；未知现实根种子分布下的无条件最优不在结论中。Skip、综合力和 Live 分别展示，不能相互代替演出验收。
+综合力按综合力单位显示。演出期望、阈值概率和活动指标采用求解器返回的 `probabilityLaw`、请求中的打法和场景条件。推荐结果保留 `completion`、`optimality` 和 `exitReason`；只有 `Complete` 且 `optimality=proven` 表示请求范围内的排名已经证明。候选搜索和未完成搜索按实际返回状态展示。
 
 Mission／Battle／Arena 强制撃奏；Battle／Arena 多人结果需要显式外部排名确认到达时间线，不能自动视为 Solo 第一。活动收益使用声明的活动时钟和结果上下文，服务器所选奖励未知时不能声称现实收益保证。
 
-独立 QA 的最终场景矩阵为 **45 PASS / 0 FAIL / 2 BLOCKED**，两项 blocked 因冻结 JP master 没有 Arena 数据；不表示 Arena 已在当前 JP 原生场景实测。synthetic Arena 模型检查单独保留。采用的 R3 推荐程序 SHA256 为 `d645f10a2e23efbdf1ef722f49892a26829871a711e9bc79179006e4afd3a1ef`；已有 48,960 物理队伍 Top3、槽位、留影和逐根结果独立对拍证据，不在此次接入重跑长穷举。数值模型边界是离线 native 1.0.1-25，未据此声称 JP 1.0.4 运行时完全等价。
+CI 下载并校验 ournotes-deck v0.0.3 的发布包，用手写合成数据通过实际推荐入口检查综合力、Skip、Live 和结构化错误。自定义请求使用同一发布版的请求契约，求解器负责校验场景与计算条件。
 
 ## 仓库检查
 
@@ -88,4 +88,4 @@ python -m pip install -e ".[test]"
 python -m pytest -q tests
 ```
 
-公共回归使用手写 synthetic master 和无游戏图像的 JSON，不分发原始 master、chart、APK、截图、卡面、账号或内部协作文件。根目录 public-manifest.json 记录发布源码各文件的字节数和 SHA-256。
+公共回归使用手写 synthetic master 和无游戏图像的 JSON，不分发原始 master、chart、APK、截图、卡面、账号或内部协作文件。根目录 public-manifest.json 记录 v0.2.0 发布时的源码文件身份。

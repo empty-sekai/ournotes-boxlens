@@ -178,6 +178,7 @@ def test_cli_failed_review_revokes_old_roster_and_can_recover(fixture,monkeypatc
     assert not (out/'needs-review.json').exists()
     assert load_review(out)['roster']['members'][4]['id']==6
     def solver(command,**kwargs):
+        assert command[1] == 'recommend'
         assert read(command[command.index('--roster')+1])['members'][4]['id']==6
         return SimpleNamespace(stdout='{}',stderr='',returncode=0)
     monkeypatch.setattr('bdon_vision.deck.recommend.subprocess.run',solver)
