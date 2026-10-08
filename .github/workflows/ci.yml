@@ -29,7 +29,7 @@ jobs:
           sha256sum --check --ignore-missing SHA256SUMS
           tar -xzf ournotes-deck-v0.0.3-x86_64-unknown-linux-musl.tar.gz --strip-components=1 -C bin
           echo "OURNOTES_DECK_BIN=$RUNNER_TEMP/deck/bin/ournotes-deck" >> "$GITHUB_ENV"
-      - run: python -m pytest -q tests
+      - run: python -m pytest -q -rs tests
       - run: python scripts/validate_contract.py scan-request schemas/examples/scan-request.json
       - run: python scripts/validate_contract.py scan-response schemas/examples/scan-response.json
       - run: python -m build
