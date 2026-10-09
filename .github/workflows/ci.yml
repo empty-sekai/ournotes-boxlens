@@ -17,7 +17,19 @@ jobs:
           python-version: '3.11'
           cache: pip
       - run: python -m pip install -e '.[test]' build
-      - run: python -m pytest -q tests
+      - name: Download recommendation CLI
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          mkdir -p "$RUNNER_TEMP/deck/bin"
+          gh release download v0.0.3 --repo empty-sekai/ournotes-deck \
+            --pattern ournotes-deck-v0.0.3-x86_64-unknown-linux-musl.tar.gz \
+            --pattern SHA256SUMS --dir "$RUNNER_TEMP/deck"
+          cd "$RUNNER_TEMP/deck"
+          sha256sum --check --ignore-missing SHA256SUMS
+          tar -xzf ournotes-deck-v0.0.3-x86_64-unknown-linux-musl.tar.gz --strip-components=1 -C bin
+          echo "OURNOTES_DECK_BIN=$RUNNER_TEMP/deck/bin/ournotes-deck" >> "$GITHUB_ENV"
+      - run: python -m pytest -q -rs tests
       - run: python scripts/validate_contract.py scan-request schemas/examples/scan-request.json
       - run: python scripts/validate_contract.py scan-response schemas/examples/scan-response.json
       - run: python -m build

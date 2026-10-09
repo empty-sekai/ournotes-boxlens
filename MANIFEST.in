@@ -1,2 +1,3 @@
 include docs/DECK_PIPELINE.md
 include CHANGELOG.md
+recursive-include tests/fixtures *.json
